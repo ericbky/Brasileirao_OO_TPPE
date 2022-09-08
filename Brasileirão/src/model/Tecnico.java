@@ -14,7 +14,9 @@ public class Tecnico extends Pessoa {
 		super();
 	}
 	
-	public Tecnico(String nome, String nomeTime, String sexo, int idade, boolean cbf, ArrayList<String> opcoesTaticas, String imagemInterna, String imagemExterna) {
+	public Tecnico(String nome, String nomeTime, String sexo, 
+			int idade, boolean cbf, ArrayList<String> opcoesTaticas, 
+			String imagemInterna, String imagemExterna) {
 		super(nome, nomeTime, sexo, idade);
 		this.cbf = cbf;
 		this.opcoesTaticas = opcoesTaticas;
@@ -56,8 +58,9 @@ public class Tecnico extends Pessoa {
 
 	@Override
 	public String toString() {
-		return "Tecnico [cbf=" + cbf + ", opcoesTaticas=" + opcoesTaticas + ", imagemInterna=" + imagemInterna
-				+ ", imagemExterna=" + imagemExterna + "]";
+		return nome + "[time = " + nomeTime + ", sexo = " + sexo + ", idade = " + idade + ", cbf = " + cbf + ", opcoesTaticas = "
+				+ opcoesTaticas + ", imagemInterna = " + imagemInterna
+				+ ", imagemExterna = " + imagemExterna + "]\n";
 	}
 	
 	

@@ -2,24 +2,31 @@ package model;
 
 import java.util.*;
 
-public class Partida {
+public class Rodada {
 
+	private ArrayList<String> confrontosDaRodada;
 	private ArrayList<String> resultadosDaRodada;
 	private int numeroRodada;
 	
-	
-	public Partida() {
+	public Rodada() {
 		super();
 	}
-	
-	
-	public Partida(ArrayList<String> resultadosDaRodada, int numeroRodada) {
+
+	public Rodada(ArrayList<String> confrontosDaRodada, ArrayList<String> resultadosDaRodada, int numeroRodada) {
 		super();
+		this.confrontosDaRodada = confrontosDaRodada;
 		this.resultadosDaRodada = resultadosDaRodada;
 		this.numeroRodada = numeroRodada;
 	}
-
 	
+	public ArrayList<String> getConfrontosDaRodada() {
+		return confrontosDaRodada;
+	}
+
+	public void setConfrontosDaRodada(ArrayList<String> confrontosDaRodada) {
+		this.confrontosDaRodada = confrontosDaRodada;
+	}
+
 	public ArrayList<String> getResultadosDaRodada() {
 		return resultadosDaRodada;
 	}
@@ -36,11 +43,13 @@ public class Partida {
 		this.numeroRodada = numeroRodada;
 	}
 
-	
 	@Override
 	public String toString() {
-		return "Partida [resultadosDaRodada=" + resultadosDaRodada + ", numeroRodada=" + numeroRodada + "]";
+		return "Rodada " + numeroRodada + " [confrontosDaRodada = " + confrontosDaRodada + 
+				", resultadosDaRodada = " + resultadosDaRodada + "]\n";
 	}
-		
 	
+	
+
+		
 }

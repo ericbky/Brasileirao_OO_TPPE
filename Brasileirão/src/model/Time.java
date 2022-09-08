@@ -16,10 +16,6 @@ public class Time {
 	private int golsMarcados;
 	private String tatica;
 	
-	public Time() {
-		super();
-	}
-	
 	
 	public Time(String nome, ArrayList<Jogador> jogadores, int colocacao, int pontos, int numeroJogos,
 			int numeroVitorias, int numeroEmpates, int numeroDerrotas, int golsSofridos, int golsMarcados,

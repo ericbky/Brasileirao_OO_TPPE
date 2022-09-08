@@ -10,6 +10,10 @@ public class Jogador extends Pessoa {
 	private int numCamisa;
 	private int id;
 	
+	public Jogador() {
+		super();
+	}
+	
 	public Jogador(String nome, String nomeTime, String sexo, int idade, int gols, 
 			String posicao, int partidas, int numCamisa, int id) {
 		super(nome, nomeTime, sexo, idade);
@@ -67,7 +71,7 @@ public class Jogador extends Pessoa {
 	public String toString() {
 		return  nome +"[time = " + nomeTime + ", sexo = " + sexo + ", idade = " + 
 				idade + ", gols = " + gols + ", posicao = " + posicao + ", partidas = " + 
-				partidas + ", numCamisa = " + numCamisa + ", id = " + id + "]";
+				partidas + ", numCamisa = " + numCamisa + ", id = " + id + "]\n";
 	}
 	
 	
