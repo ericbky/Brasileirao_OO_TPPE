@@ -20,11 +20,6 @@ public abstract class Pessoa {
 		this.idade = idade;
 	}
 	
-	public String mudarNome(String novoNome) {
-		nome = novoNome;
-		return nome;
-	}
-	
 	public String getNome() {
 		return nome;
 	}

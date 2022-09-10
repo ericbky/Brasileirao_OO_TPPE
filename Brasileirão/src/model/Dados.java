@@ -1,6 +1,7 @@
 package model;
 
 import java.util.*;
+import controller.*;
 
 public class Dados {
 	
@@ -33,36 +34,35 @@ public class Dados {
 		super();
 	}
 	
-	int random;
-	public int randomNumber(int min, int max) {
+	int random1;
+	public int randomNumber1(int min, int max) {
 	    Random r = new Random();
-	    random = r.nextInt((max - min) + 1) + min;
-	    return random;
+	    random1 = r.nextInt((max - min) - 1) + min;
+	    return random1;
+	}
+	int random2;
+	public int randomNumber2(int min, int max) {
+	    Random p = new Random();
+	    random2 = p.nextInt((max - min) + 1) + min;
+	    return random2;
 	}
 	
 	public void createPlayers() {
 		for(int i=1; i<221; i++) {
-			randomNumber(18, 30);
+			randomNumber1(18, 30);
 			if (i%11 == 0) {
-				jogadores.add(new Jogador("jogador "+ i, "", "Masculino", random, 0, "Goleiro", 0, i, i));
+				jogadores.add(new Jogador("jogador "+ i, "", 
+						"Masculino", random1, 0, "Goleiro", 0, i, i));
 			}
 			else if (i%2 == 0) {
-				jogadores.add(new Jogador("jogador "+ i, "", "Masculino", random, 0, "Defesa", 0, i, i));
+				jogadores.add(new Jogador("jogador "+ i, "", 
+						"Masculino", random1, 0, "Defesa", 0, i, i));
 			}
 			else {
-				jogadores.add(new Jogador("jogador "+ i, "", "Masculino", random, 0, "Ataque", 0, i, i));
+				jogadores.add(new Jogador("jogador "+ i, "", 
+						"Masculino", random1, 0, "Ataque", 0, i, i));
 			}
 		}
-	}
-	public void createCoachs() {
-		for (int e=0; e<20; e++) {
-			randomNumber(50, 70);
-			tecnicos.add(new Tecnico("Tecnico " + (e+1), times.get(e).getNome(), "Masculino", random, true, taticas, "Boa", "Boa"));
-		}
-	}
-	
-	
-	public void atribuirJogadores() {
 		int q;
 		for (q=0; q<11; q++) {
 			jogadoresBayern.add(jogadores.get(q));
@@ -146,9 +146,79 @@ public class Dados {
 		}
 	}
 	
+	public void createCoachs() {
+		taticas.add("4-3-3");
+		taticas.add("4-4-2");
+		taticas.add("4-1-3-2");
+		taticas.add("3-5-2");
+		taticas.add("3-4-3");
+		taticas.add("4-2-3-1");
+		taticas.add("4-5-1");
+		taticas.add("5-3-2");
+		taticas.add("4-1-4-1");
+		taticas.add("3-6-1");
+		taticas.add("4-1-2-1-2");
+		taticas.add("5-2-1-2");
+		taticas.add("4-2-2-2");
+		taticas.add("5-2-3");
+		taticas.add("3-1-4-2");
+		for (int e=0; e<20; e++) {
+			randomNumber1(50, 70);
+			tecnicos.add(new Tecnico("Tecnico " + (e+1), "", 
+					"Masculino", random1, true, taticas, "Boa", "Boa"));
+		}
+	}
+	
+	public void atribuirTecnicos() {
+		for (int e=0; e<20; e++) {
+			tecnicos.get(e).setNomeTime(times.get(e).getNome());
+		}
+	} 
+	
+	Time atleticoMadrid = new Time("Atletico Madrid", jogadoresAtleticoMadrid, 			
+			1, 0, 0, 0, 0, 0, 0, 0, "");
+	Time ajax = new Time("Ajax", jogadoresAjax, 2, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time arsenal = new Time("Arsenal", jogadoresArsenal, 3, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time barcelona = new Time("Barcelona", jogadoresBarcelona, 4, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time bayernLeverkusen = new Time("Bayern Leverkusen", jogadoresBayernLeverkusen, 5, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time bayernMunchen = new Time("Bayern Munchen", jogadoresBayern, 6, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time benfica = new Time("Benfica", jogadoresBenfica, 7, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time borussia = new Time("Borussia Dortmund", jogadoresBorussia, 8, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time chealsea = new Time("Chealsea", jogadoresChealsea, 9, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time juventus = new Time("Juventus", jogadoresJuventus, 10, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time liverpool = new Time("Liverpool", jogadoresLiverpool, 11, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time manchesterCity = new Time("Manchester City", jogadoresManchesterCity, 12, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time manchesterUnited = new Time("Manchester United", jogadoresManchesterUnited, 13, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time milan = new Time("Milan", jogadoresMilan, 14, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time napoli = new Time("Napoli", jogadoresNapoli, 15, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time psg = new Time("Paris Saint Germain", jogadoresPSG, 16, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time porto = new Time("Porto", jogadoresPorto, 17, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time realMadrid = new Time("Real Madrid", jogadoresRealMadrid, 18, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time shakhtar = new Time("Shakhtar Donetsk", jogadoresShakhtar, 19, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	Time tottenham = new Time("Tottenham Hotspur", jogadoresTottenham, 20, 
+			0, 0, 0, 0, 0, 0, 0, "");
+	
 	public void alimentarTimes() {
 		times.add(atleticoMadrid);
-		times.add(ajax);
+		times.add(ajax);		
 		times.add(arsenal);
 		times.add(barcelona);
 		times.add(bayernLeverkusen);
@@ -169,44 +239,12 @@ public class Dados {
 		times.add(tottenham);
 	}
 	
-	public void alimentarTaticas() {
-		taticas.add("4-3-3");
-		taticas.add("4-4-2");
-		taticas.add("4-1-3-2");
-		taticas.add("3-5-2");
-		taticas.add("3-4-3");
-		taticas.add("4-2-3-1");
-		taticas.add("4-5-1");
-		taticas.add("5-3-2");
-		taticas.add("4-1-4-1");
-		taticas.add("3-6-1");
-		taticas.add("4-1-2-1-2");
-		taticas.add("5-2-1-2");
-		taticas.add("4-2-2-2");
-		taticas.add("5-2-3");
-		taticas.add("3-1-4-2");
+	public void escolherOpcaoTatica() {
+		for(int e=0; e<20; e++) {
+			int random = randomNumber1(0,15);
+			times.get(e).setTatica(taticas.get(random));
+		}
 	}
-	
-	Time atleticoMadrid = new Time("Atletico Madrid", jogadoresAtleticoMadrid, 1, 0, 0, 0, 0, 0, 0, 0, "");
-	Time ajax = new Time("Ajax", jogadoresAjax, 2, 0, 0, 0, 0, 0, 0, 0, "");
-	Time arsenal = new Time("Arsenal", jogadoresArsenal, 3, 0, 0, 0, 0, 0, 0, 0, "");
-	Time barcelona = new Time("Barcelona", jogadoresBarcelona, 4, 0, 0, 0, 0, 0, 0, 0, "");
-	Time bayernLeverkusen = new Time("Bayern Leverkusen", jogadoresBayernLeverkusen, 5, 0, 0, 0, 0, 0, 0, 0, "");
-	Time bayernMunchen = new Time("Bayern Munchen", jogadoresBayern, 6, 0, 0, 0, 0, 0, 0, 0, "");
-	Time benfica = new Time("Benfica", jogadoresBenfica, 7, 0, 0, 0, 0, 0, 0, 0, "");
-	Time borussia = new Time("Borussia Dortmund", jogadoresBorussia, 8, 0, 0, 0, 0, 0, 0, 0, "");
-	Time chealsea = new Time("Chealsea", jogadoresChealsea, 9, 0, 0, 0, 0, 0, 0, 0, "");
-	Time juventus = new Time("Juventus", jogadoresJuventus, 10, 0, 0, 0, 0, 0, 0, 0, "");
-	Time liverpool = new Time("Liverpool", jogadoresLiverpool, 11, 0, 0, 0, 0, 0, 0, 0, "");
-	Time manchesterCity = new Time("Manchester City", jogadoresManchesterCity, 12, 0, 0, 0, 0, 0, 0, 0, "");
-	Time manchesterUnited = new Time("Manchester United", jogadoresManchesterUnited, 13, 0, 0, 0, 0, 0, 0, 0, "");
-	Time milan = new Time("Milan", jogadoresMilan, 14, 0, 0, 0, 0, 0, 0, 0, "");
-	Time napoli = new Time("Napoli", jogadoresNapoli, 15, 0, 0, 0, 0, 0, 0, 0, "");
-	Time psg = new Time("Paris Saint Germain", jogadoresPSG, 16, 0, 0, 0, 0, 0, 0, 0, "");
-	Time porto = new Time("Porto", jogadoresPorto, 17, 0, 0, 0, 0, 0, 0, 0, "");
-	Time realMadrid = new Time("Real Madrid", jogadoresRealMadrid, 18, 0, 0, 0, 0, 0, 0, 0, "");
-	Time shakhtar = new Time("Shakhtar Donetsk", jogadoresShakhtar, 19, 0, 0, 0, 0, 0, 0, 0, "");
-	Time tottenham = new Time("Tottenham Hotspur", jogadoresTottenham, 20, 0, 0, 0, 0, 0, 0, 0, "");
 	
 	public ArrayList<Jogador> getJogadores() {
 		return jogadores;
@@ -558,5 +596,12 @@ public class Dados {
 	public void setTottenham(Time tottenham) {
 		this.tottenham = tottenham;
 	}
-	
+
+	public int getRandom1() {
+		return random1;
+	}
+
+	public int getRandom2() {
+		return random2;
+	}
 }

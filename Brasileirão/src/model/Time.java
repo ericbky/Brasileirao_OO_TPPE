@@ -147,10 +147,10 @@ public class Time {
 
 	@Override
 	public String toString() {
-		return "Time [nome=" + nome + ", jogadores=" + jogadores + ", colocacao=" + colocacao + ", pontos=" + pontos
-				+ ", numeroJogos=" + numeroJogos + ", numeroVitorias=" + numeroVitorias + ", numeroEmpates="
-				+ numeroEmpates + ", numeroDerrotas=" + numeroDerrotas + ", golsSofridos=" + golsSofridos
-				+ ", golsMarcados=" + golsMarcados + ", tatica=" + tatica + "]";
+		return "Time [nome = " + nome + ", jogadores = " + jogadores + ", colocacao = " + colocacao + ", pontos = " + pontos
+				+ ", numeroJogos = " + numeroJogos + ", numeroVitorias = " + numeroVitorias + ", numeroEmpates = "
+				+ numeroEmpates + ", numeroDerrotas = " + numeroDerrotas + ", golsSofridos = " + golsSofridos
+				+ ", golsMarcados = " + golsMarcados + ", tatica = " + tatica + "]";
 	}
 	
 	

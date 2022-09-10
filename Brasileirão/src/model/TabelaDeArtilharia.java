@@ -4,7 +4,7 @@ package model;
 
 public class TabelaDeArtilharia {
 
-	private int golsJogadores;
+	private int golsJogador;
 	private int partidasJogador;
 	private String nomeJogador;
 	private String timeJogador;
@@ -15,7 +15,7 @@ public class TabelaDeArtilharia {
 
 	public TabelaDeArtilharia(int golsJogadores, int partidasJogador, String nomeJogador, String timeJogador) {
 		super();
-		this.golsJogadores = golsJogadores;
+		this.golsJogador = golsJogadores;
 		this.partidasJogador = partidasJogador;
 		this.nomeJogador = nomeJogador;
 		this.timeJogador = timeJogador;
@@ -23,11 +23,11 @@ public class TabelaDeArtilharia {
 
 	
 	public int getGolsJogadores() {
-		return golsJogadores;
+		return golsJogador;
 	}
 
 	public void setGolsJogadores(int golsJogadores) {
-		this.golsJogadores = golsJogadores;
+		this.golsJogador = golsJogadores;
 	}
 
 	public int getPartidasJogador() {
@@ -56,7 +56,7 @@ public class TabelaDeArtilharia {
 
 	@Override
 	public String toString() {
-		return "TabelaDeArtilharia [golsJogadores=" + golsJogadores + ", partidasJogador=" + partidasJogador
+		return "TabelaDeArtilharia [golsJogadores=" + golsJogador + ", partidasJogador=" + partidasJogador
 				+ ", nomeJogador=" + nomeJogador + ", timeJogador=" + timeJogador + "]";
 	}
 	
