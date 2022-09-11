@@ -1,17 +1,30 @@
 package model;
 
-//import java.util.*;
-
+/**
+ * Classe abstrata pai das classes Jogador e Tecnico
+ * @author Rafael Bosi
+ *@version 1.0 (set 2022)
+ */
 public abstract class Pessoa {
 	protected String nome;
 	protected String nomeTime;
 	protected String sexo;
 	protected int idade;
 	
+	/**
+	 * Construtor sem parâmetro da classe Pessoa
+	 */
 	public Pessoa () {
 		super();
 	}
-
+	
+	/**
+	 * Construtor da classe Pessoa que necessita de informações para funcionar
+	 * @param nome Nome da pessoa
+	 * @param nomeTime Nome do time da pessoa
+	 * @param sexo Sexo da pessoa
+	 * @param idade Idade da pessoa
+	 */
 	public Pessoa(String nome, String nomeTime, String sexo, int idade) {
 		super();
 		this.nome = nome;
@@ -51,6 +64,4 @@ public abstract class Pessoa {
 	public void setIdade(int idade) {
 		this.idade = idade;
 	}
-	
-	
 }

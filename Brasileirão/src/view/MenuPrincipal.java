@@ -11,7 +11,7 @@ public class MenuPrincipal implements ActionListener{
 	private static JLabel titulo = new JLabel("Bem-Vindo a Champions League");
 	private static JButton tabelaTimes = new JButton("Tabela da Liga");
 	private static JButton tabelaArtilharia = new JButton("Tabela da Artilharia");
-	private static JButton simularRodada = new JButton("Simular a Rodada"); 
+	private static JButton simularTemporada = new JButton("Simular Temporada"); 
 	public static DadosController dados = new DadosController();
 
 	
@@ -20,14 +20,14 @@ public class MenuPrincipal implements ActionListener{
 		titulo.setBounds(150, 10, 400, 30);
 		tabelaTimes.setBounds(200, 100, 200, 30);
 		tabelaArtilharia.setBounds(200, 150, 200, 30);
-		simularRodada.setBounds(200, 200, 200, 30);
+		simularTemporada.setBounds(200, 200, 200, 30);
 		
 		janela.setLayout(null);
 		
 		janela.add(titulo);
 		janela.add(tabelaTimes);
 		janela.add(tabelaArtilharia);
-		janela.add(simularRodada);
+		janela.add(simularTemporada);
 		
 		janela.setSize(600, 400);
 		janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,7 +39,7 @@ public class MenuPrincipal implements ActionListener{
 		
 		tabelaTimes.addActionListener(menu);
 		tabelaArtilharia.addActionListener(menu);
-		simularRodada.addActionListener(menu);
+		simularTemporada.addActionListener(menu);
 	}
 	
 	public void actionPerformed(ActionEvent e) {

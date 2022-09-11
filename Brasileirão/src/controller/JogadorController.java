@@ -1,18 +1,43 @@
-//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
+//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
 package controller;
 
-//import java.util.*;
+import java.util.*;
 import model.*;
-
+/**
+ * Classe responsável pelo controle das informações acerca da classe Jogador
+ * @author Rafael Bosi
+ *@version 1.0 (set 2022)
+ */
 public class JogadorController {
-	public static void main (String[] args) {
-		DadosController d = new DadosController();
-		RodadasController g = new RodadasController();
-		Dados dados = new Dados();
-		d.createAllData();
-		g.definirConfrontosTemporada();
-		g.simularRodada(11);
-		System.out.println(g.getTodosConfrontos());
-		//System.out.println();
+	private ArrayList<Jogador> listaJogadores = new ArrayList<Jogador>();
+	
+	/**
+	 * Preenche a ArrayList listaJogadores com todos os jogadores existentes até o momento
+	 * @param dados Um objeto da classe DadosController que nos possibilita operar com todos os dados presentes na aplicação
+	 */
+	public JogadorController(DadosController dados) {
+		listaJogadores = dados.getJogadores();
+	}
+	
+	/**
+	 *Método responsável por pegar o nome ea id de todos os jogadores existentes até o momento 
+	 * @return Retorna um String[] com as informações Nome e Id de todos os jogadores
+	 */
+	public String[] getJogadorNomeEId() {
+		String[] lista = new String[listaJogadores.size()];
+		for (int n=0; n<listaJogadores.size(); n++) {
+			lista[n] = "Nome = " + listaJogadores.get(n).getNome() +
+					" Time = " + listaJogadores.get(n).getNomeTime() +
+					" Id = " + listaJogadores.get(n).getId() + "\n";
+		}
+		return lista;
+	}
+
+	public ArrayList<Jogador> getListaJogadores() {
+		return listaJogadores;
+	}
+
+	public void setListaJogadores(ArrayList<Jogador> listaJogadores) {
+		this.listaJogadores = listaJogadores;
 	}
 }

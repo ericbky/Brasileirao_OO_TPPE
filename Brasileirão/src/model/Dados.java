@@ -1,8 +1,12 @@
 package model;
 
 import java.util.*;
-import controller.*;
 
+/**
+ * Responsável por inserir dados no sistema.
+ * @author Rafael Bosi
+ *@version 1.0 (Set 2022)
+ */
 public class Dados {
 	
 	private ArrayList<Jogador> jogadores = new ArrayList<Jogador>();
@@ -30,16 +34,24 @@ public class Dados {
 	private ArrayList<Jogador> jogadoresNapoli = new ArrayList<Jogador>();
 	private ArrayList<Jogador> jogadoresLiverpool  = new ArrayList<Jogador>();
 	
-	public Dados() {
-		super();
-	}
-	
+	/**
+	 * Gera números aleatórios que serão usados durante a aplicação
+	 * @param min Número inteiro que representa o limite inferior para geração de números aleatórios
+	 * @param max Número inteiro que representa o limite superior para geração de números aleatórios
+	 * @return retorna um número aleatório
+	 */
 	int random1;
 	public int randomNumber1(int min, int max) {
 	    Random r = new Random();
 	    random1 = r.nextInt((max - min) - 1) + min;
 	    return random1;
 	}
+	/**
+	 * Gera números aleatórios que serão usados durante a aplicação (Foi necessário implementar um outro randomNumber para connseguir dois números diferentes)
+	 * @param min Número inteiro que representa o limite inferior para geração de números aleatórios
+	 * @param max Número inteiro que representa o limite superior para geração de números aleatórios
+	 * @return retorna um número aleatório
+	 */
 	int random2;
 	public int randomNumber2(int min, int max) {
 	    Random p = new Random();
@@ -47,6 +59,20 @@ public class Dados {
 	    return random2;
 	}
 	
+	/**
+	 * Método que concatena vários métodos responsáveis pela criação de todos os dados usados no projeto,
+	 */
+	public void createAllData() {
+		createCoachs();
+		createPlayers();
+		alimentarTimes();
+		atribuirTecnicos();
+		escolherOpcaoTatica();
+	}
+	
+	/**
+	 * Método responsável pela criação dos objetos da classe Jogador
+	 */
 	public void createPlayers() {
 		for(int i=1; i<221; i++) {
 			randomNumber1(18, 30);
@@ -146,6 +172,9 @@ public class Dados {
 		}
 	}
 	
+	/**
+	 * Método responsável pela criação dos objatos da classe Tecnico
+	 */
 	public void createCoachs() {
 		taticas.add("4-3-3");
 		taticas.add("4-4-2");
@@ -169,12 +198,18 @@ public class Dados {
 		}
 	}
 	
+	/**
+	 * Método responsável por atribuir a um time os técnicos criados no método
+	 */
 	public void atribuirTecnicos() {
 		for (int e=0; e<20; e++) {
 			tecnicos.get(e).setNomeTime(times.get(e).getNome());
 		}
 	} 
 	
+	/**
+	 * Criação dos objetos da classe Time
+	 */
 	Time atleticoMadrid = new Time("Atletico Madrid", jogadoresAtleticoMadrid, 			
 			1, 0, 0, 0, 0, 0, 0, 0, "");
 	Time ajax = new Time("Ajax", jogadoresAjax, 2, 
@@ -216,6 +251,9 @@ public class Dados {
 	Time tottenham = new Time("Tottenham Hotspur", jogadoresTottenham, 20, 
 			0, 0, 0, 0, 0, 0, 0, "");
 	
+	/**
+	 * Método responsável por alocar dentro do ArrayList times os times criados 
+	 */
 	public void alimentarTimes() {
 		times.add(atleticoMadrid);
 		times.add(ajax);		
@@ -239,6 +277,9 @@ public class Dados {
 		times.add(tottenham);
 	}
 	
+	/** 
+	 * Método responsável por escolher uma tática aleatória para todos os times criados
+	 */
 	public void escolherOpcaoTatica() {
 		for(int e=0; e<20; e++) {
 			int random = randomNumber1(0,15);

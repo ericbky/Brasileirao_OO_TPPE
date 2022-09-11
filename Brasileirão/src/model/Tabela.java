@@ -1,7 +1,10 @@
 package model;
 
-//import java.util.*
-
+/**
+ * Classe responsável pela criação de objetos tipo Tabela
+ * @author Rafael Bosi
+ *@version 1.0 (set 2022)
+ */
 public class Tabela {
 
 	private String nomeTime;
@@ -12,15 +15,27 @@ public class Tabela {
 	private int derrotasTime;
 	private int golsSofridos;
 	private int golsMarcados;
-	private int saldoGolsTime;
 	
+	/**
+	 * Construtor sem parâmetro da classe Tabela
+	 */
 	public Tabela() {
 		super();
 	}
 	
-	
+	/**
+	 * Construtor da classe Tabela que necessita de informações para funcionar
+	 * @param nomeTime Nome do time presente na tabela
+	 * @param pontosTime Pontos do time presente na tabela
+	 * @param partidasTime Partidas jogadas pelo time presente na tabela
+	 * @param vitoriasTime Número de vitórias do time presente na tabela
+	 * @param empatesTime Número de empates do time presente na tabela
+	 * @param derrotasTime Número de derrotas do time presente na tabela
+	 * @param golsSofridos Número de gols sofridos pelo time presente na tabela
+	 * @param golsMarcados Número de gols marcados pelo time presente na tabela 
+	 */
 	public Tabela(String nomeTime, int pontosTime, int partidasTime, int vitoriasTime, int empatesTime,
-			int derrotasTime, int golsSofridos, int golsMarcados, int saldoGolsTime) {
+			int derrotasTime, int golsSofridos, int golsMarcados) {
 		super();
 		this.nomeTime = nomeTime;
 		this.pontosTime = pontosTime;
@@ -30,7 +45,6 @@ public class Tabela {
 		this.derrotasTime = derrotasTime;
 		this.golsSofridos = golsSofridos;
 		this.golsMarcados = golsMarcados;
-		this.saldoGolsTime = saldoGolsTime;
 	}
 
 
@@ -113,23 +127,14 @@ public class Tabela {
 		this.golsMarcados = golsMarcados;
 	}
 
-
-	public int getSaldoGolsTime() {
-		return saldoGolsTime;
-	}
-
-
-	public void setSaldoGolsTime(int saldoGolsTime) {
-		this.saldoGolsTime = saldoGolsTime;
-	}
-
-
+	/**
+	 * Pega todos os dados relevantes do objeto e transforma em uma String
+	 */
 	@Override
 	public String toString() {
 		return "Tabela [nomeTime=" + nomeTime + ", pontosTime=" + pontosTime + ", partidasTime=" + partidasTime
 				+ ", vitoriasTime=" + vitoriasTime + ", empatesTime=" + empatesTime + ", derrotasTime=" + derrotasTime
-				+ ", golsSofridos=" + golsSofridos + ", golsMarcados=" + golsMarcados + ", saldoGolsTime="
-				+ saldoGolsTime + "]";
+				+ ", golsSofridos=" + golsSofridos + ", golsMarcados=" + golsMarcados + "]";
 	}
 	
 }

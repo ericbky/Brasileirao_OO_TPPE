@@ -1,7 +1,10 @@
 package model;
 
-//import java.util.*
-
+/**
+ * Classe responsável por criar objetos do tipo TabelaDeArtilharia
+ * @author Rafael Bosi
+ *@version 1.0 (set 2022)
+ */
 public class TabelaDeArtilharia {
 
 	private int golsJogador;
@@ -9,10 +12,20 @@ public class TabelaDeArtilharia {
 	private String nomeJogador;
 	private String timeJogador;
 	
+	/**
+	 * Construtor sem parâmetro da classe TabelaDeArtilharia
+	 */
 	public TabelaDeArtilharia() {
 		super();
 	}
 
+	/**
+	 * Construtor da classe TabelaDeArtilharia que necessita de informações para funcionar
+	 * @param golsJogadores Número de gols marcados pelo jogadore presente na tabela
+	 * @param partidasJogador Número de partidas jogadas pelo jogadore presente na tabela
+	 * @param nomeJogador Nome do jogadore presente na tabela
+	 * @param timeJogador Nome do time do jogador presente na tabela
+	 */
 	public TabelaDeArtilharia(int golsJogadores, int partidasJogador, String nomeJogador, String timeJogador) {
 		super();
 		this.golsJogador = golsJogadores;
@@ -54,6 +67,9 @@ public class TabelaDeArtilharia {
 		this.timeJogador = timeJogador;
 	}
 
+	/**
+	 * Pega todas os dados relevantes do objeto e transforma em uma String
+	 */
 	@Override
 	public String toString() {
 		return "TabelaDeArtilharia [golsJogadores=" + golsJogador + ", partidasJogador=" + partidasJogador

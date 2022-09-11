@@ -3,33 +3,53 @@ package controller;
 import model.*;
 import java.util.*;
 
+/**
+ * Controle de todos os tipos de dados disponíveis na aplicação
+ * @author Rafael Bosi
+ *@version 1.0 (set 2022)
+ */
 public class DadosController {
 
-	Dados d = new Dados();
-	RodadasController g = new RodadasController();
+	private Dados d = new Dados();
 	
-	public void createAllData() {
-		d.createCoachs();
-		d.createPlayers();
-		d.alimentarTimes();
-		d.atribuirTecnicos();
-		d.escolherOpcaoTatica();
+	/**
+	 * Construtor da classe DadosController
+	 */
+	public DadosController() {
+		d.createAllData();
 	}
 	
+	/**
+	 * Método responsável por deletar um objeto Jogador a partir do time que joga e de seu index 
+	 * @param nomeTime Nome do time do jogador a ser deletado
+	 * @param index Posição do jogador a ser deletado
+	 * @return true Caso o jogador tenha sido deletado adequadamente retorna true
+	 */
 	public boolean deletarJogador(String nomeTime, int index) {
-		if (index >= 220) {
+		if (index > 11) {
 			return false;
 		}
 		else {
 			for (int j=0; j<20; j++) {
 				if (d.getTimes().get(j).getNome() == nomeTime) {
-					d.getTimes().get(j).getJogadores().remove(index);
+					for(int n=0; n<219; n++) {
+						if(d.getJogadores().get(n).getId() ==
+								d.getTimes().get(j).getJogadores().get(index).getId()) {
+							d.getJogadores().remove(n);
+							d.getTimes().get(j).getJogadores().remove(index);
+						}
+					}
 				}
 			}
 			return true;
 		}
 	}
 	
+	/**
+	 * Método responsável por deletar um técnico a partir do seu index
+	 * @param index Posição do técnico a ser deletado
+	 * @return Retorna true caso o técnico tenha sido deletado com sucesso
+	 */
 	public boolean deletarTecnico(int index) {
 		if (index >= 20) {
 			return false;
@@ -40,6 +60,12 @@ public class DadosController {
 		}
 	}
 	
+	/**
+	 * Método responsável por criar um novo técnico
+	 * @param nomeTime Nome do time do técnico a ser criado
+	 * @param dadosTecnico String[] contendo as informações [Nome, Idade, Imagem interna e Imagem externa] do novo técnico
+	 * @return Retorna true caso o técnico tenha sido criado com sucesso
+	 */
 	public boolean criarTecnico(String nomeTime,String[] dadosTecnico) {
 		if (d.getTecnicos().size()>20) {
 			return false;
@@ -58,7 +84,12 @@ public class DadosController {
 		return true;
 	}
 	
-	//Teste pode ser implementado
+	/**
+	 * Método responsável por criar um novo jogador
+	 * @param nomeTime Nome do time do jogador a ser criado
+	 * @param dadosJogador String[] contendo as informações [Nome, Idade, Posição, Número da camisa, Id] do novo joador
+	 * @return Retorna true caso o jogador tenha sido criado com sucesso
+	 */
 	public boolean criarJogador(String nomeTime, String[] dadosJogador) {
 		for (int j=0; j<20; j++) {
 			if (d.getTimes().get(j).getNome() == nomeTime) {
@@ -71,12 +102,22 @@ public class DadosController {
 							Integer.parseInt(dadosJogador[1]),
 							0, dadosJogador[2], 0, Integer.parseInt(dadosJogador[3]), 
 							Integer.parseInt(dadosJogador[4]) + 220));
+					d.getJogadores().add(new Jogador(dadosJogador[0], nomeTime, "Masculino", 
+							Integer.parseInt(dadosJogador[1]),
+							0, dadosJogador[2], 0, Integer.parseInt(dadosJogador[3]), 
+							Integer.parseInt(dadosJogador[4]) + 220));
 				}
 			}
 		}
 		return true;
 	}
 	
+	/**
+	 * Método responsável por alterar as informações de um jogador
+	 * @param index int que representa a posição do jogador a ser atualizado
+	 * @param update String[] contendo as informações [Nome, Idade, Posição, Número da camisa, Id]
+	 * @return Retorna true caso a alteração tenha sido feita com sucesso
+	 */
 	public boolean atualizarJogador(int index, String[] update) {
 		for(int j=0; j<5; j++){
 			if (update[j]==null || update[j]=="") {
@@ -87,10 +128,16 @@ public class DadosController {
 		d.getJogadores().get(index).setIdade(Integer.parseInt(update[1]));
 		d.getJogadores().get(index).setPosicao(update[2]);
 		d.getJogadores().get(index).setNumCamisa(Integer.parseInt(update[3]));
-		d.getJogadores().get(index).setId(Integer.parseInt(update[4]));
+		d.getJogadores().get(index).setId(Integer.parseInt(update[4])+220);
 		return true;
 	}
 	
+	/**
+	 * Método responsável por alterar as informações de um técnico
+	 * @param index int que representa a posição do técnico a ser atualizado
+	 * @param update String[] contendo as informações [Nome, Idade, Imagem interna, Imagem externa]
+	 * @return Retorna true caso a alteração tenha ocorrido com sucesso
+	 */
 	public boolean atualizarTecnico(int index, String[] update) {
 		for(int j=0; j<4; j++){
 			if (update[j]==null || update[j]=="") {
@@ -104,6 +151,11 @@ public class DadosController {
 		return true;
 	}
 	
+	/**
+	 * Método responsável por buscar um jogador a partir de seu Id
+	 * @param id Id do jogador procurado
+	 * @return Retorna um String[] com as informações do jogador procurado
+	 */
 	public String[] buscarJogador(int id){
 		String[] jogador = new String[9];
 		for (int j=0; j<20; j++) {
@@ -124,6 +176,11 @@ public class DadosController {
 		return jogador;
 	}
 	
+	/**
+	 * Método responsável por buscar um técnico a partir do nome de seu time
+	 * @param nomeTime Nome do time do técnico procurado
+	 * @return Retorna um String[] com as informações do técnico procurado
+	 */
 	public String[] buscarTecnico(String nomeTime) {
 		String[] tecnico = new String[8];
 		for (int j=0; j<20; j++) {

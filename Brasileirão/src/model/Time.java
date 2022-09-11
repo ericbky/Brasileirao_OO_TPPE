@@ -2,6 +2,11 @@ package model;
 
 import java.util.*;
 
+/**
+ * Classe responsável por criar objetos do tipo Time
+ * @author Rafael Bosi
+ *@version 1.0 (set 2022)
+ */
 public class Time {
 
 	private String nome;
@@ -16,7 +21,20 @@ public class Time {
 	private int golsMarcados;
 	private String tatica;
 	
-	
+	/**
+	 * Construtor da classe Time que necessita de informações para funcionar
+	 * @param nome Nome do time
+	 * @param jogadores ArrayList para conter os objetos de Jogador presentes no time
+	 * @param colocacao Colocação do time
+	 * @param pontos Número de pontos do time
+	 * @param numeroJogos Número de partidas jogadas pelo time
+	 * @param numeroVitorias Número de vitórias do time
+	 * @param numeroEmpates Número de empates do time
+	 * @param numeroDerrotas Número de derrotas do time
+	 * @param golsSofridos Número de gols sofridos pelo time
+	 * @param golsMarcados Número de gols marcados pelo time
+	 * @param tatica Tática usada pelo time
+	 */
 	public Time(String nome, ArrayList<Jogador> jogadores, int colocacao, int pontos, int numeroJogos,
 			int numeroVitorias, int numeroEmpates, int numeroDerrotas, int golsSofridos, int golsMarcados,
 			String tatica) {
@@ -144,7 +162,9 @@ public class Time {
 		this.tatica = tatica;
 	}
 
-
+	/**
+	 * Pega os dados relevantes e transforma em uma String
+	 */
 	@Override
 	public String toString() {
 		return "Time [nome = " + nome + ", jogadores = " + jogadores + ", colocacao = " + colocacao + ", pontos = " + pontos
