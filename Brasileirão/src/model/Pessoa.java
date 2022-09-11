@@ -17,7 +17,7 @@ public abstract class Pessoa {
 	public Pessoa () {
 		super();
 	}
-	
+
 	/**
 	 * Construtor da classe Pessoa que necessita de informações para funcionar
 	 * @param nome Nome da pessoa

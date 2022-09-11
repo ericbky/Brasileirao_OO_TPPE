@@ -26,7 +26,7 @@ public class DadosController {
 	 * @return true Caso o jogador tenha sido deletado adequadamente retorna true
 	 */
 	public boolean deletarJogador(String nomeTime, int index) {
-		if (index > 11) {
+		if (index < 0 || index > 10) {
 			return false;
 		}
 		else {
@@ -67,7 +67,7 @@ public class DadosController {
 	 * @return Retorna true caso o técnico tenha sido criado com sucesso
 	 */
 	public boolean criarTecnico(String nomeTime,String[] dadosTecnico) {
-		if (d.getTecnicos().size()>20) {
+		if (d.getTecnicos().size()==20) {
 			return false;
 		}
 		else {
@@ -120,7 +120,7 @@ public class DadosController {
 	 */
 	public boolean atualizarJogador(int index, String[] update) {
 		for(int j=0; j<5; j++){
-			if (update[j]==null || update[j]=="") {
+			if (update[j]==null || update[j]=="" || update[j]==" ") {
 				return false;
 			}
 		}
@@ -197,6 +197,18 @@ public class DadosController {
 			}
 		}
 		return tecnico;
+	}
+	/**
+	 * Método responsável por transformar os dados ArrayList<Jogador> em String[]
+	 * @param ArrayList<Jogador> contendo os dados dos jogadores
+	 * @return String[] Contendo os dados dos jogadores 
+	 */
+	public String[] transformarDadosJogadores(ArrayList<Jogador> jogador) {
+		String[] listaJogadores = new String[jogador.size()]; 
+		for (int n=0; n<jogador.size(); n++) {
+			listaJogadores[n] = jogador.get(n).toString(); 
+		}
+		return listaJogadores;
 	}
 	
 	public ArrayList<Jogador> getJogadoresAtleticoMadrid(){

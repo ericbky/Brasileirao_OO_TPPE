@@ -24,13 +24,15 @@ public class TecnicoController {
 	 * @param index Posição do técnico a ter as opções táticas listadas
 	 * @return Retorna um ArrayList com todas as táticas disponíveis
 	 */
-	public ArrayList<String> getOpcoesTaticas(int index) {
+	public String[] getOpcoesTaticas(int index) {
 		if (index<0 || index>19) {
 			return null;
 		}
 		else{
-			ArrayList<String> listaTaticas = new ArrayList<String>();
-			listaTaticas = listaTecnicos.get(index).getOpcoesTaticas();
+			String[] listaTaticas = new String[15];
+			for(int n=0; n<15; n++) {
+				listaTaticas[n] = listaTecnicos.get(index).getOpcoesTaticas().get(n);
+			}
 			return listaTaticas;
 		}	
 	}

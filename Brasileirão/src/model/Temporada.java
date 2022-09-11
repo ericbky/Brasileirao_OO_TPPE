@@ -11,7 +11,6 @@ public class Temporada {
 
 	private ArrayList<String> confrontosDaTemporada;
 	private ArrayList<String> resultadosDaTemporada;
-	private int numeroRodada;
 	
 	/**
 	 * Construtor sem parâmetro da classe Temporada
@@ -22,8 +21,8 @@ public class Temporada {
 
 	/**
 	 * Construtor da classe Temporada que necessita de informações para funcionar
-	 * @param confrontosDaRodada ArrayList para conter todos os confrontos da temporada
-	 * @param resultadosDaRodada ArrayList para conter todos os resultados da temporada
+	 * @param confrontosDaTemporada ArrayList para conter todos os confrontos da temporada
+	 * @param resultadosDaTemporada ArrayList para conter todos os resultados da temporada
 	 */
 	public Temporada(ArrayList<String> confrontosDaTemporada, ArrayList<String> resultadosDaTemporada) {
 		super();

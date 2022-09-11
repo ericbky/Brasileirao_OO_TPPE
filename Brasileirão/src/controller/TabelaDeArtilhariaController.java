@@ -23,9 +23,15 @@ public class TabelaDeArtilhariaController {
 	 * Método responsável por ordenar a artilharia
 	 * @return Retorna um ArrayList com os jogadores em ordem de quem marcou mais gols para quem marcou menos
 	 */
-	public ArrayList<Jogador> classificacaoArtilharia(){
+	public String[] classificacaoArtilharia(){
+		String[] lista = new String[20];
 		Collections.sort(listaJogadores, new ComparatorJogador());
-		return listaJogadores;
+		for (int n=0; n<20; n++) {
+			lista[n] = (n+1) + "  " + listaJogadores.get(n).getNome() +
+					"  " + listaJogadores.get(n).getNomeTime() + 
+					"  " + listaJogadores.get(n).getGols();
+		}
+		return lista;
 	}
 
 	public ArrayList<Jogador> getListaJogadores() {
@@ -34,5 +40,12 @@ public class TabelaDeArtilhariaController {
 
 	public void setListaJogadores(ArrayList<Jogador> listaJogadores) {
 		this.listaJogadores = listaJogadores;
+	}
+	public static void maind(String[] args) {
+		TemporadaController t = new TemporadaController();
+		DadosController d = new DadosController();
+		TabelaDeArtilhariaController art = new TabelaDeArtilhariaController(d);
+		t.simularTemporada(d);
+		art.classificacaoArtilharia();
 	}
 }

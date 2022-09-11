@@ -89,8 +89,8 @@ public class Jogador extends Pessoa {
 	 */
 	@Override
 	public String toString() {
-		return  nome +"[time = " + nomeTime + ", sexo = " + sexo + ", idade = " + 
-				idade + ", gols = " + gols + ", posicao = " + posicao + ", partidas = " + 
-				partidas + ", numCamisa = " + numCamisa + ", id = " + id + "]\n";
+		return  nome +" - time: " + nomeTime + " / sexo: " + sexo + " / idade: " + 
+				idade + " / gols: " + gols + " / posicao: " + posicao + " / partidas: " + 
+				partidas + " / número da camisa: " + numCamisa + " / id: " + id + "\n";
 	}
 }

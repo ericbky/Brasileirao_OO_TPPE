@@ -1,4 +1,3 @@
-//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
 package controller;
 
 import java.util.*;
@@ -10,7 +9,7 @@ import model.*;
  */
 public class JogadorController {
 	private ArrayList<Jogador> listaJogadores = new ArrayList<Jogador>();
-	
+
 	/**
 	 * Preenche a ArrayList listaJogadores com todos os jogadores existentes até o momento
 	 * @param dados Um objeto da classe DadosController que nos possibilita operar com todos os dados presentes na aplicação
@@ -20,7 +19,7 @@ public class JogadorController {
 	}
 	
 	/**
-	 *Método responsável por pegar o nome ea id de todos os jogadores existentes até o momento 
+	 *Método responsável por pegar o nome, nome do time e a id de todos os jogadores existentes até o momento 
 	 * @return Retorna um String[] com as informações Nome e Id de todos os jogadores
 	 */
 	public String[] getJogadorNomeEId() {

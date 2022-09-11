@@ -4,7 +4,7 @@ import model.*;
 import java.util.*;
 
 /**
- * Classe que implementa Comparator<> e é responsável pela ordenação dos times
+ * Classe que implementa Comparator e é responsável pela ordenação dos times e sobrescrita do método padrão da classe Comparator<>
  * @author Rafael Bosi
  *@version 1.0 (set 2022)
  */

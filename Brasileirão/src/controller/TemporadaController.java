@@ -13,12 +13,12 @@ public class TemporadaController {
 	private ArrayList<String> todosConfrontos = new ArrayList<String>();
 	private ArrayList<Integer> resultadosRodadas = new ArrayList<Integer>();
 	private Dados dados = new Dados();
-	
+
 	/**
 	 * Método responsável por simular todos os confrontos e resultados de uma temporada
 	 * @param d Um objeto da classe DadosController que nos possibilita operar com todos os dados presentes na aplicação
 	 */
-	public void simularTemporada(DadosController d) {
+	public ArrayList<Integer> simularTemporada(DadosController d) {
 		String[] m = new String[380];
 			for(int p=0; p<20; p++) {
 				for (int t=0; t<20; t++) {
@@ -145,21 +145,23 @@ public class TemporadaController {
 				}
 			}
 		}
+		return resultadosRodadas;
 	}
 	
 	/**
 	 * Método responsável por listar todos os confrontos e resultados por rodada 
+	 * @param ArrayList<Integer> Array contendo os resultados das partidas das rodadas 
 	 * @param numRodada Número da rodada a ter os confrontos e resultados listados
 	 * @return String[] com os confrontos e resultados de determinada rodada
 	 */
-	public String[] listarJogosDaRodada(int numRodada){
+	public String[] listarJogosDaRodada(ArrayList<Integer> lista, int numRodada){
 		String[] resultadosEConfrontos = new String[380];
 		String[] confrontos = new  String[380];
 		String[] resultados = new String[380];
 		String[] resultadosPorRodada = new String[19];
 		for(int i=0; i<380; i++ ) {
-			resultados[i] = Integer.toString(resultadosRodadas.get(i))+ " X "
-					+ Integer.toString(resultadosRodadas.get(i+1));
+			resultados[i] = Integer.toString(lista.get(i))+ " X "
+					+ Integer.toString(lista.get(i+1));
 		}
 		for(int e=0; e<380; e++) {
 			confrontos = getTodosConfrontos().get(e).split("-");

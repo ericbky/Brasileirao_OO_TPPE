@@ -67,7 +67,7 @@ public class Dados {
 		createPlayers();
 		alimentarTimes();
 		atribuirTecnicos();
-		escolherOpcaoTatica();
+		atribuirOpcaoTatica();
 	}
 	
 	/**
@@ -280,7 +280,7 @@ public class Dados {
 	/** 
 	 * Método responsável por escolher uma tática aleatória para todos os times criados
 	 */
-	public void escolherOpcaoTatica() {
+	public void atribuirOpcaoTatica() {
 		for(int e=0; e<20; e++) {
 			int random = randomNumber1(0,15);
 			times.get(e).setTatica(taticas.get(random));
