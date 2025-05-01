@@ -1,0 +1,49 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+env/
+ENV/
+
+# Editor/IDE configs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test reports
+htmlcov/
+coverage.xml
+.cache/
+.tox/
+
+# Python packaging
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
+
+# Migrations (caso use frameworks como Django/Flask com migrations geradas)
+db/migrations/*.pyc
+db/migrations/__pycache__/
+
+# Sonar or other analysis
+.sonar/
+
+# dotenv
+.env
+.env.*
+
+# Jupyter notebooks (caso adicione experimentos)
+.ipynb_checkpoints/
