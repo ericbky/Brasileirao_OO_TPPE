@@ -1,7 +1,7 @@
 import asyncio
-from db.database import engine, Base
+from app.db.database import engine, Base
 
-from models.models import (
+from app.models.models import (
     Time,
     Jogador,
     Tecnico,
