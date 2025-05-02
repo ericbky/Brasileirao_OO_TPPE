@@ -1,9 +1,36 @@
-from sqlalchemy import Integer, String, Date, Column, ForeignKey, Float, Boolean
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Float,
+    Date,
+    Boolean,
+    ForeignKey,
+    Enum,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import relationship
-
+from enum import Enum as PyEnum
 from db.database import Base
 
 
+# ---------------------- Enums ----------------------
+class PosicaoJogador(PyEnum):
+    ATACANTE = "Atacante"
+    MEIO_CAMPO = "Meio-Campo"
+    ZAGUEIRO = "Zagueiro"
+    GOLEIRO = "Goleiro"
+
+
+class TipoEvento(PyEnum):
+    GOL = "Gol"
+    FALTA = "Falta"
+    CARTAO_AMARELO = "Cartão Amarelo"
+    CARTAO_VERMELHO = "Cartão Vermelho"
+    SUBSTITUICAO = "Substituição"
+
+
+# ---------------------- Time ----------------------
 class Time(Base):
     __tablename__ = "times"
 
@@ -12,13 +39,8 @@ class Time(Base):
     socios = Column(Integer)
     valor_equipe_titular = Column(Float)
     valor_medio_equipe_titular = Column(Float)
-    convocacao_selecao_principal = Column(Integer)
-    selecao_juniores = Column(Integer)
-    estrangeiros = Column(Integer)
-    idade_media_titular = Column(Float)
 
     jogadores = relationship("Jogador", back_populates="time")
-    tecnico = relationship("Tecnico", back_populates="time", uselist=False)
     partidas_mandante = relationship(
         "Partida",
         back_populates="time_mandante",
@@ -29,8 +51,11 @@ class Time(Base):
         back_populates="time_visitante",
         foreign_keys="Partida.time_visitante_id",
     )
+    historico_tecnicos = relationship("HistoricoTecnico", back_populates="time")
+    historico_jogadores = relationship("HistoricoJogador", back_populates="time")
 
 
+# ---------------------- Jogador ----------------------
 class Jogador(Base):
     __tablename__ = "jogadores"
 
@@ -38,32 +63,27 @@ class Jogador(Base):
     nome = Column(String, nullable=False)
     idade = Column(Integer, nullable=False)
     altura = Column(Float, nullable=False)
-    posicao = Column(String)
+    posicao = Column(Enum(PosicaoJogador))
     num_camisa = Column(Integer, nullable=False)
-    partidas = Column(Integer, nullable=False)
-    gols = Column(Integer)
     convocado_selecao_principal = Column(Boolean)
     convocado_selecao_juniores = Column(Boolean)
     estrangeiro = Column(Boolean)
     valor_mercado = Column(Float)
     time_id = Column(Integer, ForeignKey("times.id"))
-    time = relationship("Time", back_populates="jogadores")
 
+    time = relationship("Time", back_populates="jogadores")
     eventos = relationship("EventoPartida", back_populates="jogador")
     escalacoes = relationship("Escalacao", back_populates="jogador")
+    historico = relationship("HistoricoJogador", back_populates="jogador")
 
 
+# ---------------------- Tecnico ----------------------
 class Tecnico(Base):
     __tablename__ = "tecnicos"
 
     id = Column(Integer, primary_key=True)
     nome = Column(String, nullable=False)
-    idade = Column(String, nullable=False)
-    data_inicio = Column(Date, nullable=False)
-    data_final = Column(Date)
-    proporcao_sucesso = Column(Float)
-    time_id = Column(Integer, ForeignKey("times.id"))
-    time = relationship("Time", back_populates="tecnico")
+    idade = Column(Integer, nullable=False)
 
     partidas_mandante = relationship(
         "Partida",
@@ -75,8 +95,10 @@ class Tecnico(Base):
         back_populates="tecnico_visitante",
         foreign_keys="Partida.tecnico_visitante_id",
     )
+    historico_times = relationship("HistoricoTecnico", back_populates="tecnico")
 
 
+# ---------------------- Estadio ----------------------
 class Estadio(Base):
     __tablename__ = "estadios"
 
@@ -90,6 +112,7 @@ class Estadio(Base):
     partidas = relationship("Partida", back_populates="estadio")
 
 
+# ---------------------- Partida ----------------------
 class Partida(Base):
     __tablename__ = "partidas"
 
@@ -105,12 +128,10 @@ class Partida(Base):
     arbitro = Column(String)
     publico = Column(Integer)
     publico_max = Column(Integer)
-
     gols_mandante = Column(Integer)
     gols_visitante = Column(Integer)
     gols_1_tempo_mandante = Column(Integer)
     gols_1_tempo_visitante = Column(Integer)
-
     prorrogacao = Column(Boolean)
     penalti = Column(Boolean)
 
@@ -141,12 +162,13 @@ class Partida(Base):
     estatisticas = relationship("EstatisticaTimePartida", back_populates="partida")
 
 
+# ---------------------- EventoPartida ----------------------
 class EventoPartida(Base):
     __tablename__ = "eventos_partida"
 
     id = Column(Integer, primary_key=True)
+    tipo = Column(Enum(TipoEvento), nullable=False)
     minuto = Column(Integer)
-    tipo = Column(String)
     descricao = Column(String)
 
     jogador_id = Column(Integer, ForeignKey("jogadores.id"))
@@ -156,6 +178,7 @@ class EventoPartida(Base):
     partida = relationship("Partida", back_populates="eventos")
 
 
+# ---------------------- Escalacao ----------------------
 class Escalacao(Base):
     __tablename__ = "escalacoes"
 
@@ -173,6 +196,7 @@ class Escalacao(Base):
     partida = relationship("Partida", back_populates="escalacoes")
 
 
+# ---------------------- EstatisticaTimePartida ----------------------
 class EstatisticaTimePartida(Base):
     __tablename__ = "estatisticas_time_partida"
 
@@ -191,15 +215,54 @@ class EstatisticaTimePartida(Base):
     partida_id = Column(Integer, ForeignKey("partidas.id"))
     time_id = Column(Integer, ForeignKey("times.id"))
 
+    __table_args__ = (
+        UniqueConstraint("partida_id", "time_id", name="uq_stat_partida_time"),
+    )
+
     partida = relationship("Partida", back_populates="estatisticas")
     time = relationship("Time")
 
 
+# ---------------------- TimeTemporada ----------------------
 class TimeTemporada(Base):
     __tablename__ = "times_temporada"
 
     id = Column(Integer, primary_key=True)
     data_inicio = Column(Date)
     data_final = Column(Date)
-
+    temporada = Column(String, nullable=False)
     time_id = Column(Integer, ForeignKey("times.id"))
+
+
+# ---------------------- HistoricoJogador ----------------------
+class HistoricoJogador(Base):
+    __tablename__ = "historico_jogadores"
+
+    id = Column(Integer, primary_key=True)
+    data_inicio = Column(Date, nullable=False)
+    data_fim = Column(Date)
+    jogador_id = Column(Integer, ForeignKey("jogadores.id"))
+    time_id = Column(Integer, ForeignKey("times.id"))
+
+    jogador = relationship("Jogador", back_populates="historico")
+    time = relationship("Time", back_populates="historico_jogadores")
+
+
+# ---------------------- HistoricoTecnico ----------------------
+class HistoricoTecnico(Base):
+    __tablename__ = "historico_tecnicos"
+
+    id = Column(Integer, primary_key=True)
+    data_inicio = Column(Date, nullable=False)
+    data_fim = Column(Date)
+    tecnico_id = Column(Integer, ForeignKey("tecnicos.id"))
+    time_id = Column(Integer, ForeignKey("times.id"))
+
+    __table_args__ = (
+        UniqueConstraint(
+            "tecnico_id", "time_id", "data_inicio", name="uq_tecnico_time_data"
+        ),
+    )
+
+    tecnico = relationship("Tecnico", back_populates="historico_times")
+    time = relationship("Time", back_populates="historico_tecnicos")

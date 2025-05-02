@@ -13,4 +13,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY ./app ./app
 COPY ./tests ./tests
 
+ENV PYTHONPATH=/app
+
 CMD ["bash", "-c", "python app/init_db.py && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"]
