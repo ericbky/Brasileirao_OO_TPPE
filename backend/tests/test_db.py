@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 import pytest_asyncio
 from dotenv import load_dotenv
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     create_async_engine,
@@ -66,7 +66,6 @@ async def engine():
 
 @pytest_asyncio.fixture(scope="function")
 async def db_session(engine):
-
     connection = await engine.connect()
     transaction = await connection.begin()
 
@@ -76,6 +75,12 @@ async def db_session(engine):
     Session = async_scoped_session(session_factory, scopefunc=lambda: None)
 
     session = Session()
+
+    # Truncar todas as tabelas e resetar as sequencias
+    for table in reversed(Base.metadata.sorted_tables):
+        await session.execute(text(f'TRUNCATE TABLE {table.name} RESTART IDENTITY CASCADE'))
+    await session.commit()
+
     try:
         yield session
     finally:
