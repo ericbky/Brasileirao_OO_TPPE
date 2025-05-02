@@ -7,11 +7,12 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Instala as dependências
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt pytest-asyncio
 
 # Copia o código da aplicação para dentro do container
 COPY ./app ./app
 COPY ./tests ./tests
+COPY ./pytest.ini ./pytest.ini
 
 ENV PYTHONPATH=/app
 

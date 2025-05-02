@@ -6,28 +6,33 @@ from sqlalchemy import (
     Date,
     Boolean,
     ForeignKey,
-    Enum,
+    Enum as SAEnum,
     UniqueConstraint,
 )
 from sqlalchemy.orm import relationship
 from enum import Enum as PyEnum
-from db.database import Base
+from app.db.database import Base
+
+
+# ---------------------- Enum Helpers ----------------------
+def enum_values(enum_cls):
+    return [e.value for e in enum_cls]
 
 
 # ---------------------- Enums ----------------------
-class PosicaoJogador(PyEnum):
-    ATACANTE = "Atacante"
-    MEIO_CAMPO = "Meio-Campo"
-    ZAGUEIRO = "Zagueiro"
-    GOLEIRO = "Goleiro"
+class PosicaoJogador(str, PyEnum):
+    ATACANTE = "atacante"
+    MEIO_CAMPO = "meio_campo"
+    ZAGUEIRO = "zagueiro"
+    GOLEIRO = "goleiro"
 
 
-class TipoEvento(PyEnum):
-    GOL = "Gol"
-    FALTA = "Falta"
-    CARTAO_AMARELO = "Cartão Amarelo"
-    CARTAO_VERMELHO = "Cartão Vermelho"
-    SUBSTITUICAO = "Substituição"
+class TipoEvento(str, PyEnum):
+    GOL = "gol"
+    FALTA = "falta"
+    CARTAO_AMARELO = "cartao_amarelo"
+    CARTAO_VERMELHO = "cartao_vermelho"
+    SUBSTITUICAO = "substituicao"
 
 
 # ---------------------- Time ----------------------
@@ -63,7 +68,7 @@ class Jogador(Base):
     nome = Column(String, nullable=False)
     idade = Column(Integer, nullable=False)
     altura = Column(Float, nullable=False)
-    posicao = Column(Enum(PosicaoJogador))
+    posicao = Column(SAEnum(PosicaoJogador, values_callable=enum_values, name="posicaojogador"), nullable=False)
     num_camisa = Column(Integer, nullable=False)
     convocado_selecao_principal = Column(Boolean)
     convocado_selecao_juniores = Column(Boolean)
@@ -84,6 +89,10 @@ class Tecnico(Base):
     id = Column(Integer, primary_key=True)
     nome = Column(String, nullable=False)
     idade = Column(Integer, nullable=False)
+    data_inicio = Column(Date, nullable=False)
+    data_fim = Column(Date)
+    nacionalidade = Column(String)
+    tempo_carreira = Column(Integer)
 
     partidas_mandante = relationship(
         "Partida",
@@ -167,7 +176,7 @@ class EventoPartida(Base):
     __tablename__ = "eventos_partida"
 
     id = Column(Integer, primary_key=True)
-    tipo = Column(Enum(TipoEvento), nullable=False)
+    tipo = Column(SAEnum(TipoEvento, values_callable=enum_values, name="tipoevento"), nullable=False)
     minuto = Column(Integer)
     descricao = Column(String)
 
