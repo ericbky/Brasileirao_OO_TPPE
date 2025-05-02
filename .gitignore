@@ -1,1 +1,56 @@
+# Banco de dados
 postgres-data/
+
+# Byte-compiled / cache
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+ENV/
+
+# Configurações de editor/IDE (em qualquer nível)
+**/.vscode/
+**/.idea/
+*.sublime-project
+*.sublime-workspace
+**/.ruff_cache/
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Relatórios de teste
+htmlcov/
+coverage.xml
+.cache/
+.tox/
+.pytest_cache/
+
+# Python packaging
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
+
+# Migrations (caso use frameworks)
+**/migrations/*.pyc
+**/migrations/__pycache__/
+
+# Ferramentas de análise
+.sonar/
+
+# Variáveis de ambiente (em qualquer nível)
+**/.env
+**/.env.*
+.env
+.env.*
+
+# Notebooks (caso use)
+**/.ipynb_checkpoints/
