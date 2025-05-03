@@ -39,7 +39,7 @@ class TipoEvento(str, PyEnum):
 class Time(Base):
     __tablename__ = "times"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nome = Column(String, nullable=False, unique=True)
     socios = Column(Integer)
     valor_equipe_titular = Column(Float)
@@ -64,7 +64,7 @@ class Time(Base):
 class Jogador(Base):
     __tablename__ = "jogadores"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nome = Column(String, nullable=False)
     idade = Column(Integer, nullable=False)
     altura = Column(Float, nullable=False)
@@ -86,7 +86,7 @@ class Jogador(Base):
 class Tecnico(Base):
     __tablename__ = "tecnicos"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nome = Column(String, nullable=False)
     idade = Column(Integer, nullable=False)
     data_inicio = Column(Date, nullable=False)
@@ -111,7 +111,7 @@ class Tecnico(Base):
 class Estadio(Base):
     __tablename__ = "estadios"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nome = Column(String, nullable=False)
     capacidade = Column(Integer)
     cidade = Column(String)
@@ -125,7 +125,7 @@ class Estadio(Base):
 class Partida(Base):
     __tablename__ = "partidas"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     temporada = Column(String)
     data = Column(Date)
     horario = Column(String)
@@ -175,7 +175,7 @@ class Partida(Base):
 class EventoPartida(Base):
     __tablename__ = "eventos_partida"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     tipo = Column(SAEnum(TipoEvento, values_callable=enum_values, name="tipoevento"), nullable=False)
     minuto = Column(Integer)
     descricao = Column(String)
@@ -191,7 +191,7 @@ class EventoPartida(Base):
 class Escalacao(Base):
     __tablename__ = "escalacoes"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     titular = Column(Boolean)
     minutos_em_campo = Column(Integer)
     posicao_em_campo = Column(String)
@@ -209,7 +209,7 @@ class Escalacao(Base):
 class EstatisticaTimePartida(Base):
     __tablename__ = "estatisticas_time_partida"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     posse_bola = Column(Float)
     finalizacoes = Column(Integer)
     escanteios = Column(Integer)
@@ -236,7 +236,7 @@ class EstatisticaTimePartida(Base):
 class TimeTemporada(Base):
     __tablename__ = "times_temporada"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     data_inicio = Column(Date)
     data_final = Column(Date)
     temporada = Column(String, nullable=False)
@@ -247,7 +247,7 @@ class TimeTemporada(Base):
 class HistoricoJogador(Base):
     __tablename__ = "historico_jogadores"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     data_inicio = Column(Date, nullable=False)
     data_fim = Column(Date)
     jogador_id = Column(Integer, ForeignKey("jogadores.id"))
@@ -261,7 +261,7 @@ class HistoricoJogador(Base):
 class HistoricoTecnico(Base):
     __tablename__ = "historico_tecnicos"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     data_inicio = Column(Date, nullable=False)
     data_fim = Column(Date)
     tecnico_id = Column(Integer, ForeignKey("tecnicos.id"))

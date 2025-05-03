@@ -47,7 +47,7 @@ class JogadorBase(BaseModel):
     nome: str = Field(..., min_length=1)
     idade: int = Field(..., gt=0)
     altura: float = Field(..., gt=0)
-    posicao: Optional[PosicaoJogador] = None
+    posicao: PosicaoJogador = None
     num_camisa: int
     convocado_selecao_principal: Optional[bool] = None
     convocado_selecao_juniores: Optional[bool] = None
