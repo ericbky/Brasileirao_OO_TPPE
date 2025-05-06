@@ -1,5 +1,6 @@
 import asyncio
-from app.db.database import engine, Base
+from app.db.database import engine, Base, get_session
+from app.utils.utils import fix_postgres_sequences
 
 from app.models.models import (
     Time,
@@ -19,6 +20,9 @@ async def init_models():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     print("✅ Tabelas criadas com sucesso.")
+
+    async with get_session() as session:
+        await fix_postgres_sequences(session)
 
 
 if __name__ == "__main__":

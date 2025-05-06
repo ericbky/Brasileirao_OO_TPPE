@@ -2,23 +2,22 @@ from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional, List
 from enum import Enum as PyEnum
 from datetime import date
-from enum import Enum
 
 
 # ---------------------- Enums ----------------------
 class PosicaoJogador(str, PyEnum):
-    ATACANTE = "ATACANTE"
-    MEIO_CAMPO = "MEIO_CAMPO"
-    ZAGUEIRO = "ZAGUEIRO"
-    GOLEIRO = "GOLEIRO"
+    ATACANTE = "atacante"
+    MEIO_CAMPO = "meio_campo"
+    ZAGUEIRO = "zagueiro"
+    GOLEIRO = "goleiro"
 
 
-class TipoEvento(str, Enum):
-    GOL = "GOL"
-    FALTA = "FALTA"
-    CARTAO_AMARELO = "CARTAO_AMARELO"
-    CARTAO_VERMELHO = "CARTAO_VERMELHO"
-    SUBSTITUICAO = "SUBSTITUICAO"
+class TipoEvento(str, PyEnum):
+    GOL = "gol"
+    FALTA = "falta"
+    CARTAO_AMARELO = "cartao_amarelo"
+    CARTAO_VERMELHO = "cartao_vermelho"
+    SUBSTITUICAO = "substituicao"
 
 
 # ---------------------- Time ----------------------
@@ -35,9 +34,6 @@ class TimeCreate(TimeBase):
 
 class TimeRead(TimeBase):
     id: int
-    jogadores: List["JogadorRead"] = []
-    historico_tecnicos: List["HistoricoTecnicoRead"] = []
-    historico_jogadores: List["HistoricoJogadorRead"] = []
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -78,7 +74,6 @@ class TecnicoCreate(TecnicoBase):
 
 class TecnicoRead(TecnicoBase):
     id: int
-    historico_times: List["HistoricoTecnicoRead"] = []
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -130,9 +125,6 @@ class PartidaCreate(PartidaBase):
 
 class PartidaRead(PartidaBase):
     id: int
-    eventos: List["EventoPartidaRead"] = []
-    escalacoes: List["EscalacaoRead"] = []
-    estatisticas: List["EstatisticaTimePartidaRead"] = []
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -233,8 +225,6 @@ class HistoricoJogadorCreate(HistoricoJogadorBase):
 
 class HistoricoJogadorRead(HistoricoJogadorBase):
     id: int
-    jogador: Optional["JogadorRead"] = None
-    time: Optional["TimeRead"] = None
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -252,13 +242,4 @@ class HistoricoTecnicoCreate(HistoricoTecnicoBase):
 
 class HistoricoTecnicoRead(HistoricoTecnicoBase):
     id: int
-    tecnico: Optional["TecnicoRead"] = None
-    time: Optional["TimeRead"] = None
     model_config = ConfigDict(from_attributes=True)
-
-
-# Referência cruzada
-TimeRead.model_rebuild()
-PartidaRead.model_rebuild()
-HistoricoJogadorRead.model_rebuild()
-HistoricoTecnicoRead.model_rebuild()

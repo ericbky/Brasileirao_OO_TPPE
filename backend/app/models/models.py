@@ -68,7 +68,10 @@ class Jogador(Base):
     nome = Column(String, nullable=False)
     idade = Column(Integer, nullable=False)
     altura = Column(Float, nullable=False)
-    posicao = Column(SAEnum(PosicaoJogador, values_callable=enum_values, name="posicaojogador"), nullable=False)
+    posicao = Column(
+        SAEnum(PosicaoJogador, values_callable=enum_values, name="posicaojogador"),
+        nullable=False,
+    )
     num_camisa = Column(Integer, nullable=False)
     convocado_selecao_principal = Column(Boolean)
     convocado_selecao_juniores = Column(Boolean)
@@ -176,7 +179,10 @@ class EventoPartida(Base):
     __tablename__ = "eventos_partida"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    tipo = Column(SAEnum(TipoEvento, values_callable=enum_values, name="tipoevento"), nullable=False)
+    tipo = Column(
+        SAEnum(TipoEvento, values_callable=enum_values, name="tipoevento"),
+        nullable=False,
+    )
     minuto = Column(Integer)
     descricao = Column(String)
 

@@ -21,8 +21,8 @@ from app.schemas.schemas import (
 @pytest.mark.parametrize(
     "nome, idade, altura, posicao, num_camisa, time_id, valido",
     [
-        ("João", 25, 1.80, PosicaoJogador.ATACANTE, 9, 1, True),
-        ("Pedro", -1, 1.70, PosicaoJogador.ZAGUEIRO, 3, 1, False),
+        ("João", 25, 1.80, PosicaoJogador.ATACANTE.value, 9, 1, True),
+        ("Pedro", -1, 1.70, PosicaoJogador.ZAGUEIRO.value, 3, 1, False),
         ("Lucas", 22, -1.75, None, 10, 1, False),
         ("", 19, 1.75, PosicaoJogador.GOLEIRO, 1, 1, False),
     ],
