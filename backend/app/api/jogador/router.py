@@ -7,7 +7,7 @@ from app.schemas.schemas import (
     JogadorCreate,
 )
 
-from app.controllers.jogador_controller import (
+from api.jogador.controller import (
     criar_jogador_controller,
     listar_jogadores_controller,
     deletar_jogador_controller,

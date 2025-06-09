@@ -7,7 +7,7 @@ from app.schemas.schemas import (
     HistoricoTecnicoCreate,
 )
 
-from app.controllers.historico_tecnico_controller import (
+from api.historico_tecnico.controller import (
     criar_historico_tecnico_controller,
     listar_historico_tecnicos_controller,
     deletar_historico_tecnico_controller,

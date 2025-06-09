@@ -8,7 +8,7 @@ from app.schemas.schemas import (
 )
 
 
-from app.controllers.time_temporada_controller import (
+from api.time_temporada.controller import (
     criar_time_temporada_controller,
     listar_times_temporada_controller,
     deletar_time_temporada_controller,

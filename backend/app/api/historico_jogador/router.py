@@ -7,7 +7,7 @@ from app.schemas.schemas import (
     HistoricoJogadorCreate,
 )
 
-from app.controllers.historico_jogador_controller import (
+from api.historico_jogador.controller import (
     criar_historico_jogador_controller,
     listar_historico_jogadores_controller,
     deletar_historico_jogador_controller,

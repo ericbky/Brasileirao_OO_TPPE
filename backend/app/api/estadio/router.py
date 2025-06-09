@@ -8,7 +8,7 @@ from app.schemas.schemas import (
 )
 
 
-from app.controllers.estadio_controller import (
+from api.estadio.controller import (
     criar_estadio_controller,
     listar_estadios_controller,
     deletar_estadio_controller,
