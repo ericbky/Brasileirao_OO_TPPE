@@ -8,7 +8,7 @@ from app.schemas.schemas import (
 )
 
 
-from api.escalacao.controller import (
+from app.api.escalacao.controller import (
     criar_escalacao_controller,
     listar_escalacoes_controller,
     deletar_escalacao_controller,

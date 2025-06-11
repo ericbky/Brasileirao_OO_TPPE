@@ -8,7 +8,7 @@ from app.schemas.schemas import (
 )
 
 
-from api.partida.controller import (
+from app.api.partida.controller import (
     criar_partida_controller,
     listar_partidas_controller,
     deletar_partida_controller,

@@ -8,7 +8,7 @@ from app.schemas.schemas import (
 )
 
 
-from api.estatistica.controller import (
+from app.api.estatistica.controller import (
     criar_estatistica_controller,
     listar_estatisticas_controller,
     deletar_estatistica_controller,

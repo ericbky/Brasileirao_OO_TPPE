@@ -8,7 +8,7 @@ from app.schemas.schemas import (
 )
 
 
-from api.evento_partida.controller import (
+from app.api.evento_partida.controller import (
     criar_evento_controller,
     listar_eventos_controller,
     deletar_evento_controller,
