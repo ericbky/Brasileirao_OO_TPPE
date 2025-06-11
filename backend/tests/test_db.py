@@ -20,13 +20,10 @@ from app.models.models import (
     EstatisticaTimePartida,
     Estadio,
     EventoPartida,
-    HistoricoJogador,
-    HistoricoTecnico,
     Jogador,
     Partida,
     Tecnico,
     Time,
-    TimeTemporada,
     PosicaoJogador,
     TipoEvento,
 )
