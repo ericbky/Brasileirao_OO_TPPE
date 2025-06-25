@@ -176,7 +176,220 @@ $ tree -L 3
 
 ---
 
-## 7. Convenções de Código
+## 7. Dicionário de Dados
+
+### **Tipo: public.posicaojogador**
+
+**Descrição:** Define as posições possíveis dos jogadores no campo.
+
+| Atributo       | Descrição                     | Not Null | PK  | FK  |
+| -------------- | ----------------------------- | -------- | --- | --- |
+| posicaojogador | Posições dos jogadores (Enum) | Sim      | Não | Não |
+
+---
+
+### **Tipo: public.tipoevento**
+
+**Descrição:** Define os tipos de eventos que podem ocorrer durante uma partida.
+
+| Atributo   | Descrição               | Not Null | PK  | FK  |
+| ---------- | ----------------------- | -------- | --- | --- |
+| tipoevento | Tipos de eventos (Enum) | Sim      | Não | Não |
+
+---
+
+### **Tabela: public.escalacoes**
+
+**Descrição:** Armazena informações sobre as escalações de jogadores durante as partidas.
+
+| Atributo                 | Descrição                                                         | Not Null | PK  | FK                          |
+| ------------------------ | ----------------------------------------------------------------- | -------- | --- | --------------------------- |
+| id                       | Identificador único da escalação                                  | Sim      | Sim | Não                         |
+| titular                  | Indica se o jogador é titular ou reserva                          | Sim      | Não | Não                         |
+| minutos\_em\_campo       | Tempo que o jogador permaneceu em campo (em minutos)              | Sim      | Não | Não                         |
+| posicao\_em\_campo       | Posição do jogador em campo                                       | Sim      | Não | Não                         |
+| substituido              | Indica se o jogador foi substituído                               | Sim      | Não | Não                         |
+| entrou\_durante\_o\_jogo | Indica se o jogador entrou durante o jogo                         | Sim      | Não | Não                         |
+| jogador\_id              | Identificador do jogador (referência à tabela `public.jogadores`) | Sim      | Não | Sim (`public.jogadores.id`) |
+| partida\_id              | Identificador da partida (referência à tabela `public.partidas`)  | Sim      | Não | Sim (`public.partidas.id`)  |
+
+---
+
+### **Tabela: public.estadios**
+
+**Descrição:** Armazena as informações sobre os estádios.
+
+| Atributo   | Descrição                             | Not Null | PK  | FK  |
+| ---------- | ------------------------------------- | -------- | --- | --- |
+| id         | Identificador único do estádio        | Sim      | Sim | Não |
+| nome       | Nome do estádio                       | Sim      | Não | Não |
+| capacidade | Capacidade total do estádio           | Sim      | Não | Não |
+| cidade     | Cidade onde o estádio está localizado | Sim      | Não | Não |
+| estado     | Estado onde o estádio está localizado | Sim      | Não | Não |
+| pais       | País onde o estádio está localizado   | Sim      | Não | Não |
+
+---
+
+### **Tabela: public.estatisticas\_time\_partida**
+
+**Descrição:** Armazena as estatísticas de um time durante uma partida.
+
+| Atributo          | Descrição                                                        | Not Null | PK  | FK                         |
+| ----------------- | ---------------------------------------------------------------- | -------- | --- | -------------------------- |
+| id                | Identificador único da estatística                               | Sim      | Sim | Não                        |
+| posse\_bola       | Percentual de posse de bola                                      | Sim      | Não | Não                        |
+| finalizacoes      | Número total de finalizações                                     | Sim      | Não | Não                        |
+| escanteios        | Número total de escanteios                                       | Sim      | Não | Não                        |
+| faltas\_cometidas | Número total de faltas cometidas                                 | Sim      | Não | Não                        |
+| impedimentos      | Número total de impedimentos                                     | Sim      | Não | Não                        |
+| defesas\_goleiro  | Número total de defesas do goleiro                               | Sim      | Não | Não                        |
+| chutes\_no\_gol   | Número total de chutes no gol                                    | Sim      | Não | Não                        |
+| chutes\_fora      | Número total de chutes fora do gol                               | Sim      | Não | Não                        |
+| passes\_certos    | Número total de passes certos                                    | Sim      | Não | Não                        |
+| passes\_errados   | Número total de passes errados                                   | Sim      | Não | Não                        |
+| partida\_id       | Identificador da partida (referência à tabela `public.partidas`) | Sim      | Não | Sim (`public.partidas.id`) |
+| time\_id          | Identificador do time (referência à tabela `public.times`)       | Sim      | Não | Sim (`public.times.id`)    |
+
+---
+
+### **Tabela: public.eventos\_partida**
+
+**Descrição:** Armazena os eventos que ocorrem durante as partidas.
+
+| Atributo    | Descrição                                                         | Not Null | PK  | FK                          |
+| ----------- | ----------------------------------------------------------------- | -------- | --- | --------------------------- |
+| id          | Identificador único do evento                                     | Sim      | Sim | Não                         |
+| tipo        | Tipo de evento (referência ao enum `public.tipoevento`)           | Sim      | Não | Sim (`public.tipoevento`)   |
+| minuto      | Minuto do jogo em que o evento ocorreu                            | Sim      | Não | Não                         |
+| descricao   | Descrição do evento                                               | Sim      | Não | Não                         |
+| jogador\_id | Identificador do jogador (referência à tabela `public.jogadores`) | Sim      | Não | Sim (`public.jogadores.id`) |
+| partida\_id | Identificador da partida (referência à tabela `public.partidas`)  | Sim      | Não | Sim (`public.partidas.id`)  |
+
+---
+
+### **Tabela: public.historico\_jogadores**
+
+**Descrição:** Armazena o histórico dos jogadores em relação aos times.
+
+| Atributo     | Descrição                                                         | Not Null | PK  | FK                          |
+| ------------ | ----------------------------------------------------------------- | -------- | --- | --------------------------- |
+| id           | Identificador único do histórico                                  | Sim      | Sim | Não                         |
+| data\_inicio | Data de início da associação com o time                           | Sim      | Não | Não                         |
+| data\_fim    | Data de fim da associação com o time                              | Não      | Não | Não                         |
+| jogador\_id  | Identificador do jogador (referência à tabela `public.jogadores`) | Sim      | Não | Sim (`public.jogadores.id`) |
+| time\_id     | Identificador do time (referência à tabela `public.times`)        | Sim      | Não | Sim (`public.times.id`)     |
+
+---
+
+### **Tabela: public.historico\_tecnicos**
+
+**Descrição:** Armazena o histórico dos técnicos nos times.
+
+| Atributo     | Descrição                                                        | Not Null | PK  | FK                         |
+| ------------ | ---------------------------------------------------------------- | -------- | --- | -------------------------- |
+| id           | Identificador único do histórico                                 | Sim      | Sim | Não                        |
+| data\_inicio | Data de início da associação com o time                          | Sim      | Não | Não                        |
+| data\_fim    | Data de fim da associação com o time                             | Não      | Não | Não                        |
+| tecnico\_id  | Identificador do técnico (referência à tabela `public.tecnicos`) | Sim      | Não | Sim (`public.tecnicos.id`) |
+| time\_id     | Identificador do time (referência à tabela `public.times`)       | Sim      | Não | Sim (`public.times.id`)    |
+
+---
+
+### **Tabela: public.jogadores**
+
+**Descrição:** Armazena as informações dos jogadores de futebol.
+
+| Atributo                      | Descrição                                                       | Not Null | PK  | FK                            |
+| ----------------------------- | --------------------------------------------------------------- | -------- | --- | ----------------------------- |
+| id                            | Identificador único do jogador                                  | Sim      | Sim | Não                           |
+| nome                          | Nome do jogador                                                 | Sim      | Não | Não                           |
+| idade                         | Idade do jogador                                                | Sim      | Não | Não                           |
+| altura                        | Altura do jogador                                               | Sim      | Não | Não                           |
+| posicao                       | Posição do jogador (referência ao enum `public.posicaojogador`) | Sim      | Não | Sim (`public.posicaojogador`) |
+| num\_camisa                   | Número da camisa do jogador                                     | Sim      | Não | Não                           |
+| convocado\_selecao\_principal | Indica se o jogador foi convocado para a seleção principal      | Sim      | Não | Não                           |
+| convocado\_selecao\_juniores  | Indica se o jogador foi convocado para a seleção de juniores    | Sim      | Não | Não                           |
+| estrangeiro                   | Indica se o jogador é estrangeiro                               | Sim      | Não | Não                           |
+| valor\_mercado                | Valor de mercado do jogador                                     | Sim      | Não | Não                           |
+| time\_id                      | Identificador do time (referência à tabela `public.times`)      | Sim      | Não | Sim (`public.times.id`)       |
+
+---
+
+### **Tabela: public.partidas**
+
+**Descrição:** Armazena informações sobre as partidas de futebol.
+
+| Atributo                  | Descrição                                                                          | Not Null | PK  | FK                         |
+| ------------------------- | ---------------------------------------------------------------------------------- | -------- | --- | -------------------------- |
+| id                        | Identificador único da partida                                                     | Sim      | Sim | Não                        |
+| temporada                 | Temporada da partida                                                               | Sim      | Não | Não                        |
+| data                      | Data da partida                                                                    | Sim      | Não | Não                        |
+| horario                   | Horário da partida                                                                 | Sim      | Não | Não                        |
+| fase                      | Fase do campeonato                                                                 | Sim      | Não | Não                        |
+| tipo\_fase                | Tipo da fase (ex: quartas de final, etc.)                                          | Sim      | Não | Não                        |
+| estadio\_id               | Identificador do estádio (referência à tabela `public.estadios`)                   | Sim      | Não | Sim (`public.estadios.id`) |
+| arbitro                   | Nome do árbitro                                                                    | Sim      | Não | Não                        |
+| publico                   | Número de público presente                                                         | Sim      | Não | Não                        |
+| publico\_max              | Capacidade máxima do público                                                       | Sim      | Não | Não                        |
+| gols\_mandante            | Gols do time mandante                                                              | Sim      | Não | Não                        |
+| gols\_visitante           | Gols do time visitante                                                             | Sim      | Não | Não                        |
+| gols\_1\_tempo\_mandante  | Gols do time mandante no primeiro tempo                                            | Sim      | Não | Não                        |
+| gols\_1\_tempo\_visitante | Gols do time visitante no primeiro tempo                                           | Sim      | Não | Não                        |
+| prorrogacao               | Indica se houve prorrogação                                                        | Sim      | Não | Não                        |
+| penalti                   | Indica se houve disputa de pênaltis                                                | Sim      | Não | Não                        |
+| time\_mandante\_id        | Identificador do time mandante (referência à tabela `public.times`)                | Sim      | Não | Sim (`public.times.id`)    |
+| time\_visitante\_id       | Identificador do time visitante (referência à tabela `public.times`)               | Sim      | Não | Sim (`public.times.id`)    |
+| tecnico\_mandante\_id     | Identificador do técnico do time mandante (referência à tabela `public.tecnicos`)  | Sim      | Não | Sim (`public.tecnicos.id`) |
+| tecnico\_visitante\_id    | Identificador do técnico do time visitante (referência à tabela `public.tecnicos`) | Sim      | Não | Sim (`public.tecnicos.id`) |
+
+---
+
+### **Tabela: public.tecnicos**
+
+**Descrição:** Armazena as informações sobre os técnicos.
+
+| Atributo        | Descrição                              | Not Null | PK  | FK  |
+| --------------- | -------------------------------------- | -------- | --- | --- |
+| id              | Identificador único do técnico         | Sim      | Sim | Não |
+| nome            | Nome do técnico                        | Sim      | Não | Não |
+| idade           | Idade do técnico                       | Sim      | Não | Não |
+| data\_inicio    | Data de início da carreira do técnico  | Sim      | Não | Não |
+| data\_fim       | Data de término da carreira do técnico | Não      | Não | Não |
+| nacionalidade   | Nacionalidade do técnico               | Sim      | Não | Não |
+| tempo\_carreira | Tempo de carreira do técnico (em anos) | Sim      | Não | Não |
+
+---
+
+### **Tabela: public.times**
+
+**Descrição:** Armazena as informações sobre os times.
+
+| Atributo                      | Descrição                             | Not Null | PK  | FK  |
+| ----------------------------- | ------------------------------------- | -------- | --- | --- |
+| id                            | Identificador único do time           | Sim      | Sim | Não |
+| nome                          | Nome do time                          | Sim      | Não | Não |
+| socios                        | Número de sócios do time              | Sim      | Não | Não |
+| valor\_equipe\_titular        | Valor da equipe titular do time       | Sim      | Não | Não |
+| valor\_medio\_equipe\_titular | Valor médio da equipe titular do time | Sim      | Não | Não |
+
+---
+
+### **Tabela: public.times\_temporada**
+
+**Descrição:** Armazena a temporada em que o time participou.
+
+| Atributo     | Descrição                                                  | Not Null | PK  | FK                      |
+| ------------ | ---------------------------------------------------------- | -------- | --- | ----------------------- |
+| id           | Identificador único da temporada do time                   | Sim      | Sim | Não                     |
+| data\_inicio | Data de início da temporada                                | Sim      | Não | Não                     |
+| data\_final  | Data de término da temporada                               | Não      | Não | Não                     |
+| temporada    | Nome da temporada (ex: 2024/2025)                          | Sim      | Não | Não                     |
+| time\_id     | Identificador do time (referência à tabela `public.times`) | Sim      | Não | Sim (`public.times.id`) |
+
+---
+
+
+## 8. Convenções de Código
 
 - **Estilo**: [PEP 8](https://peps.python.org/pep-0008/)
 - **Commits**: [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
