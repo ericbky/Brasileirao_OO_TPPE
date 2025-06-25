@@ -132,46 +132,76 @@ Este backlog serve como uma referência para o desenvolvimento e acompanhamento 
 
 
 
-## 6. Estrutura de Diretórios
+## 6. Estrutura de Diretórios do Backend
 
 ```
-$ tree -L 3
 .
-├── backend/
-│   ├── app/
-│   │   ├── config.py
-│   │   ├── controllers/
-│   │   ├── db/
-│   │   ├── main.py
-│   │   ├── models/
-│   │   ├── repositories/
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   ├── utils/
-│   │   └── views/
-│   ├── requirements.txt
-│   ├── Dockerfile
-│   └── tests/
-│       ├── test_db_connection.py
-│       ├── test_main.py
-│       ├── test_models/
-│       └── test_services/
-├── frontend/
-│   ├── src/
-│   │   ├── App.vue
-│   │   ├── components/
-│   │   └── main.js
-│   ├── tests/
-│   │   ├── unit/
-│   │   └── e2e/
-│   ├── Dockerfile
-│   └── vite.config.js
-├── docs/
-│   └── diagrams/
-│       ├── uml_diagram.png
-│       └── packages_diagram.png
-├── docker-compose.yaml
-└── README.md
+├── app
+│   ├── api
+│   │   ├── escalacao
+│   │   │   ├── controller.py
+│   │   │   └── router.py
+│   │   ├── estadio
+│   │   │   ├── controller.py
+│   │   │   └── router.py
+│   │   ├── estatistica
+│   │   │   ├── controller.py
+│   │   │   └── router.py
+│   │   ├── evento_partida
+│   │   │   ├── controller.py
+│   │   │   └── router.py
+│   │   ├── historico_jogador
+│   │   │   ├── controller.py
+│   │   │   └── router.py
+│   │   ├── historico_tecnico
+│   │   │   ├── controller.py
+│   │   │   └── router.py
+│   │   ├── jogador
+│   │   │   ├── controller.py
+│   │   │   └── router.py
+│   │   ├── partida
+│   │   │   ├── controller.py
+│   │   │   └── router.py
+│   │   ├── time
+│   │   │   ├── controller.py
+│   │   │   └── router.py
+│   │   └── time_temporada
+│   │       ├── controller.py
+│   │       └── router.py
+│   ├── config.py
+│   ├── db
+│   │   ├── database.py
+│   │   └── sql
+│   │       └── dump.sql
+│   ├── init_db.py
+│   ├── main.py
+│   ├── models
+│   │   ├── models.py
+│   ├── repositories
+│   │   ├── escalacao_repository.py
+│   │   ├── estadio_repository.py
+│   │   ├── estatistica_repository.py
+│   │   ├── evento_partida_repository.py
+│   │   ├── historico_jogador_repository.py
+│   │   ├── historico_tecnico_repository.py
+│   │   ├── jogador_repository.py
+│   │   ├── partida_repository.py
+│   │   ├── time_repository.py
+│   │   └── time_temporada_repository.py
+│   ├── schemas
+│   │   └── schemas.py
+│   └── utils
+│       └── utils.py
+├── Dockerfile
+├── entrypoint.sh
+├── pytest.ini
+├── requirements.txt
+├── tests
+│   ├── pytest.ini
+│   ├── test_db.py
+│   ├── test_estadio_endpoints_async.py
+│   └── test_schemas.py
+└── wait-for-postgres.sh
 ```
 
 ---
