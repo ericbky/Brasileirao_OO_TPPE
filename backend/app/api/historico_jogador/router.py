@@ -24,7 +24,7 @@ router = APIRouter()
     "/criar_historico_jogador",
     response_model=HistoricoJogadorRead,
     status_code=201,
-    tags=["Histórico Jogador"],
+    tags=["Historico Jogador"],
 )
 async def criar_historico_jogador(
     jogador: HistoricoJogadorCreate, session: AsyncSession = Depends(get_db)
@@ -36,7 +36,7 @@ async def criar_historico_jogador(
     "/listar_historico_jogadores",
     response_model=List[HistoricoJogadorRead],
     status_code=200,
-    tags=["Histórico Jogador"],
+    tags=["Historico Jogador"],
 )
 async def listar_historico_jogadores(session: AsyncSession = Depends(get_db)):
     return await listar_historico_jogadores_controller(session)
@@ -46,7 +46,7 @@ async def listar_historico_jogadores(session: AsyncSession = Depends(get_db)):
     "/deletar_historico_jogador",
     response_model=str,
     status_code=200,
-    tags=["Histórico Jogador"],
+    tags=["Historico Jogador"],
 )
 async def deletar_historico_jogador(id: int, session: AsyncSession = Depends(get_db)):
     return await deletar_historico_jogador_controller(id, session)
@@ -56,7 +56,7 @@ async def deletar_historico_jogador(id: int, session: AsyncSession = Depends(get
     "/atualizar_historico_jogador",
     response_model=str,
     status_code=200,
-    tags=["Histórico Jogador"],
+    tags=["Historico Jogador"],
 )
 async def atualizar_historico_jogador(
     id: int, jogador: HistoricoJogadorCreate, session: AsyncSession = Depends(get_db)

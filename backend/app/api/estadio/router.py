@@ -20,7 +20,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/criar_estadio", response_model=EstadioRead, status_code=201, tags=["Estádio"]
+    "/criar_estadio", response_model=EstadioRead, status_code=201, tags=["Estadio"]
 )
 async def criar_estadio(
     estadio: EstadioCreate, session: AsyncSession = Depends(get_db)
@@ -32,20 +32,20 @@ async def criar_estadio(
     "/listar_estadios",
     response_model=List[EstadioRead],
     status_code=200,
-    tags=["Estádio"],
+    tags=["Estadio"],
 )
 async def listar_estadios(session: AsyncSession = Depends(get_db)):
     return await listar_estadios_controller(session)
 
 
 @router.delete(
-    "/deletar_estadio", response_model=str, status_code=200, tags=["Estádio"]
+    "/deletar_estadio", response_model=str, status_code=200, tags=["Estadio"]
 )
 async def deletar_estadio(id: int, session: AsyncSession = Depends(get_db)):
     return await deletar_estadio_controller(id, session)
 
 
-@router.put("/atualizar_estadio", response_model=str, status_code=200, tags=["Estádio"])
+@router.put("/atualizar_estadio", response_model=str, status_code=200, tags=["Estadio"])
 async def atualizar_estadio(
     id: int, estadio: EstadioCreate, session: AsyncSession = Depends(get_db)
 ):

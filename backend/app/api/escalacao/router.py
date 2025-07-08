@@ -23,7 +23,7 @@ router = APIRouter()
     "/criar_escalacao",
     response_model=EscalacaoRead,
     status_code=201,
-    tags=["Escalação"],
+    tags=["Escalacao"],
 )
 async def criar_escalacao(
     escalacao: EscalacaoCreate, session: AsyncSession = Depends(get_db)
@@ -35,21 +35,21 @@ async def criar_escalacao(
     "/listar_escalacaos",
     response_model=List[EscalacaoRead],
     status_code=200,
-    tags=["Escalação"],
+    tags=["Escalacao"],
 )
 async def listar_escalacaos(session: AsyncSession = Depends(get_db)):
     return await listar_escalacoes_controller(session)
 
 
 @router.delete(
-    "/deletar_escalacao", response_model=str, status_code=200, tags=["Escalação"]
+    "/deletar_escalacao", response_model=str, status_code=200, tags=["Escalacao"]
 )
 async def deletar_escalacao(id: int, session: AsyncSession = Depends(get_db)):
     return await deletar_escalacao_controller(id, session)
 
 
 @router.put(
-    "/atualizar_escalacao", response_model=str, status_code=200, tags=["Escalação"]
+    "/atualizar_escalacao", response_model=str, status_code=200, tags=["Escalacao"]
 )
 async def atualizar_escalacao(
     id: int, escalacao: EscalacaoCreate, session: AsyncSession = Depends(get_db)

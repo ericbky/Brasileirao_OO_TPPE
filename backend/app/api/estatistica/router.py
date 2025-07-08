@@ -23,7 +23,7 @@ router = APIRouter()
     "/criar_estatistica",
     response_model=EstatisticaTimePartidaRead,
     status_code=201,
-    tags=["Estatística"],
+    tags=["Estatistica"],
 )
 async def criar_estatistica(
     estatistica: EstatisticaTimePartidaCreate, session: AsyncSession = Depends(get_db)
@@ -35,21 +35,21 @@ async def criar_estatistica(
     "/listar_estatisticas",
     response_model=List[EstatisticaTimePartidaRead],
     status_code=200,
-    tags=["Estatística"],
+    tags=["Estatistica"],
 )
 async def listar_estatisticas(session: AsyncSession = Depends(get_db)):
     return await listar_estatisticas_controller(session)
 
 
 @router.delete(
-    "/deletar_estatistica", response_model=str, status_code=200, tags=["Estatística"]
+    "/deletar_estatistica", response_model=str, status_code=200, tags=["Estatistica"]
 )
 async def deletar_estatistica(id: int, session: AsyncSession = Depends(get_db)):
     return await deletar_estatistica_controller(id, session)
 
 
 @router.put(
-    "/atualizar_estatistica", response_model=str, status_code=200, tags=["Estatística"]
+    "/atualizar_estatistica", response_model=str, status_code=200, tags=["Estatistica"]
 )
 async def atualizar_estatistica(
     id: int,
