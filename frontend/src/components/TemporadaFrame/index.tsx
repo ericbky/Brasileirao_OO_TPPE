@@ -1,0 +1,511 @@
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import image from "./image.png";
+import vectorImage from "./vector-0.png";
+
+type TableRowData = {
+  position: string;
+  team: string;
+  points: string;
+  wins: string;
+  draws: string;
+  losses: string;
+  goalsFor: string;
+  goalsAgainst: string;
+  goalDifference: string;
+};
+
+type TableHeader = {
+  id: keyof TableRowData;
+  label: string;
+  width: number;
+};
+
+const TemporadaFrame = () => {
+  const [timesTemporada, setTimesTemporada] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [jogadores, setJogadores] = useState<any[]>([]);
+  const [partidas, setPartidas] = useState<any[]>([]);
+  const [eventos, setEventos] = useState<any[]>([]);
+  const [times, setTimes] = useState<any[]>([]);
+  const [estadios, setEstadios] = useState<any[]>([]);
+  const [loadingPartidas, setLoadingPartidas] = useState(true);
+
+  useEffect(() => {
+    axios.get("http://localhost:8001/time_temporada/listar_times_temporada")
+      .then((response) => {
+        setTimesTemporada(response.data);
+        setLoading(false);
+        console.log("[DEBUG] timesTemporada carregados:", response.data);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.error("[DEBUG] Erro ao carregar timesTemporada:", err);
+      });
+  }, []);
+
+  const getTimeNome = (id: number) => {
+    const time = times.find((t: any) => t.id === id);
+    return time ? time.nome : id;
+  };
+
+  const getEstadioNome = (id: number) => {
+    const estadio = estadios.find((e: any) => e.id === id);
+    return estadio ? estadio.nome : id;
+  };
+
+  const getJogadorNome = (id: number) => {
+    const jogador = jogadores.find((j: any) => j.id === id);
+    return jogador ? jogador.nome : id;
+  };
+
+  const tableHeaders = [
+    { id: "position", label: "Posição", width: 123 },
+    { id: "team", label: "Time", width: 150 },
+    { id: "points", label: "Pontos", width: 113 },
+    { id: "wins", label: "Vitórias", width: 90 },
+    { id: "draws", label: "Empates", width: 88 },
+    { id: "losses", label: "Derrotas", width: 88 },
+    { id: "goalsFor", label: "Gols Pró", width: 91 },
+    { id: "goalsAgainst", label: "Gols Contra", width: 92 },
+    { id: "goalDifference", label: "Saldo de Gols", width: 93 },
+  ] as TableHeader[];
+
+  // Protege renderização até dados carregados
+  const dadosCarregados = !loadingPartidas && times.length > 0 && partidas.length > 0;
+
+  // Descobre temporada mais recente pelas partidas
+  const temporadaMaisRecente = dadosCarregados
+    ? partidas.reduce((max, item) => (item.temporada > max.temporada ? item : max), partidas[0])?.temporada
+    : undefined;
+
+  // Calcula estatísticas dos times a partir das partidas
+  const estatisticasTimes: Record<number, {
+    pontos: number;
+    vitorias: number;
+    empates: number;
+    derrotas: number;
+    gols_pro: number;
+    gols_contra: number;
+    saldo_gols: number;
+  }> = {};
+
+  if (dadosCarregados) {
+    // Filtra partidas da temporada mais recente
+    const partidasTemporada = partidas.filter((p: any) => p.temporada === temporadaMaisRecente);
+    partidasTemporada.forEach((p: any) => {
+      // Mandante
+      if (!estatisticasTimes[p.time_mandante_id]) {
+        estatisticasTimes[p.time_mandante_id] = {
+          pontos: 0, vitorias: 0, empates: 0, derrotas: 0, gols_pro: 0, gols_contra: 0, saldo_gols: 0
+        };
+      }
+      // Visitante
+      if (!estatisticasTimes[p.time_visitante_id]) {
+        estatisticasTimes[p.time_visitante_id] = {
+          pontos: 0, vitorias: 0, empates: 0, derrotas: 0, gols_pro: 0, gols_contra: 0, saldo_gols: 0
+        };
+      }
+      // Gols pró/contra
+      estatisticasTimes[p.time_mandante_id].gols_pro += p.gols_mandante ?? 0;
+      estatisticasTimes[p.time_mandante_id].gols_contra += p.gols_visitante ?? 0;
+      estatisticasTimes[p.time_visitante_id].gols_pro += p.gols_visitante ?? 0;
+      estatisticasTimes[p.time_visitante_id].gols_contra += p.gols_mandante ?? 0;
+      // Saldo de gols
+      estatisticasTimes[p.time_mandante_id].saldo_gols = estatisticasTimes[p.time_mandante_id].gols_pro - estatisticasTimes[p.time_mandante_id].gols_contra;
+      estatisticasTimes[p.time_visitante_id].saldo_gols = estatisticasTimes[p.time_visitante_id].gols_pro - estatisticasTimes[p.time_visitante_id].gols_contra;
+      // Resultado
+      if (p.gols_mandante > p.gols_visitante) {
+        estatisticasTimes[p.time_mandante_id].vitorias += 1;
+        estatisticasTimes[p.time_mandante_id].pontos += 3;
+        estatisticasTimes[p.time_visitante_id].derrotas += 1;
+      } else if (p.gols_mandante < p.gols_visitante) {
+        estatisticasTimes[p.time_visitante_id].vitorias += 1;
+        estatisticasTimes[p.time_visitante_id].pontos += 3;
+        estatisticasTimes[p.time_mandante_id].derrotas += 1;
+      } else {
+        estatisticasTimes[p.time_mandante_id].empates += 1;
+        estatisticasTimes[p.time_visitante_id].empates += 1;
+        estatisticasTimes[p.time_mandante_id].pontos += 1;
+        estatisticasTimes[p.time_visitante_id].pontos += 1;
+      }
+    });
+  }
+
+  // Monta dados da tabela
+  const tableData = dadosCarregados
+    ? times
+        .filter((t: any) => estatisticasTimes[t.id])
+        .sort((a: any, b: any) => estatisticasTimes[b.id].pontos - estatisticasTimes[a.id].pontos)
+        .map((t: any, idx: number) => ({
+          position: `${idx + 1}°`,
+          team: t.nome,
+          points: estatisticasTimes[t.id].pontos.toString(),
+          wins: estatisticasTimes[t.id].vitorias.toString(),
+          draws: estatisticasTimes[t.id].empates.toString(),
+          losses: estatisticasTimes[t.id].derrotas.toString(),
+          goalsFor: estatisticasTimes[t.id].gols_pro.toString(),
+          goalsAgainst: estatisticasTimes[t.id].gols_contra.toString(),
+          goalDifference: estatisticasTimes[t.id].saldo_gols.toString(),
+        }))
+    : [];
+
+
+
+  useEffect(() => {
+    Promise.all([
+      axios.get("http://localhost:8001/partida/listar_partidas"),
+      axios.get("http://localhost:8001/evento_partida/listar_evento_partidas"),
+      axios.get("http://localhost:8001/times/listar_times"),
+      axios.get("http://localhost:8001/estadio/listar_estadios")
+    ])
+      .then(([resPartidas, resEventos, resTimes, resEstadios]) => {
+        setPartidas(resPartidas.data);
+        setEventos(resEventos.data);
+        // Remove duplicatas de times pelo id
+        const timesUnicos = Array.isArray(resTimes.data)
+          ? resTimes.data.filter((t: any, idx: number, arr: any[]) => arr.findIndex((tt: any) => tt.id === t.id) === idx)
+          : resTimes.data;
+        setTimes(timesUnicos);
+        setEstadios(resEstadios.data);
+        setLoadingPartidas(false);
+        console.log("[DEBUG] partidas carregadas:", resPartidas.data);
+        console.log("[DEBUG] eventos carregados:", resEventos.data);
+        console.log("[DEBUG] times carregados:", resTimes.data);
+        console.log("[DEBUG] estadios carregados:", resEstadios.data);
+      })
+      .catch((err) => {
+        setLoadingPartidas(false);
+        console.error("[DEBUG] Erro ao carregar dados das partidas/eventos/times/estadios:", err);
+      });
+  }, []);
+
+  // Ordena partidas por data e horário decrescente
+  const featuredMatches = [...partidas]
+    .sort((a: any, b: any) => {
+      // Junta data e horário para comparar
+      const dateA = new Date(`${a.data}T${a.horario}`);
+      const dateB = new Date(`${b.data}T${b.horario}`);
+      return dateB.getTime() - dateA.getTime();
+    })
+    .slice(0, 6)
+    .map(partida => {
+      const eventosPartida = eventos.filter(ev => ev.partida_id === partida.id);
+      const gols = eventosPartida.filter(ev => ev.tipo === "gol").length;
+      const amarelos = eventosPartida.filter(ev => ev.tipo === "cartao_amarelo").length;
+      const vermelhos = eventosPartida.filter(ev => ev.tipo === "cartao_vermelho").length;
+
+      return {
+        id: partida.id,
+        image: "/image.png", // Troque se tiver imagem real
+        title: `${getTimeNome(partida.time_mandante_id)} ${partida.gols_mandante} x ${partida.gols_visitante} ${getTimeNome(partida.time_visitante_id)}`,
+        description: `Gols: ${gols}, Amarelos: ${amarelos}, Vermelhos: ${vermelhos} | Estádio: ${getEstadioNome(partida.estadio_id)}, Data: ${partida.data}, Horário: ${partida.horario}`,
+      };
+    });
+
+  // Destaques estatísticos dinâmicos
+  const topArtilheiro = eventos.filter(ev => ev.tipo === "gol").reduce((acc, ev) => {
+    acc[ev.jogador_id] = (acc[ev.jogador_id] || 0) + 1;
+    return acc;
+  }, {} as Record<number, number>);
+  const artilheiroId = Object.keys(topArtilheiro).sort((a, b) => topArtilheiro[Number(b)] - topArtilheiro[Number(a)])[0];
+  const artilheiroNome = getJogadorNome(Number(artilheiroId));
+  const artilheiroGols = topArtilheiro[Number(artilheiroId)];
+
+  const timeMaisVitorias = tableData.reduce((acc, t) => {
+    if (t.wins !== "-" && (acc == null || Number(t.wins) > Number(acc.wins))) return t;
+    return acc;
+  }, null as any);
+
+  const maiorOcupacao = partidas.reduce((acc, p) => {
+    if (p.publico && (!acc || p.publico > acc.publico)) return p;
+    return acc;
+  }, null as any);
+
+  const statisticalHighlights = [
+    { id: 1, title: "Top Artilheiro", value: `${artilheiroNome} (${artilheiroGols} gols)` },
+    { id: 2, title: "Time com mais vitórias", value: timeMaisVitorias ? timeMaisVitorias.team : "-" },
+    { id: 3, title: "Maior Ocupação", value: maiorOcupacao ? `${getEstadioNome(maiorOcupacao.estadio_id)} (${maiorOcupacao.publico})` : "-" },
+    // Exemplo: time mais disciplinado pode ser calculado por menos cartões
+    { id: 4, title: "Time mais Disciplinado", value: "-" },
+  ];
+
+  // Gráficos comparativos dinâmicos (exemplo: top 5 times por pontos)
+  const graphTeams = tableData
+    .sort((a, b) => Number(b.points) - Number(a.points))
+    .slice(0, 5)
+    .map(t => t.team);
+
+  const graphData = tableData
+    .sort((a, b) => Number(b.points) - Number(a.points))
+    .slice(0, 5)
+    .map(t => t.points)
+    .join(", ");
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        justifyContent: "center",
+        px: { xs: 2, md: 5 },
+        py: 2.5,
+      }}
+    >
+      <Box sx={{ display: "flex", flexDirection: "column", maxWidth: "960px", width: "100%" }}>
+        {/* Header */}
+        <Box sx={{ p: 2 }}>
+          <Stack spacing={1.5}>
+            <Typography variant="h5" fontWeight="bold" sx={{ mt: 2 }}>
+              Temporada Brasileirão
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              Fique por dentro dos dados da última classificação da temporada do Brasileirão,
+              destaques da Partida e principais estatísticas.
+            </Typography>
+          </Stack>
+        </Box>
+
+        {/* Classificação Geral */}
+        <Box sx={{ px: 2, pt: 2.5 }}>
+          <Typography variant="h5" fontWeight="bold" sx={{ mt: 2 }}>
+            Classificação geral da temporada
+          </Typography>
+        </Box>
+        <Box sx={{ px: 2, pt: 0.5, pb: 1.5 }}>
+          <Typography variant="subtitle1" color="text.secondary">
+            Em Andamento
+          </Typography>
+        </Box>
+        <Box sx={{ px: 2, py: 1.5 }}>
+          {!dadosCarregados ? (
+            <div>Carregando...</div>
+          ) : (
+            <TableContainer component={Paper} sx={{ borderRadius: 3, border: 1, borderColor: "divider" }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    {tableHeaders.map((header) => (
+                      <TableCell key={header.id} sx={{ width: header.width, fontWeight: 500 }}>
+                        {header.label}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {tableData.map((row, idx) => (
+                    <TableRow key={idx}>
+                      {tableHeaders.map((header) => (
+                        <TableCell
+                          key={header.id}
+                          sx={{
+                            color: header.id === "team" ? "text.primary" : "text.secondary",
+                            fontFamily: "Manrope-Regular, Helvetica",
+                          }}
+                        >
+                          {row[header.id]}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </Box>
+
+        {/* Partidas em Destaque */}
+        <Box sx={{ px: 2, pt: 2.5 }}>
+          <Typography variant="h5" fontWeight="bold" sx={{ mt: 2 }}>
+            Top 6 Partidas em Destaque
+          </Typography>
+        </Box>
+        <Box sx={{ width: "100%", overflowX: "auto" }}>
+          {loadingPartidas ? (
+            <div>Carregando partidas...</div>
+          ) : (
+            <Stack direction="row" spacing={1.5} sx={{ p: 2 }}>
+              {featuredMatches.map((match) => (
+                <Card key={match.id} sx={{ minWidth: 160, flex: 1, borderRadius: 2, boxShadow: "none" }}>
+                  <CardMedia
+                    component="div"
+                    sx={{
+                      height: 90,
+                      backgroundImage: `url(${match.image})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  />
+                  <CardContent sx={{ p: 0, pt: 2 }}>
+                    <Typography variant="h5" sx={{ fontSize: "16px", mb: 0.5 }}>
+                      {match.title}
+                    </Typography>
+                    <Typography variant="subtitle1" sx={{ fontSize: "14px" }}>
+                      {match.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))}
+            </Stack>
+          )}
+        </Box>
+
+        {/* Destaques Estatísticos */}
+        <Box sx={{ px: 2, pt: 2.5 }}>
+          <Typography variant="h5" fontWeight="bold" sx={{ mt: 2 }}>
+            Destaques estatísticos
+          </Typography>
+        </Box>
+        <Box sx={{ p: 2, mb: 4}}>
+          <Grid container spacing={2}>
+            {statisticalHighlights.map((stat) => (
+              <Grid item xs={12} sm={6} md={3} key={stat.id}>
+                <Card
+                  sx={{
+                    p: 3,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                    borderRadius: 3,
+                    border: 1,
+                    borderColor: "divider",
+                    boxShadow: "none",
+                  }}
+                >
+                  <Typography variant="h5" sx={{ fontSize: "16px" }}>
+                    {stat.title}
+                  </Typography>
+                  <Typography variant="h5" sx={{ fontSize: "24px", fontWeight: "bold", mt: 1 }}>
+                    {stat.value}
+                  </Typography>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
+        {/* Gráficos Comparativos */}
+        <Box sx={{ px: 2, pt: 2.5 }}>
+          <Typography variant="h5" fontWeight="bold" sx={{ mt: 2 }}>
+            Comparative Graphs
+          </Typography>
+        </Box>
+        <Box sx={{ px: 2, py: 3, mb: 4}}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Card
+                sx={{
+                  p: 3,
+                  height: "100%",
+                  borderRadius: 3,
+                  border: 1,
+                  borderColor: "divider",
+                  boxShadow: "none",
+                }}
+              >
+                <Typography variant="h5">Gráficos Comparativos</Typography>
+                <Box sx={{ display: "flex", minHeight: "180px", gap: 3, mt: 1 }}>
+                  {graphTeams.map((team, index) => (
+                    <Box key={index} sx={{ flex: 1, textAlign: "center" }}>
+                      <Box
+                        sx={{
+                          height: "117px",
+                          width: "100%",
+                          bgcolor: "grey.100",
+                          borderTop: 2,
+                          borderColor: "action.active",
+                        }}
+                      />
+                      <Typography variant="body2" sx={{ mt: 1 }}>
+                        {team}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Card
+                sx={{
+                  p: 3,
+                  height: "100%",
+                  borderRadius: 3,
+                  border: 1,
+                  borderColor: "divider",
+                  boxShadow: "none",
+                }}
+              >
+                <Typography variant="h5">Comparação dos 4 Melhores Times</Typography>
+                <Box sx={{ mt: 2, position: "relative", height: "148px" }}>
+                  <Box
+                    component="img"
+                    src={vectorImage}
+                    alt="Linha 1"
+                    sx={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+                  />
+                </Box>
+              </Card>
+            </Grid>
+          </Grid>
+        </Box>
+
+        {/* Notificações */}
+        <Box sx={{ px: 2, pt: 2.5 }}>
+          <Typography variant="h5" fontWeight="bold" sx={{ mt: 2 }}>
+            Notificações
+          </Typography>
+        </Box>
+        <Box sx={{ p: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              borderRadius: 3,
+            }}
+          >
+            <Stack spacing={0.5} sx={{ maxWidth: "608px" }}>
+              <Typography variant="subtitle1" color="text.secondary">
+                Rodada 8 lançada
+              </Typography>
+              <Typography variant="h5" sx={{ fontSize: "16px", fontWeight: "bold" }}>
+                Novas Partidas e horários já estão disponíveis.
+              </Typography>
+              <Typography variant="subtitle1" color="text.secondary">
+                Confira as últimas atualizações e planeje-se.
+              </Typography>
+            </Stack>
+            <Box
+              sx={{
+                flex: 1,
+                height: "171px",
+                borderRadius: 3,
+                backgroundImage: "url(/depth-6-frame-1.png)",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export default TemporadaFrame;
