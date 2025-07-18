@@ -49,109 +49,85 @@ export const NotificationsFrame: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchNotifications();
-  }, []);
-
-  // Lógica igual ao TemporadaFrame, mas mantendo visual original
-  const fetchNotifications = async () => {
     setLoading(true);
-    try {
-      // Busca dados das entidades
-      const [resPartidas, resEventos, resJogadores, resTimes] = await Promise.all([
-        axios.get("http://localhost:8001/partida/listar_partidas"),
-        axios.get("http://localhost:8001/evento_partida/listar_evento_partidas"),
-        axios.get("http://localhost:8001/jogador/listar_jogadores"),
-        axios.get("http://localhost:8001/times/listar_times")
-      ]);
+    Promise.all([
+      axios.get("http://localhost:8001/partida/listar_partidas"),
+      axios.get("http://localhost:8001/evento_partida/listar_evento_partidas"),
+      axios.get("http://localhost:8001/jogador/listar_jogadores"),
+      axios.get("http://localhost:8001/times/listar_times")
+    ])
+      .then(([resPartidas, resEventos, resJogadores, resTimes]) => {
 
-      // Ordena partidas por data/hora decrescente
-      const partidasOrdenadas = [...resPartidas.data].sort((a, b) => {
-        const dateA = new Date(`${a.data}T${a.horario}`);
-        const dateB = new Date(`${b.data}T${b.horario}`);
-        return dateB.getTime() - dateA.getTime();
-      });
-      // Pega os IDs das 5 partidas mais recentes
-      const partidasRecentesIds = partidasOrdenadas.slice(0, 5).map((p) => p.id);
+        const ultimasPartidas = [...resPartidas.data]
+          .sort((a: any, b: any) => {
+            const dateA = new Date(`${a.data}T${a.horario}`);
+            const dateB = new Date(`${b.data}T${b.horario}`);
+            return dateB.getTime() - dateA.getTime();
+          })
+          .slice(0, 3);
 
-      // Filtra eventos das partidas recentes
-      let eventosRecentes = resEventos.data.filter((ev: any) =>
-        partidasRecentesIds.includes(ev.partida_id)
-      );
-      // Se não houver eventos, pega os últimos 10 eventos do campeonato
-      if (eventosRecentes.length === 0 && resEventos.data.length > 0) {
-        eventosRecentes = resEventos.data.slice(-10);
-      }
+        const eventosUltimas = resEventos.data.filter((ev: any) => ultimasPartidas.some((p: any) => p.id === ev.partida_id));
 
-      // Mapas para busca rápida
-      const partidasMap = Object.fromEntries(
-        resPartidas.data.map((p: any) => [p.id, p])
-      );
-      const jogadoresMap = Object.fromEntries(
-        resJogadores.data.map((j: any) => [j.id, j.nome])
-      );
-      const timesMap = Object.fromEntries(
-        resTimes.data.map((t: any) => [t.id, t.nome])
-      );
+        const eventosOrdenados = [...eventosUltimas].sort((a, b) => b.minuto - a.minuto);
 
-      // Monta notificações (eventos das partidas recentes)
-      const ntfs = eventosRecentes.reverse().map((ev: any) => {
-        const partida = partidasMap[ev.partida_id];
-        const jogador = jogadoresMap[ev.jogador_id] || "-";
-        // Lógica para identificar o time correto do evento
-        let timeNome = "-";
-        if (ev.time_id && timesMap[ev.time_id]) {
-          timeNome = timesMap[ev.time_id];
-        } else if (partida) {
-          // Se for gol ou cartão, associa ao mandante
-          if (["gol", "amarelo", "vermelho", "cartao_amarelo", "cartao_vermelho"].includes(ev.tipo_evento) || ["gol", "amarelo", "vermelho", "cartao_amarelo", "cartao_vermelho"].includes(ev.tipo)) {
-            timeNome = timesMap[partida.time_mandante_id] || "-";
+        const eventosExibir = eventosOrdenados.filter((ev: any) => ["gol", "cartao_amarelo", "cartao_vermelho"].includes(ev.tipo));
+
+        const ntfs = eventosExibir.map((ev: any) => {
+          const jogadorObj = resJogadores.data.find((j: any) => j.id === ev.jogador_id);
+          const jogador = jogadorObj?.nome || "-";
+          const partida = ultimasPartidas.find((p: any) => p.id === ev.partida_id);
+          let timeId: number | null = null;
+          let nomePartida = "-";
+          if (ev.time_id && resTimes.data.find((t: any) => t.id === ev.time_id)) {
+            timeId = ev.time_id;
+          } else if (partida && jogadorObj) {
+            if (jogadorObj.time_id === partida.time_mandante_id) {
+              timeId = partida.time_mandante_id;
+            } else if (jogadorObj.time_id === partida.time_visitante_id) {
+              timeId = partida.time_visitante_id;
+            } else {
+              timeId = partida.time_mandante_id;
+            }
+          } else if (partida) {
+            timeId = partida.time_mandante_id;
+          }
+          if (partida) {
+            const nomeMandante = resTimes.data.find((t: any) => t.id === partida.time_mandante_id)?.nome || "-";
+            const nomeVisitante = resTimes.data.find((t: any) => t.id === partida.time_visitante_id)?.nome || "-";
+            nomePartida = `${nomeMandante} x ${nomeVisitante}`;
+          }
+          const timeNome = timeId !== null ? (resTimes.data.find((t: any) => t.id === timeId)?.nome || "-") : "-";
+          let texto = "";
+          const tipoEv = ev.tipo_evento || ev.tipo;
+          if (["cartao_amarelo", "amarelo"].includes(tipoEv)) {
+            texto = `🟨 ${jogador} recebeu cartão amarelo aos ${ev.minuto}' (${timeNome})`;
+          } else if (["cartao_vermelho", "vermelho"].includes(tipoEv)) {
+            texto = `🟥 ${jogador} recebeu cartão vermelho aos ${ev.minuto}' (${timeNome})`;
           } else {
-            timeNome = timesMap[partida.time_mandante_id] || "-";
+            switch (tipoEv) {
+              case "gol":
+                texto = `⚽ ${jogador} marcou um gol aos ${ev.minuto}' (${timeNome})`;
+                break;
+              default:
+                texto = `Evento: ${tipoEv} aos ${ev.minuto || "-"}' (${nomePartida})`;
+            }
           }
-        }
-        const nomePartida = partida
-          ? `${timesMap[partida.time_mandante_id] || "?"} x ${
-              timesMap[partida.time_visitante_id] || "?"
-            }`
-          : "Partida desconhecida";
-        let texto = "";
-        const tipoEv = ev.tipo_evento || ev.tipo;
-        if (["cartao_amarelo", "amarelo"].includes(tipoEv)) {
-          texto = `🟨 ${jogador} recebeu cartão amarelo aos ${ev.minuto}' (${timeNome})`;
-        } else if (["cartao_vermelho", "vermelho"].includes(tipoEv)) {
-          texto = `🟥 ${jogador} recebeu cartão vermelho aos ${ev.minuto}' (${timeNome})`;
-        } else {
-          switch (tipoEv) {
-            case "gol":
-              texto = `⚽ ${jogador} marcou um gol aos ${ev.minuto}' (${timeNome})`;
-              break;
-            case "substituicao":
-              texto = `⟳ Substituição aos ${ev.minuto}': ${ev.descricao || "Sem descrição"}`;
-              break;
-            case "inicio":
-              texto = `⏲ Início da partida ${nomePartida}`;
-              break;
-            case "fim":
-              texto = `🏁 Fim da partida ${nomePartida}`;
-              break;
-            default:
-              texto = `Evento: ${tipoEv} aos ${ev.minuto || "-"}' (${nomePartida})`;
-          }
-        }
-        return {
-          icon: iconMap[tipoEv] || iconMap["outros"],
-          text: texto,
-          ts: partida ? partida.data_hora : "",
-          categoria: getCategory(tipoEv),
-          partidaId: ev.partida_id,
-        };
+          return {
+            icon: iconMap[tipoEv] || iconMap["outros"],
+            text: texto,
+            ts: partida ? partida.data_hora : "",
+            categoria: getCategory(tipoEv),
+            partidaId: partida ? partida.id : null,
+          };
+        });
+        setNotifications(ntfs);
+        setLoading(false);
+      })
+      .catch(() => {
+        setNotifications([]);
+        setLoading(false);
       });
-      setNotifications(ntfs);
-    } catch (err) {
-      setNotifications([]);
-    }
-    setLoading(false);
-  };
+  }, []);
 
   const filteredNotifications =
     filter === "Todos"
@@ -162,7 +138,7 @@ export const NotificationsFrame: React.FC = () => {
     <section className="ntf-container">
       <header className="ntf-header">
         <h1 className="ntf-title">Notificações</h1>
-        <button className="ntf-refresh" onClick={fetchNotifications} disabled={loading}>
+        <button className="ntf-refresh" onClick={() => window.location.reload()} disabled={loading}>
           <RefreshCcw size={16} /> <span>Atualizar</span>
         </button>
       </header>
