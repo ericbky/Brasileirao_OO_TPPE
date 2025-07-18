@@ -42,7 +42,7 @@ jobs:
         run: flake8 .
 
       - name: Build and start containers
-        run: docker-compose up -d --build
+        run: docker compose up -d --build backend
 
       - name: Run tests inside backend container
-        run: docker exec brasileirao_backend pytest
+        run: docker exec -it brasileirao_backend pytest
