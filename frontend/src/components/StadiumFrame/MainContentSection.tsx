@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
   FormControl,
   MenuItem,
   Select,
@@ -10,15 +9,16 @@ import {
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import axios from "axios";
 
-const MainContentSection = () => {
+const MainContentSection = ({ onSelectCity }: { onSelectCity?: (city: string) => void }) => {
   const [cityOptions, setCityOptions] = useState<string[]>([]);
+  const [selectedCity, setSelectedCity] = useState<string>(""); // Adicionado estado para o valor selecionado
 
   useEffect(() => {
     axios
-      .get<{ nome: string; capacidade: number; cidade: string; estado: string; pais: string; id: number }[]>("http://localhost:8001/estadio/listar_estadios")
+      .get("http://localhost:8001/estadio/listar_estadios")
       .then((response) => {
-        const cities = response.data.map((stadium) => stadium.cidade); // Garante que cada cidade seja uma string
-        const uniqueCities = Array.from(new Set(cities)); // Remove duplicatas
+        const cities = response.data.map((stadium: any) => String(stadium.cidade)); // Garante que cada cidade seja uma string
+        const uniqueCities: string[] = Array.from(new Set(cities)); // Remove duplicatas e garante o tipo correto
         setCityOptions(uniqueCities);
       })
       .catch(() => {
@@ -26,9 +26,21 @@ const MainContentSection = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (selectedCity === "") {
+      setSelectedCity("");
+    }
+  }, [selectedCity]);
+
+  // Função para limpar filtros
+  const handleClearFilters = () => {
+    setSelectedCity("");
+    onSelectCity?.("");
+  };
+
   return (
     <>
-      <Box sx={{ padding: 3, maxWidth: "480px" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", maxWidth: "480px", width: "100%", padding: 3 }}>
         <FormControl fullWidth>
           <Typography
             variant="subtitle1"
@@ -44,7 +56,12 @@ const MainContentSection = () => {
 
           <Select
             displayEmpty
-            value={cityOptions.length > 0 ? cityOptions[0] : ""} // Define o valor inicial como a primeira cidade, se disponível
+            value={selectedCity}
+            onChange={(e) => {
+              const value = e.target.value;
+              setSelectedCity(value);
+              onSelectCity?.(value);
+            }}
             IconComponent={KeyboardArrowDownIcon}
             sx={{
               height: "56px",
@@ -56,51 +73,20 @@ const MainContentSection = () => {
                 lineHeight: "24px",
               },
             }}
-            renderValue={(selected) => selected || "Select City"} // Mostra o valor selecionado ou o placeholder
+            renderValue={() => selectedCity ? selectedCity : "Selecione uma Cidade"}
           >
-            {cityOptions.length > 0 ? (
-              cityOptions.map((city, index) => (
-                <MenuItem key={index} value={city}>
-                  {city}
-                </MenuItem>
-              ))
-            ) : (
-              <MenuItem disabled value="">
-                No cities available
+            <MenuItem disabled value="">
+              Selecione uma Cidade
+            </MenuItem>
+            {cityOptions.map((city, index) => (
+              <MenuItem key={index} value={city}>
+                {city}
               </MenuItem>
-            )}
+            ))}
           </Select>
         </FormControl>
-      </Box>
-
-      {/* Botão fora da box acima, com alinhamento à esquerda */}
-      <Box
-        sx={{
-          px: 3,
-          pb: 2,
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      >
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: "#C4D4EB",
-            color: "#121417",
-            width: "84px",
-            height: "40px",
-            borderRadius: "12px",
-            textTransform: "none",
-            fontFamily: "'Manrope-Medium', Helvetica",
-            fontSize: "14px",
-            fontWeight: 500,
-            "&:hover": {
-              backgroundColor: "#b3c6de",
-            },
-          }}
-        >
-          Filtrar
-        </Button>
+        {/* Botão de limpar filtro geral, se necessário */}
+        {/* <Button onClick={handleClearFilters}>Limpar Filtros</Button> */}
       </Box>
     </>
   );

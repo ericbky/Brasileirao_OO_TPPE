@@ -3,8 +3,13 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material";
 import axios from "axios";
 
-const StadiumWrapperSection = () => {
+interface StadiumWrapperSectionProps {
+  onSelectStadium?: (stadium: string) => void;
+}
+
+const StadiumWrapperSection: React.FC<StadiumWrapperSectionProps> = ({ onSelectStadium }) => {
   const [stadiums, setStadiums] = useState<{ label: string; value: string }[]>([]);
+  const [selectedStadium, setSelectedStadium] = useState<string>(""); // Adicionado estado para o valor selecionado
 
   useEffect(() => {
     axios
@@ -12,7 +17,7 @@ const StadiumWrapperSection = () => {
       .then((response) => {
         const data = response.data.map((stadium: any) => ({
           label: stadium.nome,
-          value: stadium.id.toString(),
+          value: stadium.nome, // Alterado para usar o nome como valor
         }));
         setStadiums(data);
       })
@@ -38,7 +43,12 @@ const StadiumWrapperSection = () => {
 
         <Select
           displayEmpty
-          value=""
+          value={selectedStadium}
+          onChange={(e) => {
+            const value = e.target.value;
+            setSelectedStadium(value);
+            onSelectStadium?.(value);
+          }}
           sx={{
             height: 56,
             borderRadius: "8px",
@@ -48,19 +58,16 @@ const StadiumWrapperSection = () => {
             },
           }}
           IconComponent={KeyboardArrowDownIcon}
-          renderValue={() => "Selecione um Estádio"}
+          renderValue={() => selectedStadium ? selectedStadium : "Selecione um Estádio"}
         >
-          {stadiums.length > 0 ? (
-            stadiums.map((stadium, index) => (
-              <MenuItem key={index} value={stadium.value}>
-                {stadium.label}
-              </MenuItem>
-            ))
-          ) : (
-            <MenuItem disabled value="">
-              Não há estádios disponíveis
+          <MenuItem disabled value="">
+            Selecione um Estádio
+          </MenuItem>
+          {stadiums.map((stadium, index) => (
+            <MenuItem key={index} value={stadium.value}>
+              {stadium.label}
             </MenuItem>
-          )}
+          ))}
         </Select>
       </FormControl>
     </Box>
