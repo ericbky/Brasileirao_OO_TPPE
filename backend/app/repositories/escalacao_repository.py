@@ -6,6 +6,7 @@ from app.models.models import Escalacao
 from app.schemas.schemas import EscalacaoCreate
 
 
+# Ajustes de criação, listagem, deleção e atualização de escalações
 async def criar_escalacao_repository(data: EscalacaoCreate, session: AsyncSession):
     nova = Escalacao(**data.model_dump())
     session.add(nova)
