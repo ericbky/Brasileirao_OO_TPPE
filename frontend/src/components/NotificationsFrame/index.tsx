@@ -32,7 +32,12 @@ const iconMap: Record<string, React.ReactNode> = {
 
 function getCategory(evento: string) {
   if (evento === "gol") return "Gols";
-  if (evento === "amarelo" || evento === "vermelho") return "Cartões";
+  if (
+    evento === "amarelo" ||
+    evento === "vermelho" ||
+    evento === "cartao_amarelo" ||
+    evento === "cartao_vermelho"
+  ) return "Cartões";
   if (evento === "substituicao") return "Substituições";
   if (evento === "inicio" || evento === "fim") return "Outros";
   return "Outros";
@@ -97,15 +102,10 @@ export const NotificationsFrame: React.FC = () => {
         if (ev.time_id && timesMap[ev.time_id]) {
           timeNome = timesMap[ev.time_id];
         } else if (partida) {
-          // Se for gol, cartão, etc, tenta identificar pelo jogador
-          // Se o jogador está no time mandante ou visitante
-          // Aqui, se o evento for de gol, cartão, etc, tenta associar ao time mandante
-          // (Ajuste conforme dados reais)
-          if (ev.tipo_evento === "gol" || ev.tipo === "gol" || ev.tipo_evento === "cartao_amarelo" || ev.tipo === "cartao_amarelo" || ev.tipo_evento === "cartao_vermelho" || ev.tipo === "cartao_vermelho") {
-            // Se o jogador está no time mandante
+          // Se for gol ou cartão, associa ao mandante
+          if (["gol", "amarelo", "vermelho", "cartao_amarelo", "cartao_vermelho"].includes(ev.tipo_evento) || ["gol", "amarelo", "vermelho", "cartao_amarelo", "cartao_vermelho"].includes(ev.tipo)) {
             timeNome = timesMap[partida.time_mandante_id] || "-";
           } else {
-            // Outros eventos, associa ao mandante por padrão
             timeNome = timesMap[partida.time_mandante_id] || "-";
           }
         }
@@ -115,35 +115,34 @@ export const NotificationsFrame: React.FC = () => {
             }`
           : "Partida desconhecida";
         let texto = "";
-        switch (ev.tipo_evento || ev.tipo) {
-          case "gol":
-            texto = `⚽ ${jogador} marcou um gol aos ${ev.minuto}' (${timeNome})`;
-            break;
-          case "cartao_amarelo":
-          case "amarelo":
-            texto = `🟨 ${jogador} recebeu cartão amarelo aos ${ev.minuto}' (${timeNome})`;
-            break;
-          case "cartao_vermelho":
-          case "vermelho":
-            texto = `🟥 ${jogador} recebeu cartão vermelho aos ${ev.minuto}' (${timeNome})`;
-            break;
-          case "substituicao":
-            texto = `⟳ Substituição aos ${ev.minuto}': ${ev.descricao || "Sem descrição"}`;
-            break;
-          case "inicio":
-            texto = `⏲ Início da partida ${nomePartida}`;
-            break;
-          case "fim":
-            texto = `🏁 Fim da partida ${nomePartida}`;
-            break;
-          default:
-            texto = `Evento: ${ev.tipo_evento || ev.tipo} aos ${ev.minuto || "-"}' (${nomePartida})`;
+        const tipoEv = ev.tipo_evento || ev.tipo;
+        if (["cartao_amarelo", "amarelo"].includes(tipoEv)) {
+          texto = `🟨 ${jogador} recebeu cartão amarelo aos ${ev.minuto}' (${timeNome})`;
+        } else if (["cartao_vermelho", "vermelho"].includes(tipoEv)) {
+          texto = `🟥 ${jogador} recebeu cartão vermelho aos ${ev.minuto}' (${timeNome})`;
+        } else {
+          switch (tipoEv) {
+            case "gol":
+              texto = `⚽ ${jogador} marcou um gol aos ${ev.minuto}' (${timeNome})`;
+              break;
+            case "substituicao":
+              texto = `⟳ Substituição aos ${ev.minuto}': ${ev.descricao || "Sem descrição"}`;
+              break;
+            case "inicio":
+              texto = `⏲ Início da partida ${nomePartida}`;
+              break;
+            case "fim":
+              texto = `🏁 Fim da partida ${nomePartida}`;
+              break;
+            default:
+              texto = `Evento: ${tipoEv} aos ${ev.minuto || "-"}' (${nomePartida})`;
+          }
         }
         return {
-          icon: iconMap[ev.tipo_evento] || iconMap[ev.tipo] || iconMap["outros"],
+          icon: iconMap[tipoEv] || iconMap["outros"],
           text: texto,
           ts: partida ? partida.data_hora : "",
-          categoria: getCategory(ev.tipo_evento || ev.tipo),
+          categoria: getCategory(tipoEv),
           partidaId: ev.partida_id,
         };
       });
