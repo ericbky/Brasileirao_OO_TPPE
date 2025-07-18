@@ -1,0 +1,162 @@
+/* ---------- RESET BÁSICO (opcional) ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Manrope", "Noto Sans", sans-serif;
+  color: #111416;
+  background: #ffffff;
+}
+
+/* ---------- CONTAINER PRINCIPAL ---------- */
+.ntf-container {
+  /* ocupa a área que você quiser – aqui imito o exemplo anterior */
+  max-width: 960px;
+  width: 100%;
+  height: 735px;          /* defina como precisar */
+  margin: 0 auto;
+  padding: 20px 160px;    /* ⇐  ajuste se estiver apertado em telas menores */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---------- CABEÇALHO ---------- */
+.ntf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ntf-title {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 40px;
+  margin: 0;
+}
+
+.ntf-refresh {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 12px;
+  background: #eff2f4;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111416;
+}
+
+/* ---------- BADGES DE FILTRO ---------- */
+.ntf-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ntf-filter-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px 0 16px; /* esquerda um pouco maior */
+  border-radius: 12px;
+  background: #eff2f4;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111416;
+}
+
+/* ---------- LISTA DE NOTIFICAÇÕES ---------- */
+.ntf-list {
+  flex: 1;                       /* ocupa todo o espaço restante */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;              /* rolagem se passar da altura */
+}
+
+/* card */
+.ntf-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  min-height: 72px;
+  padding: 8px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f2f4;   /* divisória sutil */
+}
+
+/* lado esquerdo do card */
+.ntf-card-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1 1 auto;
+}
+
+/* ícone redondo/carré */
+.ntf-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: #eff2f4;
+  flex-shrink: 0;
+}
+
+/* textos dentro do card */
+.ntf-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ntf-text {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+}
+
+.ntf-ts {
+  font-size: 14px;
+  line-height: 21px;
+  color: #637587;
+}
+
+/* botão “Ver partida” */
+.ntf-link {
+  font-size: 15px;
+  font-weight: 500;
+  color: #0a44b7;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-left: 6px;
+}
+
+/* ---------- RESPONSIVIDADE RÁPIDA ---------- */
+@media (max-width: 768px) {
+  .ntf-container {
+    padding: 20px 24px;
+  }
+  .ntf-title {
+    font-size: 28px;
+  }
+  .ntf-link {
+    font-size: 14px;
+  }
+}
