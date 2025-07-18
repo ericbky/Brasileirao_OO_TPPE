@@ -29,6 +29,7 @@ type TableRowData = {
   goalsFor: string;
   goalsAgainst: string;
   goalDifference: string;
+  [key: string]: string;
 };
 
 type TableHeader = {
@@ -154,9 +155,9 @@ const TemporadaFrame = () => {
     ? times
         .filter((t: any) => estatisticasTimes[t.id])
         .sort((a: any, b: any) => estatisticasTimes[b.id].pontos - estatisticasTimes[a.id].pontos)
-        .map((t: any, idx: number) => ({
+        .map((t: any, idx: number): TableRowData => ({
           position: `${idx + 1}°`,
-          team: t.nome,
+          team: String(t.nome),
           points: estatisticasTimes[t.id].pontos.toString(),
           wins: estatisticasTimes[t.id].vitorias.toString(),
           draws: estatisticasTimes[t.id].empates.toString(),
@@ -357,11 +358,10 @@ const TemporadaFrame = () => {
     .slice(0, 5)
     .map(t => t.team);
 
-  const graphData = tableData
+  // Dados dos 4 melhores times para o gráfico da direita
+  const top4Teams = tableData
     .sort((a, b) => Number(b.points) - Number(a.points))
-    .slice(0, 5)
-    .map(t => t.points)
-    .join(", ");
+    .slice(0, 4);
 
   return (
     <Box
@@ -424,7 +424,7 @@ const TemporadaFrame = () => {
                             fontFamily: "Manrope-Regular, Helvetica",
                           }}
                         >
-                          {row[header.id]}
+                          {String(row[header.id])}
                         </TableCell>
                       ))}
                     </TableRow>
@@ -527,22 +527,34 @@ const TemporadaFrame = () => {
               >
                 <Typography variant="h5">Gráficos Comparativos</Typography>
                 <Box sx={{ display: "flex", minHeight: "180px", gap: 3, mt: 1 }}>
-                  {graphTeams.map((team, index) => (
-                    <Box key={index} sx={{ flex: 1, textAlign: "center" }}>
-                      <Box
-                        sx={{
-                          height: "117px",
-                          width: "100%",
-                          bgcolor: "grey.100",
-                          borderTop: 2,
-                          borderColor: "action.active",
-                        }}
-                      />
-                      <Typography variant="body2" sx={{ mt: 1 }}>
-                        {team}
-                      </Typography>
-                    </Box>
-                  ))}
+                  {tableData
+                    .sort((a, b) => Number(b.points) - Number(a.points))
+                    .slice(0, 5)
+                    .map((team, index, arr) => {
+                      // Calcula altura proporcional
+                      const maxPoints = Number(arr[0].points);
+                      const barHeight = maxPoints > 0 ? (Number(team.points) / maxPoints) * 117 : 0;
+                      return (
+                        <Box key={index} sx={{ flex: 1, textAlign: "center" }}>
+                          <Box
+                            sx={{
+                              height: `${barHeight}px`,
+                              width: "100%",
+                              bgcolor: "primary.main",
+                              borderRadius: 2,
+                              transition: "height 0.3s",
+                              mb: 1,
+                            }}
+                          />
+                          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                            {team.team}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {team.points} pts
+                          </Typography>
+                        </Box>
+                      );
+                    })}
                 </Box>
               </Card>
             </Grid>
@@ -558,13 +570,98 @@ const TemporadaFrame = () => {
                 }}
               >
                 <Typography variant="h5">Comparação dos 4 Melhores Times</Typography>
-                <Box sx={{ mt: 2, position: "relative", height: "148px" }}>
-                  <Box
-                    component="img"
-                    src={vectorImage}
-                    alt="Linha 1"
-                    sx={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
-                  />
+                {/* Gráfico radar (spider chart) dos 4 melhores times */}
+                <Box sx={{ mt: 2, position: "relative", height: "220px", width: "100%" }}>
+                  {(() => {
+                    // Métricas comparadas
+                    const metrics = [
+                      { key: "points", label: "Pontos" },
+                      { key: "wins", label: "Vitórias" },
+                      { key: "goalsFor", label: "Gols Pró" },
+                      { key: "goalDifference", label: "Saldo" },
+                    ];
+                    // Normaliza valores para cada métrica
+                    const maxValues = metrics.map(m => Math.max(...top4Teams.map(t => Number(String(t[m.key])))));
+                    // Cores para cada time
+                    const colors = ["#1976d2", "#d32f2f", "#388e3c", "#fbc02d"];
+                    // Calcula pontos do radar para cada time
+                    const centerX = 160, centerY = 110, radius = 80;
+                    const angleStep = (2 * Math.PI) / metrics.length;
+                    // Para cada time, gera array de pontos [x, y]
+                    const teamPolygons = top4Teams.map((team, tIdx) => {
+                      return metrics.map((m, mIdx) => {
+                        const value = Number(String(team[m.key]));
+                        const norm = maxValues[mIdx] > 0 ? value / maxValues[mIdx] : 0;
+                        const angle = mIdx * angleStep - Math.PI / 2;
+                        const x = centerX + Math.cos(angle) * radius * norm;
+                        const y = centerY + Math.sin(angle) * radius * norm;
+                        return { x, y };
+                      });
+                    });
+                    // Pontos dos vértices do radar
+                    const radarVertices = metrics.map((m, mIdx) => {
+                      const angle = mIdx * angleStep - Math.PI / 2;
+                      const x = centerX + Math.cos(angle) * radius;
+                      const y = centerY + Math.sin(angle) * radius;
+                      return { x, y, label: m.label };
+                    });
+                    return (
+                      <svg width={320} height={220} style={{ width: "100%", height: 220 }}>
+                        {/* Linhas do radar */}
+                        {radarVertices.map((v, idx) => (
+                          <line
+                            key={"radar-line-"+idx}
+                            x1={centerX}
+                            y1={centerY}
+                            x2={v.x}
+                            y2={v.y}
+                            stroke="#bbb"
+                            strokeDasharray="4 2"
+                          />
+                        ))}
+                        {/* Polígono de fundo */}
+                        <polygon
+                          points={radarVertices.map(v => `${v.x},${v.y}`).join(" ")}
+                          fill="#e3f2fd"
+                          stroke="#90caf9"
+                          strokeWidth="2"
+                        />
+                        {/* Polígonos dos times */}
+                        {teamPolygons.map((poly, tIdx) => (
+                          <polygon
+                            key={"team-poly-"+tIdx}
+                            points={poly.map(p => `${p.x},${p.y}`).join(" ")}
+                            fill={colors[tIdx]}
+                            fillOpacity="0.25"
+                            stroke={colors[tIdx]}
+                            strokeWidth="3"
+                          />
+                        ))}
+                        {/* Nome dos times (legenda) */}
+                        {top4Teams.map((team, tIdx) => (
+                          <g key={"legend-"+tIdx}>
+                            <rect x={20} y={20 + tIdx * 22} width={18} height={18} fill={colors[tIdx]} stroke="#fff" strokeWidth="2" />
+                            <text x={44} y={34 + tIdx * 22} fontSize="15" fontWeight="bold" fill="#222">{team.team}</text>
+                          </g>
+                        ))}
+                        {/* Nome das métricas */}
+                        {radarVertices.map((v, idx) => (
+                          <text
+                            key={"metric-label-"+idx}
+                            x={v.x}
+                            y={v.y}
+                            fontSize="13"
+                            fontWeight="bold"
+                            fill="#1976d2"
+                            textAnchor={v.x < centerX ? "end" : v.x > centerX ? "start" : "middle"}
+                            alignmentBaseline={v.y < centerY ? "baseline" : "hanging"}
+                          >
+                            {v.label}
+                          </text>
+                        ))}
+                      </svg>
+                    );
+                  })()}
                 </Box>
               </Card>
             </Grid>
