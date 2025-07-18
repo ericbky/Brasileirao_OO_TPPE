@@ -1,5 +1,6 @@
 import pytest
 import pytest_asyncio
+from uuid import uuid4  # 👈 novo
 from httpx import AsyncClient
 from httpx._transports.asgi import ASGITransport
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -29,9 +30,10 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
 
 @pytest.mark.asyncio
 async def test_criar_listar_atualizar_deletar_estadio(client):
-    # Criar estádio
+    # -------- Criar estádio --------
+    nome_unico = f"Estádio Teste {uuid4()}"  # 👈 garante exclusividade
     payload = {
-        "nome": "Estádio Nacional BRB",
+        "nome": nome_unico,
         "capacidade": 70000,
         "cidade": "Brasília",
         "estado": "DF",
@@ -43,15 +45,15 @@ async def test_criar_listar_atualizar_deletar_estadio(client):
     estadio = response.json()
     estadio_id = estadio["id"]
 
-    # Listar estádios
+    # -------- Listar estádios --------
     response = await client.get("/estadio/listar_estadios")
     assert response.status_code == 200
     estadios = response.json()
     assert any(e["id"] == estadio_id for e in estadios)
 
-    # Atualizar estádio
+    # -------- Atualizar estádio --------
     novo_payload = {
-        "nome": "Estádio Nacional Atualizado",
+        "nome": f"{nome_unico} Atualizado",
         "capacidade": 65000,
         "cidade": "Brasília",
         "estado": "DF",
@@ -64,7 +66,7 @@ async def test_criar_listar_atualizar_deletar_estadio(client):
     assert response.status_code == 200
     assert response.json() == f"Estádio {novo_payload['nome']} atualizado com sucesso."
 
-    # Deletar estádio
+    # -------- Deletar estádio --------
     response = await client.delete(f"/estadio/deletar_estadio?id={estadio_id}")
     assert response.status_code == 200
     assert response.json() == f"Estádio {novo_payload['nome']} deletado com sucesso."
