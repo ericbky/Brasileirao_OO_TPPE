@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material";
+import axios from "axios";
 
 const StadiumWrapperSection = () => {
-  const stadiums: { label: string; value: string }[] = [];
+  const [stadiums, setStadiums] = useState<{ label: string; value: string }[]>([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8001/estadio/listar_estadios")
+      .then((response) => {
+        const data = response.data.map((stadium: any) => ({
+          label: stadium.nome,
+          value: stadium.id.toString(),
+        }));
+        setStadiums(data);
+      })
+      .catch(() => {
+        setStadiums([]);
+      });
+  }, []);
 
   return (
     <Box sx={{ p: 3, maxWidth: "480px" }}>
