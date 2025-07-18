@@ -22,19 +22,23 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Install dependencies (backend)
+        working-directory: backend
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install flake8 ruff black
 
-      - name: Run Ruff
+      - name: Run Ruff (backend)
+        working-directory: backend
         run: ruff check .
 
-      - name: Run Black (check mode)
+      - name: Run Black (check mode, backend)
+        working-directory: backend
         run: black --check .
 
-      - name: Run Flake8
+      - name: Run Flake8 (backend)
+        working-directory: backend
         run: flake8 .
 
       - name: Build and start containers
