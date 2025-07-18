@@ -48,7 +48,7 @@ const StadiumWrapperSection = () => {
             },
           }}
           IconComponent={KeyboardArrowDownIcon}
-          renderValue={() => "Select Estádium"}
+          renderValue={() => "Selecione um Estádio"}
         >
           {stadiums.length > 0 ? (
             stadiums.map((stadium, index) => (
@@ -58,7 +58,7 @@ const StadiumWrapperSection = () => {
             ))
           ) : (
             <MenuItem disabled value="">
-              No stadiums available
+              Não há estádios disponíveis
             </MenuItem>
           )}
         </Select>

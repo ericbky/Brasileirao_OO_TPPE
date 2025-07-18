@@ -15,10 +15,11 @@ const MainContentSection = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8001/cidades/listar_cidades")
+      .get<{ nome: string; capacidade: number; cidade: string; estado: string; pais: string; id: number }[]>("http://localhost:8001/estadio/listar_estadios")
       .then((response) => {
-        const cities = response.data.map((city: any) => city.nome);
-        setCityOptions(cities);
+        const cities = response.data.map((stadium) => stadium.cidade); // Garante que cada cidade seja uma string
+        const uniqueCities = Array.from(new Set(cities)); // Remove duplicatas
+        setCityOptions(uniqueCities);
       })
       .catch(() => {
         setCityOptions([]);
@@ -43,7 +44,7 @@ const MainContentSection = () => {
 
           <Select
             displayEmpty
-            value=""
+            value={cityOptions.length > 0 ? cityOptions[0] : ""} // Define o valor inicial como a primeira cidade, se disponível
             IconComponent={KeyboardArrowDownIcon}
             sx={{
               height: "56px",
@@ -55,7 +56,7 @@ const MainContentSection = () => {
                 lineHeight: "24px",
               },
             }}
-            renderValue={() => "Select City"}
+            renderValue={(selected) => selected || "Select City"} // Mostra o valor selecionado ou o placeholder
           >
             {cityOptions.length > 0 ? (
               cityOptions.map((city, index) => (
