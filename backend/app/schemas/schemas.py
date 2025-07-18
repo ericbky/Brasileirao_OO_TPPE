@@ -33,7 +33,7 @@ class TimeCreate(TimeBase):
 
 
 class TecnicoBase(BaseModel):
-    nome: str
+    nome: str = Field(..., min_length=1)
     nacionalidade: Optional[str] = None
     idade: Optional[int] = None
 
