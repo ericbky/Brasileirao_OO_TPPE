@@ -1,0 +1,368 @@
+.teams-frame {
+    align-items: flex-start;
+    display: flex;
+    height: 914px;
+    justify-content: center;
+    padding: 20px 160px;
+    position: relative;
+}
+
+.teams-frame .teams-main {
+    align-items: flex-start;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 960px;
+    position: relative;
+}
+
+.teams-frame .teams-header {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    gap: 12px 12px;
+    justify-content: space-between;
+    padding: 16px;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-title-wrapper {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 288px;
+}
+
+.teams-frame .teams-title {
+    align-self: stretch;
+    color: #111116;
+    font-family: "Manrope-Bold", Helvetica;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 40px;
+    margin-top: -1.00px;
+    position: relative;
+}
+
+.teams-frame .teams-create-wrapper {
+    align-items: center;
+    background-color: #eff2f4;
+    border-radius: 12px;
+    display: inline-flex;
+    flex: 0 0 auto;
+    height: 32px;
+    justify-content: center;
+    max-width: 480px;
+    min-width: 84px;
+    overflow: hidden;
+    padding: 0px 16px;
+    position: relative;
+}
+
+.teams-frame .teams-create-wrapper {
+    align-items: center;
+    display: inline-flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    position: relative;
+}
+
+.teams-frame .teams-create-text {
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    align-self: stretch;
+    color: #111116;
+    display: -webkit-box;
+    font-family: "Manrope-Medium", Helvetica;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 21px;
+    margin-top: -1.00px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    text-overflow: ellipsis;
+}
+
+.teams-frame .teams-filters {
+    align-items: flex-end;
+    display: inline-flex;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    gap: 16px 48px;
+    max-width: 480px;
+    padding: 12px 16px;
+    position: relative;
+    margin-bottom: 5px; 
+}
+
+.teams-frame .teams-filter {
+    align-items: flex-start;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 160px;
+    position: relative;
+}
+
+.teams-frame .teams-filter-label-wrapper {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    padding: 0px 0px 8px;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-filter-label {
+    align-self: stretch;
+    color: #111116;
+    font-family: "Manrope-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 24px;
+    margin-top: -1.00px;
+    position: relative;
+}
+
+.teams-frame .teams-filter-input-wrapper {
+    align-items: center;
+    align-self: stretch;
+    background-color: #ffffff;
+    border: 1px solid;
+    border-color: #dbdde5;
+    border-radius: 12px;
+    display: flex;
+    height: 30px;
+    overflow: hidden;
+    padding: 10px 15px;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-filter-input {
+    color: #607089;
+    font-family: "Manrope-Regular", Helvetica;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 24px;
+    position: relative;
+    white-space: nowrap;
+    width: fit-content;
+}
+
+.teams-frame .teams-filter-select {
+    color: #607089;
+    font-family: "Manrope-Regular", Helvetica;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 24px;
+    margin-right: -15.00px;
+    position: relative;
+    white-space: nowrap;
+    width: fit-content;
+}
+
+.teams-frame .teams-filters {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    padding: 12px 16px;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-filter-action-wrapper {
+    align-items: center;
+    background-color: #eff2f4;
+    border-radius: 12px;
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    max-width: 480px;
+    overflow: hidden;
+    padding: 0px 16px;
+    position: relative;
+    width: 84px;
+}
+
+.teams-frame .teams-filter-action-text {
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    align-self: stretch;
+    color: #111116;
+    display: -webkit-box;
+    font-family: "Manrope-Bold", Helvetica;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 21px;
+    margin-top: -1.00px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    text-overflow: ellipsis;
+}
+
+.teams-frame .teams-section-title-wrapper {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    height: 60px;
+    padding: 20px 16px 1px;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-section-title {
+    align-self: stretch;
+    color: #111116;
+    font-family: "Manrope-Bold", Helvetica;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 28px;
+    margin-top: -1.00px;
+    position: relative;
+}
+
+.teams-frame .teams-list-wrapper {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-list {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 1;
+    flex-grow: 1;
+    gap: 12px;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-card {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0px 0px 12px;
+    position: relative;
+    width: 223px;
+}
+
+.teams-frame .teams-card-image {
+    align-self: stretch;
+    background-image: url(./vasco.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    border-radius: 12px;
+    height: 223px;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-card-info {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-card-subinfo {
+    align-self: stretch;
+    color: #607089;
+    font-family: "Manrope-Regular", Helvetica;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 21px;
+    margin-top: -1.00px;
+    position: relative;
+}
+
+.teams-frame .teams-card-image-b {
+    align-self: stretch;
+    background-image: url(./cruzeiro.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    border-radius: 12px;
+    height: 223px;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-card-image-c {
+    align-self: stretch;
+    background-image: url(./vasco.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    border-radius: 12px;
+    height: 223px;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-card-image-d {
+    align-self: stretch;
+    background-image: url(./cruzeiro.png);
+    background-position: 50% 50%;
+    background-size: cover;
+    border-radius: 12px;
+    height: 223px;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-details-button-wrapper {
+    align-items: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    padding: 12px 16px;
+    position: relative;
+    width: 100%;
+}
+
+.teams-frame .teams-details-button-inner {
+    align-items: center;
+    background-color: #eff2f4;
+    border-radius: 12px;
+    display: inline-flex;
+    flex: 0 0 auto;
+    height: 40px;
+    justify-content: center;
+    max-width: 480px;
+    min-width: 84px;
+    overflow: hidden;
+    padding: 0px 16px;
+    position: relative;
+}
