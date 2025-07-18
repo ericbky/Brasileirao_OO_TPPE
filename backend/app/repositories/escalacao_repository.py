@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy import update, delete
+from sqlalchemy import update
 from fastapi import HTTPException
 from app.models.models import Escalacao
 from app.schemas.schemas import EscalacaoCreate

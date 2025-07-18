@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict, Field
-from typing import Optional, List
+from typing import Optional
 from enum import Enum as PyEnum
 from datetime import date
 

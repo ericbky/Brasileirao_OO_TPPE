@@ -2,18 +2,6 @@ import asyncio
 from app.db.database import engine, Base, get_session
 from app.utils.utils import fix_postgres_sequences
 
-from app.models.models import (
-    Time,
-    Jogador,
-    Tecnico,
-    Partida,
-    TimeTemporada,
-    Estadio,
-    Escalacao,
-    EstatisticaTimePartida,
-    EventoPartida,
-)
-
 
 async def init_models():
     print(f"📦 Registrando {len(Base.metadata.tables)} tabelas via SQLAlchemy...")

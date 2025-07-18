@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from typing import List
-from sqlalchemy.exc import NoResultFound
+
 
 from app.models.models import Time
 from app.schemas.schemas import TimeCreate
