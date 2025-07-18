@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -8,9 +8,22 @@ import {
   Typography,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import axios from "axios";
 
 const MainContentSection = () => {
-  const cityOptions: string[] = [];
+  const [cityOptions, setCityOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8001/cidades/listar_cidades")
+      .then((response) => {
+        const cities = response.data.map((city: any) => city.nome);
+        setCityOptions(cities);
+      })
+      .catch(() => {
+        setCityOptions([]);
+      });
+  }, []);
 
   return (
     <>
