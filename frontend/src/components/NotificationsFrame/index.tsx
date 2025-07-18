@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import {
   ChevronDown,
@@ -25,6 +24,7 @@ const iconMap: Record<string, React.ReactNode> = {
   amarelo: <Square size={18} style={{ color: "#FFD600" }} />,
   vermelho: <Square size={18} style={{ color: "#D32F2F" }} />,
   substituicao: <Repeat size={18} />,
+  falta: <Flag size={18} style={{ color: "#FF9800" }} />,
   inicio: <Clock size={18} />,
   fim: <Flag size={18} />,
   outros: <Clock size={18} />,
@@ -39,6 +39,7 @@ function getCategory(evento: string) {
     evento === "cartao_vermelho"
   ) return "Cartões";
   if (evento === "substituicao") return "Substituições";
+  if (evento === "falta") return "Outros";
   if (evento === "inicio" || evento === "fim") return "Outros";
   return "Outros";
 }
@@ -63,14 +64,17 @@ export const NotificationsFrame: React.FC = () => {
             const dateA = new Date(`${a.data}T${a.horario}`);
             const dateB = new Date(`${b.data}T${b.horario}`);
             return dateB.getTime() - dateA.getTime();
-          })
-          .slice(0, 3);
+          }); // Removida a limitação de 3 partidas
 
         const eventosUltimas = resEventos.data.filter((ev: any) => ultimasPartidas.some((p: any) => p.id === ev.partida_id));
 
-        const eventosOrdenados = [...eventosUltimas].sort((a, b) => b.minuto - a.minuto);
+        const eventosOrdenados = ultimasPartidas.flatMap((partida: any) =>
+          eventosUltimas
+            .filter((ev: any) => ev.partida_id === partida.id)
+            .sort((a: any, b: any) => b.minuto - a.minuto)
+        ); // Ordena os eventos pela ordem das partidas e mantém todos os eventos
 
-        const eventosExibir = eventosOrdenados.filter((ev: any) => ["gol", "cartao_amarelo", "cartao_vermelho"].includes(ev.tipo));
+        const eventosExibir = eventosOrdenados; // Removido filtro para exibir todos os eventos
 
         const ntfs = eventosExibir.map((ev: any) => {
           const jogadorObj = resJogadores.data.find((j: any) => j.id === ev.jogador_id);
@@ -98,25 +102,23 @@ export const NotificationsFrame: React.FC = () => {
           }
           const timeNome = timeId !== null ? (resTimes.data.find((t: any) => t.id === timeId)?.nome || "-") : "-";
           let texto = "";
-          const tipoEv = ev.tipo_evento || ev.tipo;
+          const tipoEv = ev.tipo_evento || ev.tipo; // Adicionado fallback para ev.tipo_evento
           if (["cartao_amarelo", "amarelo"].includes(tipoEv)) {
             texto = `🟨 ${jogador} recebeu cartão amarelo aos ${ev.minuto}' (${timeNome})`;
           } else if (["cartao_vermelho", "vermelho"].includes(tipoEv)) {
             texto = `🟥 ${jogador} recebeu cartão vermelho aos ${ev.minuto}' (${timeNome})`;
+          } else if (tipoEv === "gol") {
+            texto = `⚽ ${jogador} marcou um gol aos ${ev.minuto}' (${timeNome})`;
+          } else if (tipoEv === "substituicao") {
+            texto = `⟳ ${jogador} foi substituído aos ${ev.minuto}' (${timeNome})${ev.descricao ? ` - ${ev.descricao}` : ""}`;
           } else {
-            switch (tipoEv) {
-              case "gol":
-                texto = `⚽ ${jogador} marcou um gol aos ${ev.minuto}' (${timeNome})`;
-                break;
-              default:
-                texto = `Evento: ${tipoEv} aos ${ev.minuto || "-"}' (${nomePartida})`;
-            }
+            texto = `🚩 Evento: ${tipoEv} aos ${ev.minuto || "-"}' (${timeNome})${ev.descricao ? ` - ${ev.descricao}` : ""}`;
           }
           return {
             icon: iconMap[tipoEv] || iconMap["outros"],
             text: texto,
             ts: partida ? partida.data_hora : "",
-            categoria: getCategory(tipoEv),
+            categoria: ["gol", "cartao_amarelo", "cartao_vermelho", "substituicao"].includes(tipoEv) ? getCategory(tipoEv) : "Outros",
             partidaId: partida ? partida.id : null,
           };
         });
