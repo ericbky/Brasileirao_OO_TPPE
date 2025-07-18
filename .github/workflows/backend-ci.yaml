@@ -3,12 +3,12 @@ name: Backend CI
 on:
   push:
     paths:
-      - 'backend/**'
-      - '.github/workflows/backend-ci.yaml'
+      - "backend/**"
+      - ".github/workflows/backend-ci.yaml"
   pull_request:
     paths:
-      - 'backend/**'
-      - '.github/workflows/backend-ci.yaml'
+      - "backend/**"
+      - ".github/workflows/backend-ci.yaml"
 
 jobs:
   backend:
@@ -23,7 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install dependencies
         run: |
@@ -32,7 +32,7 @@ jobs:
           pip install flake8 ruff black
 
       - name: Run Ruff
-        run: ruff .
+        run: ruff check .
 
       - name: Run Black (check mode)
         run: black --check .
@@ -40,5 +40,8 @@ jobs:
       - name: Run Flake8
         run: flake8 .
 
-      - name: Run tests (pytest)
-        run: pytest
+      - name: Build and start containers
+        run: docker-compose up -d --build
+
+      - name: Run tests inside backend container
+        run: docker exec brasileirao_backend pytest
