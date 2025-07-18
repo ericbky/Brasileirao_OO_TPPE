@@ -2,48 +2,100 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import "./style.css";
 
+interface Time {
+  nome: string;
+  socios: number;
+  valor_equipe_titular: number;
+  valor_medio_equipe_titular: number;
+  id: number;
+}
+
+interface TimeTemporada {
+  data_inicio: string;
+  data_final: string;
+  temporada: string;
+  time_id: number;
+  id: number;
+}
+
+interface Jogador {
+  nome: string;
+  idade: number;
+  altura: number;
+  posicao: string;
+  num_camisa: number;
+  convocado_selecao_principal: boolean;
+  convocado_selecao_juniores: boolean;
+  estrangeiro: boolean;
+  valor_mercado: number;
+  time_id: number;
+}
+
 export const TeamDetail = () => {
     const { id } = useParams();
+    const [time, setTime] = React.useState<Time | null>(null);
+    const [jogadores, setJogadores] = React.useState<Jogador[]>([]);
+    const [temporadaAtual, setTemporadaAtual] = React.useState<string | null>(null);
+
+    React.useEffect(() => {
+        import("axios").then(axios => {
+            axios.default.get("http://localhost:8001/times/listar_times").then((res) => {
+                const nomeParam = id?.replace(/-/g, " ").toLowerCase();
+                const found = res.data.find((t: Time) => t.nome.toLowerCase() === nomeParam);
+                setTime(found || null);
+                if (found) {
+                    axios.default.get(`http://localhost:8001/jogador/listar_jogadores?time_id=${found.id}`).then((resJog) => {
+                        setJogadores(resJog.data || []);
+                    });
+                    axios.default.get(`http://localhost:8001/time_temporada/listar_times_temporada?time_id=${found.id}`).then((resTemp) => {
+                        if (Array.isArray(resTemp.data) && resTemp.data.length > 0) {
+                            setTemporadaAtual(resTemp.data[resTemp.data.length - 1].temporada);
+                        } else {
+                            setTemporadaAtual(null);
+                        }
+                    });
+                } else {
+                    setJogadores([]);
+                    setTemporadaAtual(null);
+                }
+            });
+        });
+    }, [id]);
 
     return (
         <div className="team-detail">
             <div className="div">
                 <div className="team-detail-wrapper">
                     <div className="div-wrapper">
-                        <div className="text-wrapper">{id?.replace("-", " ").toUpperCase()}</div>
+                        <div className="text-wrapper">{time ? time.nome.toUpperCase() : id?.replace("-", " ").toUpperCase()}</div>
                     </div>
                 </div>
 
                 <div className="div-2">
                     <div className="div-3">
                         <div className="div-wrapper-2">
-                            <div className="text-wrapper-2">20</div>
+                            <div className="text-wrapper-2">{time ? Number(time.socios).toLocaleString('pt-BR') : "-"}</div>
                         </div>
-
                         <div className="team-detail-wrapper-2">
                             <div className="div-wrapper-3">
                                 <div className="text-wrapper-3">Membros</div>
                             </div>
                         </div>
                     </div>
-
                     <div className="div-3">
                         <div className="div-wrapper-2">
-                            <div className="text-wrapper-2">$500K</div>
+                            <div className="text-wrapper-2">{time ? `R$ ${Number(time.valor_equipe_titular).toLocaleString('pt-BR', { minimumFractionDigits: 2 })} milhões` : "-"}</div>
                         </div>
-
                         <div className="team-detail-wrapper-3">
                             <div className="div-wrapper-3">
                                 <div className="text-wrapper-3">Valor Total</div>
                             </div>
                         </div>
                     </div>
-
                     <div className="div-3">
                         <div className="div-wrapper-2">
-                            <div className="text-wrapper-2">$25K</div>
+                            <div className="text-wrapper-2">{time ? `R$ ${Number(time.valor_medio_equipe_titular).toLocaleString('pt-BR', { minimumFractionDigits: 2 })} milhões` : "-"}</div>
                         </div>
-
                         <div className="team-detail-wrapper-3">
                             <div className="div-wrapper-3">
                                 <div className="text-wrapper-3">Valor Médio</div>
@@ -58,7 +110,6 @@ export const TeamDetail = () => {
 
                 <div className="div-4">
                     <div className="div-5" />
-
                     <div className="div-wrapper-3">
                         <div className="text-wrapper-5">Ethan Carter</div>
                     </div>
@@ -66,35 +117,20 @@ export const TeamDetail = () => {
 
                 <div className="div-6">
                     <div className="div-7">
-                        <div className="div-8">
-                            <div className="team-detail-wrapper-4">
-                                <div className="div-wrapper-5">
-                                    <div className="text-wrapper-3">Data de Fundação</div>
-                                </div>
-                            </div>
-
-                            <div className="team-detail-wrapper-4">
-                                <div className="div-wrapper-5">
-                                    <div className="text-wrapper-6">2018-05-15</div>
-                                </div>
-                            </div>
-                        </div>
-
+                        {/* Data de Fundação removida conforme solicitado */}
                         <div className="div-9">
                             <div className="team-detail-wrapper-4">
                                 <div className="div-wrapper-6">
                                     <div className="text-wrapper-3">Número de Membros</div>
                                 </div>
                             </div>
-
                             <div className="team-detail-wrapper-4">
                                 <div className="div-wrapper-6">
-                                    <div className="text-wrapper-6">20</div>
+                                    <div className="text-wrapper-6">{time ? Number(time.socios).toLocaleString('pt-BR') : "-"}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div className="div-7">
                         <div className="div-10">
                             <div className="team-detail-wrapper-5">
@@ -102,11 +138,10 @@ export const TeamDetail = () => {
                                     <div className="text-wrapper-3">Temporada Atual</div>
                                 </div>
                             </div>
-
                             <div className="team-detail-wrapper-6">
                                 <div className="div-wrapper-7">
                                     <p className="text-wrapper-6">
-                                        Participando da temporada de 2025
+                                        {temporadaAtual ? `Participando da temporada de ${temporadaAtual}` : "-"}
                                     </p>
                                 </div>
                             </div>
@@ -117,9 +152,7 @@ export const TeamDetail = () => {
                 <div className="team-detail-wrapper-7">
                     <div className="team-detail-wrapper-8">
                         <div className="div-wrapper-8">
-                            <div className="text-wrapper-7">
-                                Visualizar o Histórico Técnico
-                            </div>
+                            <div className="text-wrapper-7">Visualizar o Histórico Técnico</div>
                         </div>
                     </div>
                 </div>
@@ -128,45 +161,28 @@ export const TeamDetail = () => {
                     <div className="text-wrapper-4">Jogadores</div>
                 </div>
 
-                <div className="div-11">
-                    <div className="div-12" />
-
-                    <div className="div-13">
-                        <div className="div-wrapper-2">
-                            <div className="text-wrapper-8">Liam Harper</div>
+                <div style={{ maxHeight: 220, overflowY: "auto", overflowX: "hidden", marginBottom: 16, width: "100%", maxWidth: "100%" }}>
+                    {jogadores.length === 0 && (
+                        <div className="div-11">
+                            <div className="div-12" />
+                            <div className="div-13">
+                                <div className="div-wrapper-2">
+                                    <div className="text-wrapper-8">Nenhum jogador cadastrado</div>
+                                </div>
+                            </div>
                         </div>
-
-                        <div className="div-wrapper-9">
-                            <div className="text-wrapper-3">Atacante</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="div-11">
-                    <div className="div-14" />
-
-                    <div className="div-13">
-                        <div className="div-wrapper-2">
-                            <div className="text-wrapper-8">Noah Bennett</div>
-                        </div>
-
-                        <div className="div-wrapper-10">
-                            <div className="text-wrapper-3">Meio-campo</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="div-11">
-                    <div className="div-15" />
-
-                    <div className="div-13">
-                        <div className="div-wrapper-2">
-                            <div className="text-wrapper-8">Oliver Hayes</div>
-                        </div>
-
-                        <div className="div-wrapper-11">
-                            <div className="text-wrapper-3">Defesa</div>
-                        </div>
+                    )}
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, width: "100%" }}>
+                        {jogadores.map((jogador, idx) => (
+                            <div className="div-11" key={jogador.nome + idx} style={{ minWidth: 0 }}>
+                                <div className="div-13">
+                                    <div className="div-wrapper-2">
+                                        <div className="text-wrapper-8">{jogador.nome}</div>
+                                    </div>
+                                    <div className="text-wrapper-3" style={{ fontSize: 13, color: '#555' }}>{jogador.posicao.charAt(0).toUpperCase() + jogador.posicao.slice(1)} · Camisa: {jogador.num_camisa}</div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
@@ -185,7 +201,6 @@ export const TeamDetail = () => {
                                 <div className="text-wrapper-10">Editar Time</div>
                             </div>
                         </div>
-
                         <div className="team-detail-wrapper-8">
                             <div className="div-wrapper-8">
                                 <div className="text-wrapper-7">Deletar Time</div>
