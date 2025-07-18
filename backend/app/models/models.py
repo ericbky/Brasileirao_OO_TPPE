@@ -36,6 +36,8 @@ class TipoEvento(str, PyEnum):
 
 
 # ---------------------- Time ----------------------
+
+
 class Time(Base):
     __tablename__ = "times"
 

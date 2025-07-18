@@ -32,6 +32,28 @@ class TimeCreate(TimeBase):
     pass
 
 
+class TecnicoBase(BaseModel):
+    nome: str
+    nacionalidade: Optional[str] = None
+    idade: Optional[int] = None
+
+
+class TecnicoCreate(TecnicoBase):
+    pass
+
+
+class TecnicoUpdate(BaseModel):
+    nome: Optional[str] = None
+    nacionalidade: Optional[str] = None
+    idade: Optional[int] = None
+
+
+class TecnicoRead(TecnicoBase):
+    id: int
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class TimeRead(TimeBase):
     id: int
 
@@ -66,15 +88,6 @@ class JogadorRead(JogadorBase):
 class TecnicoBase(BaseModel):
     nome: str = Field(..., min_length=1)
     idade: int = Field(..., gt=0)
-
-
-class TecnicoCreate(TecnicoBase):
-    pass
-
-
-class TecnicoRead(TecnicoBase):
-    id: int
-    model_config = ConfigDict(from_attributes=True)
 
 
 # ---------------------- Estadio ----------------------
