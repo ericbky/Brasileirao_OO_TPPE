@@ -668,42 +668,97 @@ const TemporadaFrame = () => {
           </Grid>
         </Box>
 
-        {/* Notificações */}
+        {/* Notificações bonitas dos eventos das últimas partidas */}
         <Box sx={{ px: 2, pt: 2.5 }}>
           <Typography variant="h5" fontWeight="bold" sx={{ mt: 2 }}>
             Notificações
           </Typography>
         </Box>
         <Box sx={{ p: 2 }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              borderRadius: 3,
-            }}
-          >
-            <Stack spacing={0.5} sx={{ maxWidth: "608px" }}>
-              <Typography variant="subtitle1" color="text.secondary">
-                Rodada 8 lançada
-              </Typography>
-              <Typography variant="h5" sx={{ fontSize: "16px", fontWeight: "bold" }}>
-                Novas Partidas e horários já estão disponíveis.
-              </Typography>
-              <Typography variant="subtitle1" color="text.secondary">
-                Confira as últimas atualizações e planeje-se.
-              </Typography>
-            </Stack>
-            <Box
-              sx={{
-                flex: 1,
-                height: "171px",
-                borderRadius: 3,
-                backgroundImage: "url(/depth-6-frame-1.png)",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            />
-          </Box>
+          <Grid container spacing={2}>
+            {(() => {
+              if (!dadosCarregados) return <Grid item xs={12}><Typography>Carregando notificações...</Typography></Grid>;
+              // Últimas 3 partidas
+              const ultimasPartidas = [...partidas]
+                .sort((a: any, b: any) => {
+                  const dateA = new Date(`${a.data}T${a.horario}`);
+                  const dateB = new Date(`${b.data}T${b.horario}`);
+                  return dateB.getTime() - dateA.getTime();
+                })
+                .slice(0, 3);
+              // Eventos dessas partidas
+              const eventosUltimas = eventos.filter(ev => ultimasPartidas.some(p => p.id === ev.partida_id));
+              // Ordena por minuto decrescente
+              const eventosOrdenados = [...eventosUltimas].sort((a, b) => b.minuto - a.minuto);
+              // Exibe os 8 últimos eventos relevantes (gols, cartões)
+              const eventosExibir = eventosOrdenados.filter(ev => ["gol", "cartao_amarelo", "cartao_vermelho"].includes(ev.tipo)).slice(0, 8);
+              if (eventosExibir.length === 0) return <Grid item xs={12}><Typography>Nenhum evento relevante nas últimas partidas.</Typography></Grid>;
+              return eventosExibir.map((ev, idx) => {
+                // Busca dados do jogador, partida e time
+                const jogadorNome = getJogadorNome(ev.jogador_id);
+                const partida = ultimasPartidas.find(p => p.id === ev.partida_id);
+                let timeId = null;
+                let nomePartida = "-";
+                if (partida) {
+                  timeId = partida.time_mandante_id;
+                  const nomeMandante = getTimeNome(partida.time_mandante_id);
+                  const nomeVisitante = getTimeNome(partida.time_visitante_id);
+                  nomePartida = `${nomeMandante} x ${nomeVisitante}`;
+                }
+                const timeNome = timeId ? getTimeNome(timeId) : "-";
+                let tipoEvento = "";
+                let corBg = "#fff";
+                let corIcone = "#1976d2";
+                let icone = null;
+                if (ev.tipo === "gol") {
+                  tipoEvento = "Gol";
+                  corBg = "#e8f5e9";
+                  corIcone = "#388e3c";
+                  icone = (
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", width: 38, height: 38, bgcolor: corIcone, borderRadius: "50%", mr: 2 }}>
+                      <span style={{ color: "#fff", fontSize: 22, fontWeight: "bold" }}>⚽</span>
+                    </Box>
+                  );
+                } else if (ev.tipo === "cartao_amarelo") {
+                  tipoEvento = "Cartão Amarelo";
+                  corBg = "#fffde7";
+                  corIcone = "#fbc02d";
+                  icone = (
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", width: 38, height: 38, bgcolor: corIcone, borderRadius: "50%", mr: 2 }}>
+                      <span style={{ color: "#fff", fontSize: 22, fontWeight: "bold" }}>🟨</span>
+                    </Box>
+                  );
+                } else if (ev.tipo === "cartao_vermelho") {
+                  tipoEvento = "Cartão Vermelho";
+                  corBg = "#ffebee";
+                  corIcone = "#d32f2f";
+                  icone = (
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", width: 38, height: 38, bgcolor: corIcone, borderRadius: "50%", mr: 2 }}>
+                      <span style={{ color: "#fff", fontSize: 22, fontWeight: "bold" }}>🟥</span>
+                    </Box>
+                  );
+                }
+                return (
+                  <Grid item xs={12} sm={6} md={4} key={idx}>
+                    <Card sx={{ display: "flex", alignItems: "center", bgcolor: corBg, boxShadow: "none", borderRadius: 3, border: "1px solid #e0e0e0", p: 2, minHeight: 90 }}>
+                      {icone}
+                      <Box sx={{ flex: 1 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: "bold", color: corIcone }}>
+                          {tipoEvento} - {jogadorNome}
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 500, color: "#1976d2", mb: 0.5 }}>
+                          {nomePartida}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {timeNome} | {ev.minuto}' | {ev.descricao || "Sem descrição"}
+                        </Typography>
+                      </Box>
+                    </Card>
+                  </Grid>
+                );
+              });
+            })()}
+          </Grid>
         </Box>
       </Box>
     </Box>
