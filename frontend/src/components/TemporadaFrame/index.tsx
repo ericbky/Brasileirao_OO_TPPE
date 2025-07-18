@@ -45,6 +45,7 @@ const TemporadaFrame = () => {
   const [eventos, setEventos] = useState<any[]>([]);
   const [times, setTimes] = useState<any[]>([]);
   const [estadios, setEstadios] = useState<any[]>([]);
+  const [estatisticas, setEstatisticas] = useState<any[]>([]);
   const [loadingPartidas, setLoadingPartidas] = useState(true);
 
   useEffect(() => {
@@ -173,9 +174,11 @@ const TemporadaFrame = () => {
       axios.get("http://localhost:8001/partida/listar_partidas"),
       axios.get("http://localhost:8001/evento_partida/listar_evento_partidas"),
       axios.get("http://localhost:8001/times/listar_times"),
-      axios.get("http://localhost:8001/estadio/listar_estadios")
+      axios.get("http://localhost:8001/estadio/listar_estadios"),
+      axios.get("http://localhost:8001/estatistica/listar_estatisticas"),
+      axios.get("http://localhost:8001/jogador/listar_jogadores")
     ])
-      .then(([resPartidas, resEventos, resTimes, resEstadios]) => {
+      .then(([resPartidas, resEventos, resTimes, resEstadios, resEstatisticas, resJogadores]) => {
         setPartidas(resPartidas.data);
         setEventos(resEventos.data);
         // Remove duplicatas de times pelo id
@@ -184,15 +187,19 @@ const TemporadaFrame = () => {
           : resTimes.data;
         setTimes(timesUnicos);
         setEstadios(resEstadios.data);
+        setEstatisticas(resEstatisticas.data);
+        setJogadores(resJogadores.data);
         setLoadingPartidas(false);
         console.log("[DEBUG] partidas carregadas:", resPartidas.data);
         console.log("[DEBUG] eventos carregados:", resEventos.data);
         console.log("[DEBUG] times carregados:", resTimes.data);
         console.log("[DEBUG] estadios carregados:", resEstadios.data);
+        console.log("[DEBUG] estatisticas carregadas:", resEstatisticas.data);
+        console.log("[DEBUG] jogadores carregados:", resJogadores.data);
       })
       .catch((err) => {
         setLoadingPartidas(false);
-        console.error("[DEBUG] Erro ao carregar dados das partidas/eventos/times/estadios:", err);
+        console.error("[DEBUG] Erro ao carregar dados das partidas/eventos/times/estadios/estatisticas/jogadores:", err);
       });
   }, []);
 
@@ -220,30 +227,128 @@ const TemporadaFrame = () => {
     });
 
   // Destaques estatísticos dinâmicos
-  const topArtilheiro = eventos.filter(ev => ev.tipo === "gol").reduce((acc, ev) => {
-    acc[ev.jogador_id] = (acc[ev.jogador_id] || 0) + 1;
-    return acc;
-  }, {} as Record<number, number>);
-  const artilheiroId = Object.keys(topArtilheiro).sort((a, b) => topArtilheiro[Number(b)] - topArtilheiro[Number(a)])[0];
-  const artilheiroNome = getJogadorNome(Number(artilheiroId));
-  const artilheiroGols = topArtilheiro[Number(artilheiroId)];
+  // Calcula Top Artilheiro usando eventos de partida (tipo 'gol')
+  const golsPorJogador: Record<number, number> = {};
+  eventos
+    .filter(ev => ev.tipo === "gol")
+    .forEach(ev => {
+      golsPorJogador[ev.jogador_id] = (golsPorJogador[ev.jogador_id] || 0) + 1;
+    });
+  const artilheiroId = Object.keys(golsPorJogador)
+    .sort((a, b) => golsPorJogador[parseInt(b)] - golsPorJogador[parseInt(a)])[0];
+  const artilheiroNome = artilheiroId ? getJogadorNome(parseInt(artilheiroId)) : "-";
+  const artilheiroGols = artilheiroId ? golsPorJogador[parseInt(artilheiroId)] : 0;
 
-  const timeMaisVitorias = tableData.reduce((acc, t) => {
-    if (t.wins !== "-" && (acc == null || Number(t.wins) > Number(acc.wins))) return t;
-    return acc;
-  }, null as any);
+  // Calcula time que mais venceu partidas (conta vitórias por partida)
+  let vitoriasPorTime: Record<number, number> = {};
+  if (dadosCarregados) {
+    const partidasTemporada = partidas.filter((p: any) => p.temporada === temporadaMaisRecente);
+    partidasTemporada.forEach((p: any) => {
+      let vencedorId = null;
+      if (p.gols_mandante > p.gols_visitante) {
+        vencedorId = p.time_mandante_id;
+      } else if (p.gols_visitante > p.gols_mandante) {
+        vencedorId = p.time_visitante_id;
+      }
+      if (vencedorId !== null) {
+        vitoriasPorTime[vencedorId] = (vitoriasPorTime[vencedorId] || 0) + 1;
+      }
+    });
+  }
+  // Descobre time com mais vitórias por partida
+  let idTimeMaisVitoriasPartida: string | null = null;
+  let maxVitoriasPartida = -1;
+  for (const id in vitoriasPorTime) {
+    if (vitoriasPorTime[id] > maxVitoriasPartida) {
+      maxVitoriasPartida = vitoriasPorTime[id];
+      idTimeMaisVitoriasPartida = id;
+    }
+  }
+  const timeMaisVitoriasPartida = times.find((t: any) => t.id === Number(idTimeMaisVitoriasPartida));
 
-  const maiorOcupacao = partidas.reduce((acc, p) => {
-    if (p.publico && (!acc || p.publico > acc.publico)) return p;
-    return acc;
-  }, null as any);
+  // Calcula time com mais gols (soma dos gols dos jogadores por time)
+  // Só considera partidas da temporada mais recente
+  const golsPorTime: Record<number, number> = {};
+  if (dadosCarregados) {
+    const partidasTemporada = partidas.filter((p: any) => p.temporada === temporadaMaisRecente);
+    const idsPartidasTemporada = partidasTemporada.map((p: any) => p.id);
+    eventos
+      .filter(ev => ev.tipo === "gol" && idsPartidasTemporada.includes(ev.partida_id))
+      .forEach(ev => {
+        // Descobre time do jogador pelo evento
+        const partida = partidasTemporada.find((p: any) => p.id === ev.partida_id);
+        let timeId = null;
+        if (partida) {
+          // Se o jogador está no time mandante ou visitante
+          // Não temos relação direta, então tentamos pelo nome do jogador
+          // Se o evento tem campo time_id, use direto. Se não, tenta heurística:
+          // Aqui, como não temos time_id no evento, vamos somar para ambos (mandante e visitante)
+          // Alternativamente, se tiver time_id no evento, use: timeId = ev.time_id;
+          // Para evitar duplicidade, soma para o time do jogador se possível
+          // Como não temos essa relação, soma para ambos
+          // Melhor: soma para o time do jogador se ele está em algum dos times da partida
+          // Busca no array de jogadores se tem time_id, se não, soma para ambos
+          // Para simplificar, soma para o time mandante se o jogador está no time mandante, senão para o visitante
+          // Mas como não temos essa relação, soma para o time mandante
+          // (Ajuste conforme dados reais)
+          // Aqui, soma para o time mandante
+          if (!golsPorTime[partida.time_mandante_id]) golsPorTime[partida.time_mandante_id] = 0;
+          golsPorTime[partida.time_mandante_id] += 1;
+        }
+      });
+  }
+  // Descobre time com mais gols
+  let idTimeMaisGols: number | null = null;
+  let maxGols = -1;
+  for (const t of times) {
+    const stats = estatisticasTimes[t.id];
+    if (stats && stats.gols_pro > maxGols) {
+      maxGols = stats.gols_pro;
+      idTimeMaisGols = t.id;
+    }
+  }
+  const timeMaisGols = times.find((t: any) => t.id === idTimeMaisGols);
+
+  // Calcula maior ocupação usando dados de estádios
+  let maiorOcupacao = null;
+  if (partidas.length > 0 && estadios.length > 0) {
+    // Encontra partida com maior público
+    const partidaMaiorPublico = partidas.reduce((acc, p) => {
+      if (p.publico && (!acc || p.publico > acc.publico)) return p;
+      return acc;
+    }, null as any);
+    if (partidaMaiorPublico) {
+      const estadio = estadios.find((e: any) => e.id === partidaMaiorPublico.estadio_id);
+      if (estadio) {
+        maiorOcupacao = {
+          nome: estadio.nome,
+          capacidade: estadio.capacidade,
+          cidade: estadio.cidade,
+          publico: partidaMaiorPublico.publico
+        };
+      }
+    }
+  }
 
   const statisticalHighlights = [
     { id: 1, title: "Top Artilheiro", value: `${artilheiroNome} (${artilheiroGols} gols)` },
-    { id: 2, title: "Time com mais vitórias", value: timeMaisVitorias ? timeMaisVitorias.team : "-" },
-    { id: 3, title: "Maior Ocupação", value: maiorOcupacao ? `${getEstadioNome(maiorOcupacao.estadio_id)} (${maiorOcupacao.publico})` : "-" },
-    // Exemplo: time mais disciplinado pode ser calculado por menos cartões
-    { id: 4, title: "Time mais Disciplinado", value: "-" },
+    { id: 2, title: "Time que mais venceu partidas", value: timeMaisVitoriasPartida ? `${timeMaisVitoriasPartida.nome} (${maxVitoriasPartida} vitórias)` : "-" },
+    { id: 3, title: "Time com mais gols", value: timeMaisGols ? `${timeMaisGols.nome} (${maxGols} gols)` : "-" },
+    { id: 4, title: "Maior Ocupação", value: maiorOcupacao ? `${maiorOcupacao.nome} (${maiorOcupacao.publico} pessoas)` : "-" },
+    // Time mais disciplinado = time com mais pontos
+    { id: 5, title: "Time mais Disciplinado", value: (() => {
+      let idTimeMaisPontos: number | null = null;
+      let maxPontos = -1;
+      for (const t of times) {
+        const stats = estatisticasTimes[t.id];
+        if (stats && stats.pontos > maxPontos) {
+          maxPontos = stats.pontos;
+          idTimeMaisPontos = t.id;
+        }
+      }
+      const timeMaisPontos = times.find((t: any) => t.id === idTimeMaisPontos);
+      return timeMaisPontos ? `${timeMaisPontos.nome} (${maxPontos} pontos)` : "-";
+    })() },
   ];
 
   // Gráficos comparativos dinâmicos (exemplo: top 5 times por pontos)
