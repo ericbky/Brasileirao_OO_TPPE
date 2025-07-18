@@ -4,45 +4,56 @@ on:
   push:
     paths:
       - "backend/**"
-      - ".github/workflows/backend-ci.yaml"
+      - ".github/workflows/backend-ci.yml"
   pull_request:
     paths:
       - "backend/**"
-      - ".github/workflows/backend-ci.yaml"
+      - ".github/workflows/backend-ci.yml"
 
 jobs:
   backend:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install dependencies (backend)
+      - name: Criar arquivo .env
+        run: |
+          cat <<EOF > .env
+          POSTGRES_USER=postgres
+          POSTGRES_PASSWORD=postgres
+          POSTGRES_DB=brasileirao
+          DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/brasileirao
+          DATABASE_URL_EXTERNAL=postgresql+asyncpg://postgres:postgres@localhost:25432/brasileirao
+          EOF
+
+      - name: Instalar dependências Python do backend
         working-directory: backend
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install flake8 ruff black
+          pip install ruff black flake8
 
-      - name: Run Ruff (backend)
+      - name: Rodar Ruff (lint)
         working-directory: backend
         run: ruff check .
 
-      - name: Run Black (check mode, backend)
+      - name: Rodar Black (modo verificação)
         working-directory: backend
         run: black --check .
 
-      - name: Run Flake8 (backend)
+      - name: Rodar Flake8
         working-directory: backend
         run: flake8 .
 
-      - name: Build and start containers
-        run: docker compose up -d --build backend
+      - name: Subir containers com Docker Compose
+        run: docker compose up -d --build
 
-      - name: Run tests inside backend container
-        run: docker exec -it brasileirao_backend pytest
+      - name: Rodar testes no container backend
+        run: docker exec brasileirao_backend pytest -q
