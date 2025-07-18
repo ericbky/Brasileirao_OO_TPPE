@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import {
   ChevronDown,
   Clock,
@@ -8,85 +9,202 @@ import {
   Repeat,
   Square,
 } from "lucide-react";
-
+import axios from "axios";
 import "./style.css";
 
-/* ------------------------------------------------------------------ */
-/*  DADOS FAKE – troque por dados vindos do backend quando quiser     */
-/* ------------------------------------------------------------------ */
-
-const filterCategories = ["Todos", "Goals", "Cards", "Substitutions", "Others"];
-
-const notifications = [
-  {
-    icon: <Goal size={20} />,
-    text: "⚽ Ethan Carter marcou um gol aos 37' do 2º tempo para o Time Azul.",
-    ts: "06/12/2025 — 18:43",
-  },
-  {
-    icon: <Square size={18} />,
-    text: "🛑 Liam Harper recebeu cartão vermelho aos 15' do 1º tempo.",
-    ts: "06/12/2025 — 18:43",
-  },
-  {
-    icon: <Repeat size={18} />,
-    text: "⟳ Noah Bennett foi substituído por Owen aos 62' (Time Verde).",
-    ts: "06/12/2025 — 18:43",
-  },
-  {
-    icon: <Clock size={18} />,
-    text: "⏲ A partida entre Time A e Time B começou!",
-    ts: "06/12/2025 — 18:43",
-  },
-  {
-    icon: <Flag size={18} />,
-    text: "🏁 Vitória do Time B por 2×1 sobre o Time A.",
-    ts: "06/12/2025 — 18:43",
-  },
+const filterCategories = [
+  "Todos",
+  "Gols",
+  "Cartões",
+  "Substituições",
+  "Outros",
 ];
 
-/* ------------------------------------------------------------------ */
-/*  COMPONENTE                                                        */
-/* ------------------------------------------------------------------ */
+const iconMap: Record<string, React.ReactNode> = {
+  gol: <Goal size={20} />,
+  amarelo: <Square size={18} style={{ color: "#FFD600" }} />,
+  vermelho: <Square size={18} style={{ color: "#D32F2F" }} />,
+  substituicao: <Repeat size={18} />,
+  inicio: <Clock size={18} />,
+  fim: <Flag size={18} />,
+  outros: <Clock size={18} />,
+};
 
-// ⬇️  aqui já exportamos o componente por nome
+function getCategory(evento: string) {
+  if (evento === "gol") return "Gols";
+  if (evento === "amarelo" || evento === "vermelho") return "Cartões";
+  if (evento === "substituicao") return "Substituições";
+  if (evento === "inicio" || evento === "fim") return "Outros";
+  return "Outros";
+}
+
 export const NotificationsFrame: React.FC = () => {
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [filter, setFilter] = useState<string>("Todos");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  // Lógica igual ao TemporadaFrame, mas mantendo visual original
+  const fetchNotifications = async () => {
+    setLoading(true);
+    try {
+      // Busca dados das entidades
+      const [resPartidas, resEventos, resJogadores, resTimes] = await Promise.all([
+        axios.get("http://localhost:8001/partida/listar_partidas"),
+        axios.get("http://localhost:8001/evento_partida/listar_evento_partidas"),
+        axios.get("http://localhost:8001/jogador/listar_jogadores"),
+        axios.get("http://localhost:8001/times/listar_times")
+      ]);
+
+      // Ordena partidas por data/hora decrescente
+      const partidasOrdenadas = [...resPartidas.data].sort((a, b) => {
+        const dateA = new Date(`${a.data}T${a.horario}`);
+        const dateB = new Date(`${b.data}T${b.horario}`);
+        return dateB.getTime() - dateA.getTime();
+      });
+      // Pega os IDs das 5 partidas mais recentes
+      const partidasRecentesIds = partidasOrdenadas.slice(0, 5).map((p) => p.id);
+
+      // Filtra eventos das partidas recentes
+      let eventosRecentes = resEventos.data.filter((ev: any) =>
+        partidasRecentesIds.includes(ev.partida_id)
+      );
+      // Se não houver eventos, pega os últimos 10 eventos do campeonato
+      if (eventosRecentes.length === 0 && resEventos.data.length > 0) {
+        eventosRecentes = resEventos.data.slice(-10);
+      }
+
+      // Mapas para busca rápida
+      const partidasMap = Object.fromEntries(
+        resPartidas.data.map((p: any) => [p.id, p])
+      );
+      const jogadoresMap = Object.fromEntries(
+        resJogadores.data.map((j: any) => [j.id, j.nome])
+      );
+      const timesMap = Object.fromEntries(
+        resTimes.data.map((t: any) => [t.id, t.nome])
+      );
+
+      // Monta notificações (eventos das partidas recentes)
+      const ntfs = eventosRecentes.reverse().map((ev: any) => {
+        const partida = partidasMap[ev.partida_id];
+        const jogador = jogadoresMap[ev.jogador_id] || "-";
+        // Lógica para identificar o time correto do evento
+        let timeNome = "-";
+        if (ev.time_id && timesMap[ev.time_id]) {
+          timeNome = timesMap[ev.time_id];
+        } else if (partida) {
+          // Se for gol, cartão, etc, tenta identificar pelo jogador
+          // Se o jogador está no time mandante ou visitante
+          // Aqui, se o evento for de gol, cartão, etc, tenta associar ao time mandante
+          // (Ajuste conforme dados reais)
+          if (ev.tipo_evento === "gol" || ev.tipo === "gol" || ev.tipo_evento === "cartao_amarelo" || ev.tipo === "cartao_amarelo" || ev.tipo_evento === "cartao_vermelho" || ev.tipo === "cartao_vermelho") {
+            // Se o jogador está no time mandante
+            timeNome = timesMap[partida.time_mandante_id] || "-";
+          } else {
+            // Outros eventos, associa ao mandante por padrão
+            timeNome = timesMap[partida.time_mandante_id] || "-";
+          }
+        }
+        const nomePartida = partida
+          ? `${timesMap[partida.time_mandante_id] || "?"} x ${
+              timesMap[partida.time_visitante_id] || "?"
+            }`
+          : "Partida desconhecida";
+        let texto = "";
+        switch (ev.tipo_evento || ev.tipo) {
+          case "gol":
+            texto = `⚽ ${jogador} marcou um gol aos ${ev.minuto}' (${timeNome})`;
+            break;
+          case "cartao_amarelo":
+          case "amarelo":
+            texto = `🟨 ${jogador} recebeu cartão amarelo aos ${ev.minuto}' (${timeNome})`;
+            break;
+          case "cartao_vermelho":
+          case "vermelho":
+            texto = `🟥 ${jogador} recebeu cartão vermelho aos ${ev.minuto}' (${timeNome})`;
+            break;
+          case "substituicao":
+            texto = `⟳ Substituição aos ${ev.minuto}': ${ev.descricao || "Sem descrição"}`;
+            break;
+          case "inicio":
+            texto = `⏲ Início da partida ${nomePartida}`;
+            break;
+          case "fim":
+            texto = `🏁 Fim da partida ${nomePartida}`;
+            break;
+          default:
+            texto = `Evento: ${ev.tipo_evento || ev.tipo} aos ${ev.minuto || "-"}' (${nomePartida})`;
+        }
+        return {
+          icon: iconMap[ev.tipo_evento] || iconMap[ev.tipo] || iconMap["outros"],
+          text: texto,
+          ts: partida ? partida.data_hora : "",
+          categoria: getCategory(ev.tipo_evento || ev.tipo),
+          partidaId: ev.partida_id,
+        };
+      });
+      setNotifications(ntfs);
+    } catch (err) {
+      setNotifications([]);
+    }
+    setLoading(false);
+  };
+
+  const filteredNotifications =
+    filter === "Todos"
+      ? notifications
+      : notifications.filter((n) => n.categoria === filter);
+
   return (
     <section className="ntf-container">
-      {/* Cabeçalho */}
       <header className="ntf-header">
-        <h1 className="ntf-title">Notifications</h1>
-
-        <button className="ntf-refresh">
-          <RefreshCcw size={16} /> <span>Refresh</span>
+        <h1 className="ntf-title">Notificações</h1>
+        <button className="ntf-refresh" onClick={fetchNotifications} disabled={loading}>
+          <RefreshCcw size={16} /> <span>Atualizar</span>
         </button>
       </header>
-
-      {/* Filtros */}
       <div className="ntf-filters">
         {filterCategories.map((cat) => (
-          <button key={cat} className="ntf-filter-badge">
+          <button
+            key={cat}
+            className={`ntf-filter-badge${filter === cat ? " ntf-active" : ""}`}
+            onClick={() => setFilter(cat)}
+          >
             <span>{cat}</span>
             <ChevronDown size={14} />
           </button>
         ))}
       </div>
-
-      {/* Lista */}
       <div className="ntf-list">
-        {notifications.map(({ icon, text, ts }, idx) => (
-          <article key={idx} className="ntf-card">
-            <div className="ntf-card-left">
-              <span className="ntf-icon">{icon}</span>
-              <div className="ntf-texts">
-                <p className="ntf-text">{text}</p>
-                <p className="ntf-ts">{ts}</p>
+        {loading ? (
+          <div className="ntf-loading">Carregando...</div>
+        ) : filteredNotifications.length === 0 ? (
+          <div className="ntf-empty">Nenhuma notificação encontrada.</div>
+        ) : (
+          filteredNotifications.map(({ icon, text, ts, partidaId }, idx) => (
+            <article key={idx} className="ntf-card">
+              <div className="ntf-card-left">
+                <span className="ntf-icon">{icon}</span>
+                <div className="ntf-texts">
+                  <p className="ntf-text">{text}</p>
+                  <p className="ntf-ts">{ts}</p>
+                </div>
               </div>
-            </div>
-
-            <button className="ntf-link">Ver partida</button>
-          </article>
-        ))}
+              <a
+                className="ntf-link"
+                href={partidaId ? `/partida/${partidaId}` : "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ver partida
+              </a>
+            </article>
+          ))
+        )}
       </div>
     </section>
   );
