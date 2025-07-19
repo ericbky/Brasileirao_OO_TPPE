@@ -22,6 +22,7 @@ export const PlayerFrame = () => {
     const navigate = useNavigate();
     const [jogadores, setJogadores] = React.useState<Jogador[]>([]);
     const [times, setTimes] = React.useState<{ id: number; nome: string }[]>([]);
+    const [eventos, setEventos] = React.useState<any[]>([]);
 
     React.useEffect(() => {
         import("axios").then(axios => {
@@ -30,6 +31,9 @@ export const PlayerFrame = () => {
             });
             axios.default.get("http://localhost:8001/times/listar_times").then((res) => {
                 setTimes(res.data || []);
+            });
+            axios.default.get("http://localhost:8001/evento_partida/listar_evento_partidas").then((res) => {
+                setEventos(res.data || []);
             });
         });
     }, []);
@@ -241,51 +245,59 @@ export const PlayerFrame = () => {
                 <div className="div-11">
                     <div className="div-12">
                         <div className="div-8">
-                            <div className="text-wrapper-11">Total de Jogadores</div>
+                            <div className="text-wrapper-11">Jogador Com Mais Gols</div>
                         </div>
-
                         <div className="div-8">
-                            <div className="text-wrapper-12">127</div>
+                            <div className="text-wrapper-12">
+                                {(() => {
+                                    const gols = eventos.filter(e => e.tipo === "gol");
+                                    const contagem: Record<number, number> = {};
+                                    gols.forEach(e => {
+                                        contagem[e.jogador_id] = (contagem[e.jogador_id] || 0) + 1;
+                                    });
+                                    const jogadorIdMaisGols = Object.entries(contagem).sort((a, b) => b[1] - a[1])[0];
+                                    if (jogadorIdMaisGols) {
+                                        const jogador = jogadores.find(j => j.id === Number(jogadorIdMaisGols[0]));
+                                        if (jogador) {
+                                            const time = times.find(t => t.id === jogador.time_id);
+                                            return `${jogador.nome} (${time ? time.nome : 'Time ' + jogador.time_id}) - 
+                                            ${jogadorIdMaisGols[1]} gols`;
+                                        }
+                                        return `ID ${jogadorIdMaisGols[0]} (${jogadorIdMaisGols[1]})`;
+                                    }
+                                    return "-";
+                                })()}
+                            </div>
                         </div>
                     </div>
 
+                    <div className="div-12">
+                        <div className="div-8">
+                            <div className="text-wrapper-11">Total de Jogadores</div>
+                        </div>
+                        <div className="div-8">
+                            <div className="text-wrapper-12">{jogadores.length}</div>
+                        </div>
+                    </div>
                     <div className="div-12">
                         <div className="div-8">
                             <div className="text-wrapper-11">Total de estrangeiros</div>
                         </div>
-
                         <div className="div-8">
-                            <div className="text-wrapper-12">12</div>
+                            <div className="text-wrapper-12">{jogadores.filter(j => j.estrangeiro).length}</div>
                         </div>
                     </div>
-
-                    <div className="div-12">
-                        <div className="div-8">
-                            <div className="text-wrapper-11">Total de gols marcados</div>
-                        </div>
-
-                        <div className="div-8">
-                            <div className="text-wrapper-12">380</div>
-                        </div>
-                    </div>
-
-                    <div className="div-12">
-                        <div className="div-8">
-                            <div className="text-wrapper-11">Jogador com mais gols</div>
-                        </div>
-
-                        <div className="div-wrapper-19">
-                            <div className="text-wrapper-12">Lucas Silva (12)</div>
-                        </div>
-                    </div>
-
                     <div className="div-13">
                         <div className="div-8">
                             <div className="text-wrapper-11">Jogador mais valioso</div>
                         </div>
-
                         <div className="div-wrapper-20">
-                            <div className="text-wrapper-12">Carlos Meira ($2.5M)</div>
+                            <div className="text-wrapper-12">
+                                {jogadores.length > 0 ? (() => {
+                                    const valioso = jogadores.reduce((max, j) => j.valor_mercado > max.valor_mercado ? j : max, jogadores[0]);
+                                    return `${valioso.nome} (R$ ${(valioso.valor_mercado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}M)`;
+                                })() : "-"}
+                            </div>
                         </div>
                     </div>
                 </div>
