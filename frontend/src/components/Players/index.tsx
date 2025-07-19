@@ -25,6 +25,8 @@ export const PlayerFrame = () => {
     const [eventos, setEventos] = React.useState<any[]>([]);
     const [buscaNome, setBuscaNome] = React.useState<string>("");
     const [filtroPosicao, setFiltroPosicao] = React.useState<string>("Todos");
+    const [filtroTime, setFiltroTime] = React.useState<string>("");
+    const [ordenacaoNome, setOrdenacaoNome] = React.useState<'az' | 'za'>('az');
 
     React.useEffect(() => {
         import("axios").then(axios => {
@@ -108,28 +110,39 @@ export const PlayerFrame = () => {
                 <div className="div-4">
                     <div className="div-5">
                         <div className="div-wrapper-2">
-                            <div className="text-wrapper-4">Time Associado</div>
-                        </div>
-
-                        <div className="div-wrapper-2">
-                            <div className="img-wrapper">
-                                <img className="img" alt="Vector" src={arrow} />
-                            </div>
+                            <select
+                                value={filtroTime}
+                                onChange={e => setFiltroTime(e.target.value)}
+                                style={{
+                                    padding: '6px 12px',
+                                    borderRadius: '8px',
+                                    border: 'none',
+                                    background: 'inherit',
+                                    color: '#111',
+                                    fontSize: '1rem',
+                                    outline: 'none',
+                                    boxShadow: 'none',
+                                }}
+                            >
+                                <option value="Todos">Todos</option>
+                                {times.map(time => (
+                                    <option key={time.id} value={time.nome}>{time.nome}</option>
+                                ))}
+                            </select>
                         </div>
                     </div>
                 </div>
 
                 <div className="player-frame-wrapper-5">
-                    <div className="div-6">
-                        <div className="player-frame-wrapper-6">
+                    <div className="div-6" style={{ display: 'flex', gap: '12px' }}>
+                        <div className="player-frame-wrapper-6" style={{ cursor: 'pointer', opacity: ordenacaoNome === 'az' ? 1 : 0.7 }} onClick={() => setOrdenacaoNome('az')}>
                             <div className="div-wrapper-2">
-                                <div className="text-wrapper-5">Ordenar A–Z</div>
+                                <div className="text-wrapper-5" style={{ fontWeight: ordenacaoNome === 'az' ? 700 : 400, color: ordenacaoNome === 'az' ? '#1976d2' : undefined }}>Ordenar A–Z</div>
                             </div>
                         </div>
-
-                        <div className="player-frame-wrapper-6">
+                        <div className="player-frame-wrapper-6" style={{ cursor: 'pointer', opacity: ordenacaoNome === 'za' ? 1 : 0.7 }} onClick={() => setOrdenacaoNome('za')}>
                             <div className="div-wrapper-2">
-                                <div className="text-wrapper-5">Ordenar Z–A</div>
+                                <div className="text-wrapper-5" style={{ fontWeight: ordenacaoNome === 'za' ? 700 : 400, color: ordenacaoNome === 'za' ? '#1976d2' : undefined }}>Ordenar Z–A</div>
                             </div>
                         </div>
                     </div>
@@ -175,15 +188,29 @@ export const PlayerFrame = () => {
                             </div>
 
                             <div className="div-8" style={{ maxHeight: '400px', overflowY: 'auto', overflowX: 'hidden', minWidth: '100%' }}>
-                                {jogadores
+                                {[...jogadores]
                                     .filter(jogador => {
                                         // Filtro por nome
                                         const nomeMatch = buscaNome.trim() === "" || jogador.nome.toLowerCase().includes(buscaNome.trim().toLowerCase());
                                         // Filtro por posição
                                         let posicaoJogador = jogador.posicao;
-                                        if (posicaoJogador === "meio_campo") posicaoJogador = "Meio-Campo";
+                                        if (["meio_campo", "Meio_campo", "Meio-campo"].includes(posicaoJogador)) posicaoJogador = "Meio-Campo";
                                         const posMatch = filtroPosicao === "Todos" || posicaoJogador.toLowerCase() === filtroPosicao.toLowerCase();
-                                        return nomeMatch && posMatch;
+                                        // Filtro por time
+                                        if (filtroTime === "Todos" || filtroTime === "") {
+                                            return nomeMatch && posMatch;
+                                        }
+                                        const timeObj = times.find(t => t.id === jogador.time_id);
+                                        const timeNome = timeObj ? timeObj.nome : jogador.time_id;
+                                        const timeMatch = timeNome === filtroTime;
+                                        return nomeMatch && posMatch && timeMatch;
+                                    })
+                                    .sort((a, b) => {
+                                        if (ordenacaoNome === 'az') {
+                                            return a.nome.localeCompare(b.nome);
+                                        } else {
+                                            return b.nome.localeCompare(a.nome);
+                                        }
                                     })
                                     .map((jogador) => (
                                     <div className="div-10" key={jogador.id}>
