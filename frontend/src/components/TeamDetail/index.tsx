@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import "./style.css";
 
 interface Time {
@@ -36,6 +36,7 @@ export const TeamDetail = () => {
     const [time, setTime] = React.useState<Time | null>(null);
     const [jogadores, setJogadores] = React.useState<Jogador[]>([]);
     const [temporadaAtual, setTemporadaAtual] = React.useState<string | null>(null);
+    const [tecnico, setTecnico] = React.useState<any | null>(null);
 
     React.useEffect(() => {
         import("axios").then(axios => {
@@ -54,9 +55,27 @@ export const TeamDetail = () => {
                             setTemporadaAtual(null);
                         }
                     });
+                    axios.default.get("http://localhost:8001/tecnico/tecnico/listar_tecnicos").then((resTec) => {
+                        // Seleciona o técnico cujo time_id corresponde ao id do time presente em TeamDetail
+                        const historicoDoTime: any[] = [];
+                        let tecnicoDoTime: any | null = null;
+                        axios.default.get("http://localhost:8001/historico_tecnico/listar_historico_tecnicos").then((resHist) => {
+                            // Filtra histórico do time
+                            const historicoFiltrado = resHist.data.filter((hist: any) => hist.time_id === found.id);
+                            historicoDoTime.push(...historicoFiltrado);
+                            // Busca o nome do técnico pelo tecnico_id do histórico
+                            const tecnicoId = historicoFiltrado.length > 0 ? historicoFiltrado[0].tecnico_id : null;
+                            if (tecnicoId) {
+                                const tecnicoObj = resTec.data.find((tec: any) => tec.id === tecnicoId);
+                                tecnicoDoTime = tecnicoObj ? { ...tecnicoObj, historico: historicoFiltrado } : null;
+                            }
+                            setTecnico(tecnicoDoTime);
+                        });
+                    });
                 } else {
                     setJogadores([]);
                     setTemporadaAtual(null);
+                    setTecnico(null);
                 }
             });
         });
@@ -111,7 +130,7 @@ export const TeamDetail = () => {
                 <div className="div-4">
                     <div className="div-5" />
                     <div className="div-wrapper-3">
-                        <div className="text-wrapper-5">Ethan Carter</div>
+                        <div className="text-wrapper-5">{tecnico ? tecnico.nome : "-"}</div>
                     </div>
                 </div>
 
@@ -152,7 +171,13 @@ export const TeamDetail = () => {
                 <div className="team-detail-wrapper-7">
                     <div className="team-detail-wrapper-8">
                         <div className="div-wrapper-8">
-                            <div className="text-wrapper-7">Visualizar o Histórico Técnico</div>
+                            <Link
+                                to="/tecnicos"
+                                className="text-wrapper-7"
+                                style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+                            >
+                                Visualizar o Histórico Técnico
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -196,23 +221,22 @@ export const TeamDetail = () => {
 
                 <div className="team-detail-wrapper-9">
                     <div className="div-16">
-                        <div className="team-detail-wrapper-10">
-                            <div className="div-wrapper-8">
-                                <div className="text-wrapper-10">Editar Time</div>
-                            </div>
-                        </div>
                         <div className="team-detail-wrapper-8">
                             <div className="div-wrapper-8">
-                                <div className="text-wrapper-7">Deletar Time</div>
+                                <button
+                                    className="text-wrapper-7"
+                                    style={{ background: '#e53935', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 4, cursor: 'pointer' }}
+                                    onClick={async () => {
+                                        if (time) {
+                                            const axios = (await import('axios')).default;
+                                            await axios.delete(`http://localhost:8001/times/deletar_time?id=${time.id}`);
+                                            window.location.href = '/times';
+                                        }
+                                    }}
+                                >
+                                    Deletar Time
+                                </button>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="team-detail-wrapper-7">
-                    <div className="team-detail-wrapper-8">
-                        <div className="div-wrapper-8">
-                            <div className="text-wrapper-9">Compartilhar Estatísticas</div>
                         </div>
                     </div>
                 </div>
