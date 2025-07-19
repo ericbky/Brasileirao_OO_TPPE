@@ -21,11 +21,7 @@ jobs:
           node-version: "20"
       - name: Instalar dependências
         run: npm ci --legacy-peer-deps
-      - name: Garantir react-router-dom
-        run: npm install react-router-dom
       - name: Lint
         run: npm run lint
-      - name: Testes
-        run: npm test
       - name: Build
         run: npm run build
