@@ -1,8 +1,8 @@
 # Projeto — Sistema de Gestão do Campeonato Brasileiro
 
-| Autor               | Matrícula | Disciplina                                                                 | Período |
-|---------------------|-----------|----------------------------------------------------------------------------|---------|
-| Eric Silveira Gomes | 22102266  | Técnicas de Programação em Plataformas Emergentes (FGA0242) – UnB/FGA     | 2025/1  |
+| Autor               | Matrícula | Disciplina                                                            | Período |
+| ------------------- | --------- | --------------------------------------------------------------------- | ------- |
+| Eric Silveira Gomes | 22102266  | Técnicas de Programação em Plataformas Emergentes (FGA0242) – UnB/FGA | 2025/1  |
 
 ---
 
@@ -29,6 +29,7 @@ A disciplina aborda práticas modernas de desenvolvimento de software com foco e
 O **Sistema de Gestão do Campeonato Brasileiro** modela as principais entidades e regras de um campeonato real, usando uma abordagem orientada a objetos e arquitetura em camadas.
 
 ### Requisitos de Qualidade
+
 - Arquitetura **modular e extensível**
 - **Cobertura de testes ≥ 90%**
 - **Documentação versionada** com diagramas UML e pacotes
@@ -50,14 +51,14 @@ O **Sistema de Gestão do Campeonato Brasileiro** modela as principais entidades
 
 O projeto adota uma abordagem incremental e iterativa, com entregas organizadas em sprints, uso de TDD e documentação contínua.
 
-| Eixo               | Descrição                                                                 |
-|--------------------|---------------------------------------------------------------------------|
-| **Planejamento**   | Organização do backlog, critérios de aceite, histórico de decisões       |
-| **Documentação**   | README, arquivos Markdown, diagramas UML e pacotes                       |
-| **Infraestrutura** | Setup Docker, ambiente virtual, dependências e CI (futuro)               |
-| **Modelagem**      | Entidades, lógica de negócio e persistência no banco                     |
-| **Frontend**       | Interface básica Vue integrando com a API                                |
-| **Testes**         | Testes unitários automatizados (backend e frontend)                      |
+| Eixo               | Descrição                                                          |
+| ------------------ | ------------------------------------------------------------------ |
+| **Planejamento**   | Organização do backlog, critérios de aceite, histórico de decisões |
+| **Documentação**   | README, arquivos Markdown, diagramas UML e pacotes                 |
+| **Infraestrutura** | Setup Docker, ambiente virtual, dependências e CI (futuro)         |
+| **Modelagem**      | Entidades, lógica de negócio e persistência no banco               |
+| **Frontend**       | Interface básica Vue integrando com a API                          |
+| **Testes**         | Testes unitários automatizados (backend e frontend)                |
 
 ---
 
@@ -81,56 +82,29 @@ A seguir, são apresentadas as histórias de usuário organizadas por **épicos*
 
 Este backlog serve como uma referência para o desenvolvimento e acompanhamento do progresso do projeto, sendo um instrumento essencial para garantir que as metas sejam atingidas dentro dos requisitos estabelecidos.
 
-
-| **Épico**                | **História de Usuário**                                                                                                                                             | **Critérios de Aceitação**                                                                                                          | **Prioridade** |
-|--------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|----------------|
-| **Épico 1: Registros**   | Eu como usuário gostaria de cadastrar um time no sistema a fim de que ele possa ser incluído nas partidas do campeonato.                                              | O time deve ter nome único, socios e valor médio.                                                                                   | Alta           |
-| **Épico 1: Registros**   | Eu como administrador gostaria de cadastrar jogadores em um time para que possam ser escalados em partidas.                                                             | O jogador deve ter nome, idade, posição e número de camisa. O time do jogador deve ser associado corretamente.                     | Alta           |
-| **Épico 1: Registros**   | Eu como administrador gostaria de registrar uma partida entre dois times para acompanhar o desempenho de cada um no campeonato.                                      | A partida deve ter data, horário, estádio e times mandante e visitante associados.                                                  | Alta           |
-| **Épico 1: Registros**   | Eu como administrador gostaria de cadastrar técnicos para associá-los a partidas e times no campeonato.                                                              | O técnico deve ter nome, idade, data de início e término, e estar associado a um time.                                               | Alta           |
-| **Épico 1: Registros**   | Eu como administrador gostaria de cadastrar estádios para que as partidas possam ser associadas a esses locais.                                                         | O estádio deve ter nome, capacidade e localização. A partida deve ser corretamente associada ao estádio.                            | Alta           |
-| **Épico 1: Registros**   | Eu como usuário gostaria de registrar o histórico de um jogador no sistema para manter o controle de suas transferências e passagem por times.                         | O histórico de jogador deve registrar as datas de início e fim e associar o jogador ao time corretamente.                           | Média          |
-| **Épico 1: Registros**   | Eu como usuário gostaria de registrar o histórico de um técnico para manter o controle das equipes que ele treinou ao longo de sua carreira.                         | O histórico de técnico deve registrar as datas de início e fim e associar o técnico ao time corretamente.                           | Média          |
-| **Épico 1: Registros**   | Eu como usuário gostaria de registrar eventos que aconteceram durante uma partida (gols, cartões, etc.) para manter o histórico das partidas.                       | O evento deve ter tipo, minuto e descrição, e ser associado ao jogador e partida corretamente.                                        | Alta           |
-| **Épico 1: Registros**   | Eu como administrador gostaria de registrar as estatísticas das partidas (posse de bola, finalizações, etc.) para que possamos analisar o desempenho dos times.     | A estatística deve ser associada a partida e time e registrar dados como posse de bola, finalizações, escanteios e outros.         | Alta           |
-| **Épico 2: Escalações**  | Eu como técnico gostaria de escalar jogadores para uma partida a fim de que eles possam ser analisados durante a execução do jogo.                                     | A escalação deve incluir informações sobre o jogador (titular, minutos em campo, substituído) e ser associada à partida corretamente. | Alta           |
-| **Épico 3: Relatórios e Visualização** | Eu como usuário gostaria de visualizar todas as partidas realizadas em uma temporada para acompanhar o progresso do campeonato.                                          | A visualização deve listar todas as partidas com seus respectivos detalhes (data, fase, times, gols, etc.).                       | Alta           |
-| **Épico 4: Filtragem de Times** | Eu como usuário gostaria de filtrar os times por nome, número de sócios ou valor médio da equipe a fim de encontrar informações mais facilmente.                         | O sistema deve permitir a filtragem por nome, sócios e valor médio de forma eficiente e sem erros.                                 | Média          |
-| **Épico 5: Relatórios de Partidas** | Eu como administrador gostaria de gerar relatórios detalhados das partidas para análise de dados e decisões estratégicas.                                                | O sistema deve permitir a geração de relatórios com as estatísticas e eventos das partidas.                                        | Média          |
-| **Épico 6: Atualizações** | Eu como administrador gostaria de atualizar as informações de um jogador, como seu time, idade ou posição, caso haja mudanças no elenco.                               | O sistema deve permitir a atualização das informações do jogador e refletir corretamente nas escalas e históricos.                | Alta           |
-| **Épico 6: Atualizações** | Eu como administrador gostaria de atualizar as informações de um técnico, como seu time ou data de término de contrato, caso haja mudanças.                           | O sistema deve permitir a atualização das informações do técnico e refletir corretamente nos históricos e partidas.               | Alta           |
-| **Épico 7: Transferências** | Eu como usuário gostaria de registrar a transferência de um jogador entre times a fim de manter o histórico de transferências atualizado.                             | A transferência deve ser registrada corretamente, com datas de início e fim e associação correta entre o jogador e o time.         | Média          |
-| **Épico 8: Controle de Cartões** | Eu como técnico gostaria de registrar os cartões dados aos jogadores em uma partida para gerenciar melhor as infrações durante os jogos.                                 | O cartão deve ser registrado com o tipo (amarelo ou vermelho), jogador e minuto do evento.                                         | Alta           |
-| **Épico 9: Busca de Jogadores por Posição** | Eu como técnico gostaria de buscar jogadores por sua posição em campo para fazer as melhores escolhas de escalonamento.                                               | A busca deve ser eficiente e retornar jogadores que se encaixam na posição solicitada.                                              | Média          |
-| **Épico 10: Temporada** | Eu como administrador gostaria de registrar uma nova temporada no campeonato para organizar as partidas e equipes de forma ordenada.                                 | A temporada deve ser registrada com nome e datas de início e fim. As partidas devem ser associadas à temporada corretamente.       | Alta           |
-| **Épico 11: Histórico de Partidas por Temporada** | Eu como usuário gostaria de visualizar todas as partidas realizadas em uma temporada específica para análises detalhadas.                                            | O sistema deve listar todas as partidas de uma temporada, permitindo a visualização de detalhes como gols, técnicos e estádios.   | Média          |
-| **Épico 12: Performance de Time e Jogador** | Eu como técnico gostaria de ver o desempenho do meu time e dos jogadores em tempo real durante as partidas para tomar decisões estratégicas.                           | O sistema deve fornecer estatísticas de tempo real para análise de desempenho dos jogadores e time.                               | Alta           |
-| **Épico 13: Atualização de Eventos** | Eu como administrador gostaria de atualizar eventos registrados durante as partidas, como a correção de gols ou cartões dados aos jogadores.                             | O sistema deve permitir a atualização das informações de eventos, como minutos e tipo de evento, e refletir nas partidas corretamente. | Média          |
-| **Épico 14: Sistema de Notificações** | Eu como usuário gostaria de ser notificado sobre alterações em jogos, escalações e eventos durante a temporada para acompanhar as atualizações.          | O sistema deve enviar notificações sobre eventos importantes relacionados ao time e partidas, como cartões e gols.                | Baixa          |
-| **Épico 15: Gestão de Usuários** | Eu como administrador gostaria de gerenciar as permissões de usuários no sistema para controlar o acesso a diferentes funcionalidades.                                           | O sistema deve permitir a criação, edição e remoção de usuários, além de atribuir permissões de acesso (admin, técnico, usuário).  | Alta           |
-| **Épico 15: Gestão de Usuários** | Eu como usuário gostaria de alterar minha senha para garantir a segurança da minha conta.                                                                                      | O sistema deve permitir que o usuário altere sua senha, validando as informações corretamente.                                      | Média          |
-| **Épico 16: Análises Estatísticas Avançadas** | Eu como administrador gostaria de visualizar gráficos detalhados sobre o desempenho dos jogadores ao longo das partidas para tomar decisões estratégicas.                      | O sistema deve gerar gráficos de desempenho dos jogadores, incluindo métricas como gols, assistências, faltas cometidas, etc.      | Alta           |
-| **Épico 16: Análises Estatísticas Avançadas** | Eu como técnico gostaria de ter uma análise comparativa entre os times do campeonato para avaliar o desempenho geral e ajustar a estratégia.                                  | O sistema deve permitir a visualização de comparações entre os times, como número de vitórias, empates, gols marcados e sofridos. | Alta           |
-| **Épico 17: Modificações no Campeonato** | Eu como administrador gostaria de editar a configuração de um campeonato em andamento, como alterar a data de uma partida ou mudar o estádio.                                | O sistema deve permitir a edição de detalhes de partidas e sua reconfiguração no campeonato.                                       | Média          |
-| **Épico 17: Modificações no Campeonato** | Eu como administrador gostaria de desmarcar uma partida agendada em caso de imprevistos, para garantir que a competição continue sem problemas.                               | O sistema deve permitir o cancelamento de partidas agendadas, atualizando as tabelas de classificação de forma automática.          | Alta           |
-| **Épico 18: Sistema de Ranking** | Eu como usuário gostaria de visualizar um ranking de jogadores com base em suas estatísticas (gols, assistências, etc.) para acompanhar o desempenho individual.              | O sistema deve gerar um ranking dinâmico de jogadores, baseado em suas estatísticas de partidas.                                    | Alta           |
-| **Épico 18: Sistema de Ranking** | Eu como usuário gostaria de visualizar o ranking de times do campeonato para acompanhar sua posição ao longo da temporada.                                                     | O sistema deve permitir a visualização do ranking dos times, com base nos pontos e desempenho das partidas.                       | Alta           |
-| **Épico 19: Controle de Lesões** | Eu como técnico gostaria de registrar as lesões dos jogadores durante as partidas para monitorar a saúde do elenco.                                                             | O sistema deve permitir o registro de lesões, incluindo tipo, gravidade e jogador afetado.                                        | Alta           |
-| **Épico 19: Controle de Lesões** | Eu como técnico gostaria de atualizar o status de recuperação de um jogador lesionado para saber quando ele poderá retornar ao time.                                             | O sistema deve permitir a atualização do status de recuperação dos jogadores lesionados.                                           | Média          |
-| **Épico 20: Desempenho do Técnico** | Eu como administrador gostaria de visualizar o desempenho dos técnicos no campeonato, baseado nas vitórias e estatísticas de suas equipes.                                      | O sistema deve gerar relatórios sobre o desempenho dos técnicos ao longo do campeonato.                                             | Alta           |
-| **Épico 20: Desempenho do Técnico** | Eu como técnico gostaria de receber feedback sobre minhas estratégias e escalações, baseado nos resultados das partidas.                                                        | O sistema deve fornecer análises sobre a performance do técnico, considerando resultados das partidas e as escolhas de escalação.  | Média          |
-| **Épico 21: Integração com Redes Sociais** | Eu como usuário gostaria de compartilhar as estatísticas do meu time nas redes sociais para promover o campeonato e engajar os fãs.                                             | O sistema deve permitir a integração com redes sociais e a publicação de estatísticas diretamente nas plataformas.                 | Baixa          |
-| **Épico 21: Integração com Redes Sociais** | Eu como usuário gostaria de compartilhar eventos de uma partida, como gols e cartões, nas redes sociais para manter os torcedores atualizados.                                 | O sistema deve permitir a postagem de eventos específicos de partidas nas redes sociais.                                           | Baixa          |
-| **Épico 22: Análise de Táticas de Jogo** | Eu como técnico gostaria de visualizar análises táticas das partidas para avaliar o desempenho das formações e estratégias utilizadas.                                          | O sistema deve gerar gráficos e relatórios detalhados sobre as formações e táticas utilizadas nas partidas.                         | Alta           |
-| **Épico 22: Análise de Táticas de Jogo** | Eu como técnico gostaria de comparar táticas de diferentes equipes para ajustar minha estratégia de jogo.                                                                       | O sistema deve permitir a comparação das formações táticas entre diferentes equipes, considerando as estatísticas de partidas.      | Alta           |
-| **Épico 23: Histórico de Jogadores por Time** | Eu como usuário gostaria de visualizar o histórico completo de jogadores de um time, incluindo suas estatísticas e transferências.                                                | O sistema deve exibir o histórico de jogadores por time, com informações detalhadas sobre transferências e desempenho.             | Média          |
-| **Épico 23: Histórico de Jogadores por Time** | Eu como usuário gostaria de acessar as estatísticas de um jogador ao longo das temporadas, para acompanhar sua evolução no campeonato.                                            | O sistema deve exibir as estatísticas de cada jogador em todas as temporadas em que participou, com detalhes por temporada.         | Alta           |
-| **Épico 24: Regras do Campeonato** | Eu como usuário gostaria de consultar as regras do campeonato diretamente no sistema para entender os critérios de classificação e as penalidades.                              | O sistema deve permitir que os usuários visualizem as regras do campeonato de forma clara e acessível.                             | Baixa          |
-| **Épico 24: Regras do Campeonato** | Eu como administrador gostaria de poder editar as regras do campeonato a qualquer momento, para garantir que as regras reflitam mudanças necessárias.                          | O sistema deve permitir a edição das regras do campeonato e notificar os usuários sobre quaisquer mudanças.                        | Baixa          |
-| **Épico 25: Interação com a Mídia** | Eu como administrador gostaria de enviar atualizações automáticas para a imprensa sobre o andamento do campeonato, para manter todos informados sobre as principais notícias.      | O sistema deve permitir o envio de atualizações periódicas sobre o campeonato para um canal de mídia ou imprensa.                  | Baixa          |
-
-
-
+| **Épico**                                        | **História de Usuário**                                                                                                                                                                                         | **Critérios de Aceitação**                                                                                                                                 | **Prioridade** |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| **Épico 1: Registros**                           | Eu como administrador gostaria de cadastrar jogadores em um time para que possam ser escalados em partidas.                                                                                                     | O jogador deve ter nome, idade, posição e número de camisa. O time do jogador deve ser associado corretamente.                                             | Alta           |
+| **Épico 1: Registros**                           | Eu como administrador gostaria de cadastrar estádios para que as partidas possam ser associadas a esses locais.                                                                                                 | O estádio deve ter nome, capacidade e localização. A partida deve ser corretamente associada ao estádio.                                                   | Alta           |
+| **Épico 1: Registros**                           | Eu como usuário gostaria de registrar o histórico de um jogador no sistema para manter o controle de suas transferências e passagem por times.                                                                  | O histórico de jogador deve registrar as datas de início e fim e associar o jogador ao time corretamente.                                                  | Média          |
+| **Épico 2: Navegação**                           | Eu como usuário gostaria de ter um menu estático a rim de permitir uma melhor navegação da página.                                                                                                              | O sistema deve permitir a navegação fácil entre páginas como estádios, partidas, jogadores, times e notificações.                                          | Média          |
+| **Épico 3: Filtragem**                           | Eu como usuário gostaria de filtrar os times por nome, número de sócios ou valor médio da equipe a fim de encontrar informações mais facilmente.                                                                | O sistema deve permitir a filtragem por nome, sócios e valor médio de forma eficiente e sem erros.                                                         | Média          |
+| **Épico 3: Filtragem**                           | Eu como usuário gostaria de filtrar os estádios por nome e cidade a fim de encontrar informações mais facilmente.                                                                                               | O sistema deve permitir a filtragem por nome e cidade de forma eficiente e sem erros.                                                                      | Média          |
+| **Épico 3: Filtragem**                           | Eu como usuário gostaria de filtrar os jogadores por nome, posição e time, a fim de encontrar informações mais facilmente, além disso gostaria de ordenar em ordem alfabética de forma crescente e decrescente. | O sistema deve permitir a filtragem por nome, posição e time, e também exibir em ordem alfabética crescente e decrescente, de forma eficiente e sem erros. | Média          |
+| **Épico 3: Filtragem**                           | Eu como usuário gostaria de filtrar as partidas por temporada, nome do time, data da partida, estádio e ordenação de data, a fim de encontrar informações mais facilmente.                                      | O sistema deve permitir a filtragem por temporada, nome do time, data da partida, estádio e ordenação de data, de forma eficiente e sem erros.             | Média          |
+| **Épico 3: Filtragem**                           | Eu como usuário gostaria de filtrar as notificações por gols, cartões, substituições e outros, a fim de encontrar informações mais facilmente.                                                                  | O sistema deve permitir a filtragem por gols, cartões, substituições e outros, de forma eficiente e sem erros.                                             | Média          |
+| **Épico 4: Relatórios de Visualização**          | Eu como administrador gostaria de gerar relatórios detalhados das partidas para análise de dados e decisões estratégicas.                                                                                       | O sistema deve permitir a geração de relatórios com as estatísticas e eventos das partidas.                                                                | Média          |
+| **Épico 2: Relatórios e Visualização**           | Eu como usuário gostaria de visualizar todas as partidas realizadas em uma temporada para acompanhar o progresso do campeonato.                                                                                 | A visualização deve listar todas as partidas com seus respectivos detalhes (data, fase, times, gols, etc.).                                                | Alta           |
+| **Épico 5: Busca de Jogadores por Posição**      | Eu como técnico gostaria de buscar jogadores por sua posição em campo para fazer as melhores escolhas de escalonamento.                                                                                         | A busca deve ser eficiente e retornar jogadores que se encaixam na posição solicitada.                                                                     | Média          |
+| **Épico 6: Histórico de Partidas por Temporada** | Eu como usuário gostaria de visualizar todas as partidas realizadas em uma temporada específica para análises detalhadas.                                                                                       | O sistema deve listar todas as partidas de uma temporada, permitindo a visualização de detalhes como gols, técnicos e estádios.                            | Média          |
+| **Épico 7: Sistema de Notificações**             | Eu como usuário gostaria de ser notificado sobre alterações em jogos, escalações e eventos durante a temporada para acompanhar as atualizações.                                                                 | O sistema deve registrar notificações sobre eventos importantes relacionados ao time e partidas, como cartões, faltas, substituições e gols.               | Alta           |
+| **Épico 8: Análises Estatísticas Avançadas**     | Eu como administrador gostaria de visualizar dados detalhados sobre o desempenho dos jogadores ao longo das partidas para tomar decisões estratégicas.                                                          | O sistema deve gerar tabelas de desempenho dos jogadores, incluindo métricas como gols, assistências, faltas cometidas, etc.                               | Alta           |
+| **Épico 8: Análises Estatísticas Avançadas**     | Eu como técnico gostaria de ter uma análise comparativa entre os times do campeonato para avaliar o desempenho geral e ajustar a estratégia.                                                                    | O sistema deve permitir a visualização de comparações entre os times, como número de vitórias, empates, gols marcados e sofridos.                          | Alta           |
+| **Épico 9: Sistema de Ranking**                  | Eu como usuário gostaria de visualizar um ranking de jogadores com base em suas estatísticas (gols, cartões, etc.) para acompanhar o desempenho individual.                                                     | O sistema deve gerar um ranking dinâmico de jogadores, baseado em suas estatísticas de partidas.                                                           | Alta           |
+| **Épico 9: Sistema de Ranking**                  | Eu como usuário gostaria de visualizar o ranking de times do campeonato para acompanhar sua posição ao longo da temporada.                                                                                      | O sistema deve permitir a visualização do ranking dos times, com base nos pontos e desempenho das partidas.                                                | Alta           |
+| **Épico 10: Remoção**                            | Eu como administrador gostaria de remover estádios cadastrados para manter a base de dados atualizada.                                                                                                          | O sistema deve permitir a exclusão de estádios da lista.                                                                                                   | Média          |
+| **Épico 10: Remoção**                            | Eu como administrador gostaria de remover jogadores cadastrados para manter a base de dados atualizada.                                                                                                         | O sistema deve permitir a exclusão de jogadores da lista.                                                                                                  | Média          |
+| **Épico 10: Remoção**                            | Eu como administrador gostaria de remover times cadastrados para manter a base de dados atualizada.                                                                                                             | O sistema deve permitir a exclusão de times da lista.                                                                                                      | Média          |
 
 ## 6. Estrutura de Diretórios do Backend
 
@@ -232,16 +206,16 @@ Este backlog serve como uma referência para o desenvolvimento e acompanhamento 
 
 **Descrição:** Armazena informações sobre as escalações de jogadores durante as partidas.
 
-| Atributo                 | Descrição                                                         | Not Null | PK  | FK                          |
-| ------------------------ | ----------------------------------------------------------------- | -------- | --- | --------------------------- |
-| id                       | Identificador único da escalação                                  | Sim      | Sim | Não                         |
-| titular                  | Indica se o jogador é titular ou reserva                          | Sim      | Não | Não                         |
-| minutos\_em\_campo       | Tempo que o jogador permaneceu em campo (em minutos)              | Sim      | Não | Não                         |
-| posicao\_em\_campo       | Posição do jogador em campo                                       | Sim      | Não | Não                         |
-| substituido              | Indica se o jogador foi substituído                               | Sim      | Não | Não                         |
-| entrou\_durante\_o\_jogo | Indica se o jogador entrou durante o jogo                         | Sim      | Não | Não                         |
-| jogador\_id              | Identificador do jogador (referência à tabela `public.jogadores`) | Sim      | Não | Sim (`public.jogadores.id`) |
-| partida\_id              | Identificador da partida (referência à tabela `public.partidas`)  | Sim      | Não | Sim (`public.partidas.id`)  |
+| Atributo              | Descrição                                                         | Not Null | PK  | FK                          |
+| --------------------- | ----------------------------------------------------------------- | -------- | --- | --------------------------- |
+| id                    | Identificador único da escalação                                  | Sim      | Sim | Não                         |
+| titular               | Indica se o jogador é titular ou reserva                          | Sim      | Não | Não                         |
+| minutos_em_campo      | Tempo que o jogador permaneceu em campo (em minutos)              | Sim      | Não | Não                         |
+| posicao_em_campo      | Posição do jogador em campo                                       | Sim      | Não | Não                         |
+| substituido           | Indica se o jogador foi substituído                               | Sim      | Não | Não                         |
+| entrou_durante_o_jogo | Indica se o jogador entrou durante o jogo                         | Sim      | Não | Não                         |
+| jogador_id            | Identificador do jogador (referência à tabela `public.jogadores`) | Sim      | Não | Sim (`public.jogadores.id`) |
+| partida_id            | Identificador da partida (referência à tabela `public.partidas`)  | Sim      | Não | Sim (`public.partidas.id`)  |
 
 ---
 
@@ -260,68 +234,68 @@ Este backlog serve como uma referência para o desenvolvimento e acompanhamento 
 
 ---
 
-### **Tabela: public.estatisticas\_time\_partida**
+### **Tabela: public.estatisticas_time_partida**
 
 **Descrição:** Armazena as estatísticas de um time durante uma partida.
 
-| Atributo          | Descrição                                                        | Not Null | PK  | FK                         |
-| ----------------- | ---------------------------------------------------------------- | -------- | --- | -------------------------- |
-| id                | Identificador único da estatística                               | Sim      | Sim | Não                        |
-| posse\_bola       | Percentual de posse de bola                                      | Sim      | Não | Não                        |
-| finalizacoes      | Número total de finalizações                                     | Sim      | Não | Não                        |
-| escanteios        | Número total de escanteios                                       | Sim      | Não | Não                        |
-| faltas\_cometidas | Número total de faltas cometidas                                 | Sim      | Não | Não                        |
-| impedimentos      | Número total de impedimentos                                     | Sim      | Não | Não                        |
-| defesas\_goleiro  | Número total de defesas do goleiro                               | Sim      | Não | Não                        |
-| chutes\_no\_gol   | Número total de chutes no gol                                    | Sim      | Não | Não                        |
-| chutes\_fora      | Número total de chutes fora do gol                               | Sim      | Não | Não                        |
-| passes\_certos    | Número total de passes certos                                    | Sim      | Não | Não                        |
-| passes\_errados   | Número total de passes errados                                   | Sim      | Não | Não                        |
-| partida\_id       | Identificador da partida (referência à tabela `public.partidas`) | Sim      | Não | Sim (`public.partidas.id`) |
-| time\_id          | Identificador do time (referência à tabela `public.times`)       | Sim      | Não | Sim (`public.times.id`)    |
+| Atributo         | Descrição                                                        | Not Null | PK  | FK                         |
+| ---------------- | ---------------------------------------------------------------- | -------- | --- | -------------------------- |
+| id               | Identificador único da estatística                               | Sim      | Sim | Não                        |
+| posse_bola       | Percentual de posse de bola                                      | Sim      | Não | Não                        |
+| finalizacoes     | Número total de finalizações                                     | Sim      | Não | Não                        |
+| escanteios       | Número total de escanteios                                       | Sim      | Não | Não                        |
+| faltas_cometidas | Número total de faltas cometidas                                 | Sim      | Não | Não                        |
+| impedimentos     | Número total de impedimentos                                     | Sim      | Não | Não                        |
+| defesas_goleiro  | Número total de defesas do goleiro                               | Sim      | Não | Não                        |
+| chutes_no_gol    | Número total de chutes no gol                                    | Sim      | Não | Não                        |
+| chutes_fora      | Número total de chutes fora do gol                               | Sim      | Não | Não                        |
+| passes_certos    | Número total de passes certos                                    | Sim      | Não | Não                        |
+| passes_errados   | Número total de passes errados                                   | Sim      | Não | Não                        |
+| partida_id       | Identificador da partida (referência à tabela `public.partidas`) | Sim      | Não | Sim (`public.partidas.id`) |
+| time_id          | Identificador do time (referência à tabela `public.times`)       | Sim      | Não | Sim (`public.times.id`)    |
 
 ---
 
-### **Tabela: public.eventos\_partida**
+### **Tabela: public.eventos_partida**
 
 **Descrição:** Armazena os eventos que ocorrem durante as partidas.
 
-| Atributo    | Descrição                                                         | Not Null | PK  | FK                          |
-| ----------- | ----------------------------------------------------------------- | -------- | --- | --------------------------- |
-| id          | Identificador único do evento                                     | Sim      | Sim | Não                         |
-| tipo        | Tipo de evento (referência ao enum `public.tipoevento`)           | Sim      | Não | Sim (`public.tipoevento`)   |
-| minuto      | Minuto do jogo em que o evento ocorreu                            | Sim      | Não | Não                         |
-| descricao   | Descrição do evento                                               | Sim      | Não | Não                         |
-| jogador\_id | Identificador do jogador (referência à tabela `public.jogadores`) | Sim      | Não | Sim (`public.jogadores.id`) |
-| partida\_id | Identificador da partida (referência à tabela `public.partidas`)  | Sim      | Não | Sim (`public.partidas.id`)  |
+| Atributo   | Descrição                                                         | Not Null | PK  | FK                          |
+| ---------- | ----------------------------------------------------------------- | -------- | --- | --------------------------- |
+| id         | Identificador único do evento                                     | Sim      | Sim | Não                         |
+| tipo       | Tipo de evento (referência ao enum `public.tipoevento`)           | Sim      | Não | Sim (`public.tipoevento`)   |
+| minuto     | Minuto do jogo em que o evento ocorreu                            | Sim      | Não | Não                         |
+| descricao  | Descrição do evento                                               | Sim      | Não | Não                         |
+| jogador_id | Identificador do jogador (referência à tabela `public.jogadores`) | Sim      | Não | Sim (`public.jogadores.id`) |
+| partida_id | Identificador da partida (referência à tabela `public.partidas`)  | Sim      | Não | Sim (`public.partidas.id`)  |
 
 ---
 
-### **Tabela: public.historico\_jogadores**
+### **Tabela: public.historico_jogadores**
 
 **Descrição:** Armazena o histórico dos jogadores em relação aos times.
 
-| Atributo     | Descrição                                                         | Not Null | PK  | FK                          |
-| ------------ | ----------------------------------------------------------------- | -------- | --- | --------------------------- |
-| id           | Identificador único do histórico                                  | Sim      | Sim | Não                         |
-| data\_inicio | Data de início da associação com o time                           | Sim      | Não | Não                         |
-| data\_fim    | Data de fim da associação com o time                              | Não      | Não | Não                         |
-| jogador\_id  | Identificador do jogador (referência à tabela `public.jogadores`) | Sim      | Não | Sim (`public.jogadores.id`) |
-| time\_id     | Identificador do time (referência à tabela `public.times`)        | Sim      | Não | Sim (`public.times.id`)     |
+| Atributo    | Descrição                                                         | Not Null | PK  | FK                          |
+| ----------- | ----------------------------------------------------------------- | -------- | --- | --------------------------- |
+| id          | Identificador único do histórico                                  | Sim      | Sim | Não                         |
+| data_inicio | Data de início da associação com o time                           | Sim      | Não | Não                         |
+| data_fim    | Data de fim da associação com o time                              | Não      | Não | Não                         |
+| jogador_id  | Identificador do jogador (referência à tabela `public.jogadores`) | Sim      | Não | Sim (`public.jogadores.id`) |
+| time_id     | Identificador do time (referência à tabela `public.times`)        | Sim      | Não | Sim (`public.times.id`)     |
 
 ---
 
-### **Tabela: public.historico\_tecnicos**
+### **Tabela: public.historico_tecnicos**
 
 **Descrição:** Armazena o histórico dos técnicos nos times.
 
-| Atributo     | Descrição                                                        | Not Null | PK  | FK                         |
-| ------------ | ---------------------------------------------------------------- | -------- | --- | -------------------------- |
-| id           | Identificador único do histórico                                 | Sim      | Sim | Não                        |
-| data\_inicio | Data de início da associação com o time                          | Sim      | Não | Não                        |
-| data\_fim    | Data de fim da associação com o time                             | Não      | Não | Não                        |
-| tecnico\_id  | Identificador do técnico (referência à tabela `public.tecnicos`) | Sim      | Não | Sim (`public.tecnicos.id`) |
-| time\_id     | Identificador do time (referência à tabela `public.times`)       | Sim      | Não | Sim (`public.times.id`)    |
+| Atributo    | Descrição                                                        | Not Null | PK  | FK                         |
+| ----------- | ---------------------------------------------------------------- | -------- | --- | -------------------------- |
+| id          | Identificador único do histórico                                 | Sim      | Sim | Não                        |
+| data_inicio | Data de início da associação com o time                          | Sim      | Não | Não                        |
+| data_fim    | Data de fim da associação com o time                             | Não      | Não | Não                        |
+| tecnico_id  | Identificador do técnico (referência à tabela `public.tecnicos`) | Sim      | Não | Sim (`public.tecnicos.id`) |
+| time_id     | Identificador do time (referência à tabela `public.times`)       | Sim      | Não | Sim (`public.times.id`)    |
 
 ---
 
@@ -329,19 +303,19 @@ Este backlog serve como uma referência para o desenvolvimento e acompanhamento 
 
 **Descrição:** Armazena as informações dos jogadores de futebol.
 
-| Atributo                      | Descrição                                                       | Not Null | PK  | FK                            |
-| ----------------------------- | --------------------------------------------------------------- | -------- | --- | ----------------------------- |
-| id                            | Identificador único do jogador                                  | Sim      | Sim | Não                           |
-| nome                          | Nome do jogador                                                 | Sim      | Não | Não                           |
-| idade                         | Idade do jogador                                                | Sim      | Não | Não                           |
-| altura                        | Altura do jogador                                               | Sim      | Não | Não                           |
-| posicao                       | Posição do jogador (referência ao enum `public.posicaojogador`) | Sim      | Não | Sim (`public.posicaojogador`) |
-| num\_camisa                   | Número da camisa do jogador                                     | Sim      | Não | Não                           |
-| convocado\_selecao\_principal | Indica se o jogador foi convocado para a seleção principal      | Sim      | Não | Não                           |
-| convocado\_selecao\_juniores  | Indica se o jogador foi convocado para a seleção de juniores    | Sim      | Não | Não                           |
-| estrangeiro                   | Indica se o jogador é estrangeiro                               | Sim      | Não | Não                           |
-| valor\_mercado                | Valor de mercado do jogador                                     | Sim      | Não | Não                           |
-| time\_id                      | Identificador do time (referência à tabela `public.times`)      | Sim      | Não | Sim (`public.times.id`)       |
+| Atributo                    | Descrição                                                       | Not Null | PK  | FK                            |
+| --------------------------- | --------------------------------------------------------------- | -------- | --- | ----------------------------- |
+| id                          | Identificador único do jogador                                  | Sim      | Sim | Não                           |
+| nome                        | Nome do jogador                                                 | Sim      | Não | Não                           |
+| idade                       | Idade do jogador                                                | Sim      | Não | Não                           |
+| altura                      | Altura do jogador                                               | Sim      | Não | Não                           |
+| posicao                     | Posição do jogador (referência ao enum `public.posicaojogador`) | Sim      | Não | Sim (`public.posicaojogador`) |
+| num_camisa                  | Número da camisa do jogador                                     | Sim      | Não | Não                           |
+| convocado_selecao_principal | Indica se o jogador foi convocado para a seleção principal      | Sim      | Não | Não                           |
+| convocado_selecao_juniores  | Indica se o jogador foi convocado para a seleção de juniores    | Sim      | Não | Não                           |
+| estrangeiro                 | Indica se o jogador é estrangeiro                               | Sim      | Não | Não                           |
+| valor_mercado               | Valor de mercado do jogador                                     | Sim      | Não | Não                           |
+| time_id                     | Identificador do time (referência à tabela `public.times`)      | Sim      | Não | Sim (`public.times.id`)       |
 
 ---
 
@@ -349,28 +323,28 @@ Este backlog serve como uma referência para o desenvolvimento e acompanhamento 
 
 **Descrição:** Armazena informações sobre as partidas de futebol.
 
-| Atributo                  | Descrição                                                                          | Not Null | PK  | FK                         |
-| ------------------------- | ---------------------------------------------------------------------------------- | -------- | --- | -------------------------- |
-| id                        | Identificador único da partida                                                     | Sim      | Sim | Não                        |
-| temporada                 | Temporada da partida                                                               | Sim      | Não | Não                        |
-| data                      | Data da partida                                                                    | Sim      | Não | Não                        |
-| horario                   | Horário da partida                                                                 | Sim      | Não | Não                        |
-| fase                      | Fase do campeonato                                                                 | Sim      | Não | Não                        |
-| tipo\_fase                | Tipo da fase (ex: quartas de final, etc.)                                          | Sim      | Não | Não                        |
-| estadio\_id               | Identificador do estádio (referência à tabela `public.estadios`)                   | Sim      | Não | Sim (`public.estadios.id`) |
-| arbitro                   | Nome do árbitro                                                                    | Sim      | Não | Não                        |
-| publico                   | Número de público presente                                                         | Sim      | Não | Não                        |
-| publico\_max              | Capacidade máxima do público                                                       | Sim      | Não | Não                        |
-| gols\_mandante            | Gols do time mandante                                                              | Sim      | Não | Não                        |
-| gols\_visitante           | Gols do time visitante                                                             | Sim      | Não | Não                        |
-| gols\_1\_tempo\_mandante  | Gols do time mandante no primeiro tempo                                            | Sim      | Não | Não                        |
-| gols\_1\_tempo\_visitante | Gols do time visitante no primeiro tempo                                           | Sim      | Não | Não                        |
-| prorrogacao               | Indica se houve prorrogação                                                        | Sim      | Não | Não                        |
-| penalti                   | Indica se houve disputa de pênaltis                                                | Sim      | Não | Não                        |
-| time\_mandante\_id        | Identificador do time mandante (referência à tabela `public.times`)                | Sim      | Não | Sim (`public.times.id`)    |
-| time\_visitante\_id       | Identificador do time visitante (referência à tabela `public.times`)               | Sim      | Não | Sim (`public.times.id`)    |
-| tecnico\_mandante\_id     | Identificador do técnico do time mandante (referência à tabela `public.tecnicos`)  | Sim      | Não | Sim (`public.tecnicos.id`) |
-| tecnico\_visitante\_id    | Identificador do técnico do time visitante (referência à tabela `public.tecnicos`) | Sim      | Não | Sim (`public.tecnicos.id`) |
+| Atributo               | Descrição                                                                          | Not Null | PK  | FK                         |
+| ---------------------- | ---------------------------------------------------------------------------------- | -------- | --- | -------------------------- |
+| id                     | Identificador único da partida                                                     | Sim      | Sim | Não                        |
+| temporada              | Temporada da partida                                                               | Sim      | Não | Não                        |
+| data                   | Data da partida                                                                    | Sim      | Não | Não                        |
+| horario                | Horário da partida                                                                 | Sim      | Não | Não                        |
+| fase                   | Fase do campeonato                                                                 | Sim      | Não | Não                        |
+| tipo_fase              | Tipo da fase (ex: quartas de final, etc.)                                          | Sim      | Não | Não                        |
+| estadio_id             | Identificador do estádio (referência à tabela `public.estadios`)                   | Sim      | Não | Sim (`public.estadios.id`) |
+| arbitro                | Nome do árbitro                                                                    | Sim      | Não | Não                        |
+| publico                | Número de público presente                                                         | Sim      | Não | Não                        |
+| publico_max            | Capacidade máxima do público                                                       | Sim      | Não | Não                        |
+| gols_mandante          | Gols do time mandante                                                              | Sim      | Não | Não                        |
+| gols_visitante         | Gols do time visitante                                                             | Sim      | Não | Não                        |
+| gols_1_tempo_mandante  | Gols do time mandante no primeiro tempo                                            | Sim      | Não | Não                        |
+| gols_1_tempo_visitante | Gols do time visitante no primeiro tempo                                           | Sim      | Não | Não                        |
+| prorrogacao            | Indica se houve prorrogação                                                        | Sim      | Não | Não                        |
+| penalti                | Indica se houve disputa de pênaltis                                                | Sim      | Não | Não                        |
+| time_mandante_id       | Identificador do time mandante (referência à tabela `public.times`)                | Sim      | Não | Sim (`public.times.id`)    |
+| time_visitante_id      | Identificador do time visitante (referência à tabela `public.times`)               | Sim      | Não | Sim (`public.times.id`)    |
+| tecnico_mandante_id    | Identificador do técnico do time mandante (referência à tabela `public.tecnicos`)  | Sim      | Não | Sim (`public.tecnicos.id`) |
+| tecnico_visitante_id   | Identificador do técnico do time visitante (referência à tabela `public.tecnicos`) | Sim      | Não | Sim (`public.tecnicos.id`) |
 
 ---
 
@@ -378,15 +352,15 @@ Este backlog serve como uma referência para o desenvolvimento e acompanhamento 
 
 **Descrição:** Armazena as informações sobre os técnicos.
 
-| Atributo        | Descrição                              | Not Null | PK  | FK  |
-| --------------- | -------------------------------------- | -------- | --- | --- |
-| id              | Identificador único do técnico         | Sim      | Sim | Não |
-| nome            | Nome do técnico                        | Sim      | Não | Não |
-| idade           | Idade do técnico                       | Sim      | Não | Não |
-| data\_inicio    | Data de início da carreira do técnico  | Sim      | Não | Não |
-| data\_fim       | Data de término da carreira do técnico | Não      | Não | Não |
-| nacionalidade   | Nacionalidade do técnico               | Sim      | Não | Não |
-| tempo\_carreira | Tempo de carreira do técnico (em anos) | Sim      | Não | Não |
+| Atributo       | Descrição                              | Not Null | PK  | FK  |
+| -------------- | -------------------------------------- | -------- | --- | --- |
+| id             | Identificador único do técnico         | Sim      | Sim | Não |
+| nome           | Nome do técnico                        | Sim      | Não | Não |
+| idade          | Idade do técnico                       | Sim      | Não | Não |
+| data_inicio    | Data de início da carreira do técnico  | Sim      | Não | Não |
+| data_fim       | Data de término da carreira do técnico | Não      | Não | Não |
+| nacionalidade  | Nacionalidade do técnico               | Sim      | Não | Não |
+| tempo_carreira | Tempo de carreira do técnico (em anos) | Sim      | Não | Não |
 
 ---
 
@@ -394,30 +368,29 @@ Este backlog serve como uma referência para o desenvolvimento e acompanhamento 
 
 **Descrição:** Armazena as informações sobre os times.
 
-| Atributo                      | Descrição                             | Not Null | PK  | FK  |
-| ----------------------------- | ------------------------------------- | -------- | --- | --- |
-| id                            | Identificador único do time           | Sim      | Sim | Não |
-| nome                          | Nome do time                          | Sim      | Não | Não |
-| socios                        | Número de sócios do time              | Sim      | Não | Não |
-| valor\_equipe\_titular        | Valor da equipe titular do time       | Sim      | Não | Não |
-| valor\_medio\_equipe\_titular | Valor médio da equipe titular do time | Sim      | Não | Não |
+| Atributo                   | Descrição                             | Not Null | PK  | FK  |
+| -------------------------- | ------------------------------------- | -------- | --- | --- |
+| id                         | Identificador único do time           | Sim      | Sim | Não |
+| nome                       | Nome do time                          | Sim      | Não | Não |
+| socios                     | Número de sócios do time              | Sim      | Não | Não |
+| valor_equipe_titular       | Valor da equipe titular do time       | Sim      | Não | Não |
+| valor_medio_equipe_titular | Valor médio da equipe titular do time | Sim      | Não | Não |
 
 ---
 
-### **Tabela: public.times\_temporada**
+### **Tabela: public.times_temporada**
 
 **Descrição:** Armazena a temporada em que o time participou.
 
-| Atributo     | Descrição                                                  | Not Null | PK  | FK                      |
-| ------------ | ---------------------------------------------------------- | -------- | --- | ----------------------- |
-| id           | Identificador único da temporada do time                   | Sim      | Sim | Não                     |
-| data\_inicio | Data de início da temporada                                | Sim      | Não | Não                     |
-| data\_final  | Data de término da temporada                               | Não      | Não | Não                     |
-| temporada    | Nome da temporada (ex: 2024/2025)                          | Sim      | Não | Não                     |
-| time\_id     | Identificador do time (referência à tabela `public.times`) | Sim      | Não | Sim (`public.times.id`) |
+| Atributo    | Descrição                                                  | Not Null | PK  | FK                      |
+| ----------- | ---------------------------------------------------------- | -------- | --- | ----------------------- |
+| id          | Identificador único da temporada do time                   | Sim      | Sim | Não                     |
+| data_inicio | Data de início da temporada                                | Sim      | Não | Não                     |
+| data_final  | Data de término da temporada                               | Não      | Não | Não                     |
+| temporada   | Nome da temporada (ex: 2024/2025)                          | Sim      | Não | Não                     |
+| time_id     | Identificador do time (referência à tabela `public.times`) | Sim      | Não | Sim (`public.times.id`) |
 
 ---
-
 
 ## 8. Convenções de Código
 
