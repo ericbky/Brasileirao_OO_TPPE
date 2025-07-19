@@ -1,0 +1,41 @@
+.depth-frame-screen {
+  align-items: flex-start;
+  display: flex;
+  height: 1411px;
+  justify-content: center;
+  padding: 20px 160px;
+  position: relative;
+}
+
+.depth-frame-screen .depth-frame-54 {
+  align-items: flex-start;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  flex-grow: 1;
+  max-width: 960px;
+  position: relative;
+}
+
+.depth-frame-screen .depth-frame-55 {
+  align-items: flex-start;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  height: 60px;
+  padding: 20px 16px 12px;
+  position: relative;
+  width: 100%;
+}
+
+.depth-frame-screen .text-wrapper-22 {
+  align-self: stretch;
+  color: #111116;
+  font-family: "Manrope-Bold", Helvetica;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 28px;
+  margin-top: -1px;
+  position: relative;
+}
