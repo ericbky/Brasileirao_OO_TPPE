@@ -402,10 +402,17 @@ Este backlog serve como uma referência para o desenvolvimento e acompanhamento 
 
 ---
 
-## Referências Técnicas
+## 9. Diagramas do Projeto
 
-- [FastAPI Docs](https://fastapi.tiangolo.com/)
-- [Vue.js Docs](https://vuejs.org/)
-- [SQLAlchemy 2.0](https://docs.sqlalchemy.org/en/20/)
-- [pytest](https://docs.pytest.org/en/stable/)
-- [Docker Compose](https://docs.docker.com/compose/)
+Os principais diagramas do projeto estão disponíveis na pasta `docs/diagrams`:
+
+- **Diagrama UML:**
+  ![Diagrama UML](docs/diagrams/uml_diagram.png)
+
+- **Diagrama de Pacotes:**
+  ![Diagrama de Pacotes](docs/diagrams/packages_diagram.png)
+
+- **Diagrama DLD (Diagrama Lógico de Dados):**
+  ![Diagrama DLD](docs/diagrams/dld.png)
+
+Esses diagramas ilustram a arquitetura, os relacionamentos entre entidades e a estrutura lógica do sistema, auxiliando na compreensão e manutenção do projeto.
