@@ -23,6 +23,8 @@ export const PlayerFrame = () => {
     const [jogadores, setJogadores] = React.useState<Jogador[]>([]);
     const [times, setTimes] = React.useState<{ id: number; nome: string }[]>([]);
     const [eventos, setEventos] = React.useState<any[]>([]);
+    const [buscaNome, setBuscaNome] = React.useState<string>("");
+    const [filtroPosicao, setFiltroPosicao] = React.useState<string>("Todos");
 
     React.useEffect(() => {
         import("axios").then(axios => {
@@ -37,6 +39,8 @@ export const PlayerFrame = () => {
             });
         });
     }, []);
+
+    const posicoes = ["Todos", "Goleiro", "Zagueiro", "Meio-Campo", "Atacante"];
 
     return (
         <div className="player-frame">
@@ -63,74 +67,42 @@ export const PlayerFrame = () => {
                             </div>
 
                             <div className="search-by-nome-wrapper">
-                                <div className="search-by-nome">
-                                    Search&nbsp;&nbsp;by Nome...
-                                </div>
+                                <input
+                                    className="search-by-nome"
+                                    type="text"
+                                    placeholder="Buscar por nome..."
+                                    value={buscaNome}
+                                    onChange={e => setBuscaNome(e.target.value)}
+                                    style={{
+                                        width: '100%',
+                                        padding: '8px 12px',
+                                        borderRadius: '8px',
+                                        border: 'none',
+                                        background: 'inherit',
+                                        color: '#111',
+                                        fontSize: '1rem',
+                                        outline: 'none',
+                                        boxShadow: 'none',
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="div-4">
-                    <div className="div-5">
-                        <div className="div-wrapper-2">
-                            <div className="text-wrapper-3">Todos</div>
-                        </div>
-
-                        <div className="div-wrapper-2">
-                            <div className="img-wrapper">
-                                <img className="img" alt="Vector" src={arrow} />
+                    {posicoes.map(pos => (
+                        <div className="div-5" key={pos} style={{ cursor: "pointer", opacity: filtroPosicao === pos ? 1 : 0.7 }} onClick={() => setFiltroPosicao(pos)}>
+                            <div className="div-wrapper-2">
+                                <div className="text-wrapper-3" style={{ fontWeight: filtroPosicao === pos ? 700 : 400, color: filtroPosicao === pos ? '#1976d2' : undefined }}>{pos}</div>
+                            </div>
+                            <div className="div-wrapper-2">
+                                <div className="img-wrapper">
+                                    <img className="img" alt="Vector" src={arrow} />
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="div-5">
-                        <div className="div-wrapper-2">
-                            <div className="text-wrapper-3">Goleiro</div>
-                        </div>
-
-                        <div className="div-wrapper-2">
-                            <div className="img-wrapper">
-                                <img className="img" alt="Vector" src={arrow} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="div-5">
-                        <div className="div-wrapper-2">
-                            <div className="text-wrapper-3">Defesa</div>
-                        </div>
-
-                        <div className="div-wrapper-2">
-                            <div className="img-wrapper">
-                                <img className="img" alt="Vector" src={arrow} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="div-5">
-                        <div className="div-wrapper-2">
-                            <div className="text-wrapper-3">Meio-campo</div>
-                        </div>
-
-                        <div className="div-wrapper-2">
-                            <div className="img-wrapper">
-                                <img className="img" alt="Vector" src={arrow} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="div-5">
-                        <div className="div-wrapper-2">
-                            <div className="text-wrapper-3">Atacante</div>
-                        </div>
-
-                        <div className="div-wrapper-2">
-                            <div className="img-wrapper">
-                                <img className="img" alt="Vector" src={arrow} />
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
 
                 <div className="div-4">
@@ -203,7 +175,17 @@ export const PlayerFrame = () => {
                             </div>
 
                             <div className="div-8" style={{ maxHeight: '400px', overflowY: 'auto', overflowX: 'hidden', minWidth: '100%' }}>
-                                {jogadores.map((jogador) => (
+                                {jogadores
+                                    .filter(jogador => {
+                                        // Filtro por nome
+                                        const nomeMatch = buscaNome.trim() === "" || jogador.nome.toLowerCase().includes(buscaNome.trim().toLowerCase());
+                                        // Filtro por posição
+                                        let posicaoJogador = jogador.posicao;
+                                        if (posicaoJogador === "meio_campo") posicaoJogador = "Meio-Campo";
+                                        const posMatch = filtroPosicao === "Todos" || posicaoJogador.toLowerCase() === filtroPosicao.toLowerCase();
+                                        return nomeMatch && posMatch;
+                                    })
+                                    .map((jogador) => (
                                     <div className="div-10" key={jogador.id}>
                                         <div className="div-wrapper-11">
                                             <div className="text-wrapper-8">{jogador.nome}</div>
@@ -212,7 +194,7 @@ export const PlayerFrame = () => {
                                             <div className="text-wrapper-9">{jogador.idade}</div>
                                         </div>
                                         <div className="div-wrapper-13">
-                                            <div className="text-wrapper-9">{jogador.posicao.charAt(0).toUpperCase() + jogador.posicao.slice(1)}</div>
+                                            <div className="text-wrapper-9">{["meio_campo", "Meio_campo", "Meio-campo"].includes(jogador.posicao) ? "Meio-Campo" : jogador.posicao.charAt(0).toUpperCase() + jogador.posicao.slice(1)}</div>
                                         </div>
                                         <div className="div-wrapper-14">
                                             <div className="text-wrapper-9">{jogador.num_camisa}</div>
