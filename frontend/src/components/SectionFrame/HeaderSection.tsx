@@ -18,7 +18,7 @@ const HeaderSection = () => {
         Partidas
       </Typography>
 
-      <Button
+      {/* <Button
         variant="contained"
         disableElevation
         sx={{
@@ -39,7 +39,7 @@ const HeaderSection = () => {
         }}
       >
         Nova Partida
-      </Button>
+      </Button> */}
     </Box>
   );
 };
