@@ -93,7 +93,7 @@ const CreatePlayerFrame = () => {
 
   React.useEffect(() => {
     import("axios").then(axios => {
-      axios.default.get("http://localhost:8001/times/listar_times").then((res) => {
+      axios.default.get("http://localhost:8000/times/listar_times").then((res) => {
         if (Array.isArray(res.data)) {
           setTimes(res.data);
         } else if (Array.isArray(res.data.times)) {
@@ -128,7 +128,7 @@ const CreatePlayerFrame = () => {
         valor_mercado: formValues.valor_mercado ? Number(formValues.valor_mercado.replace(",", ".")) : 0,
         time_id: Number(formValues.time_id),
       };
-      const jogadorRes = await fetch("http://localhost:8001/jogador/criar_jogador", {
+      const jogadorRes = await fetch("http://localhost:8000/jogador/criar_jogador", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(jogadorPayload),
@@ -143,7 +143,7 @@ const CreatePlayerFrame = () => {
         jogador_id: jogador.id,
         time_id: Number(formValues.time_id),
       };
-      const historicoRes = await fetch("http://localhost:8001/historico_jogador/criar_historico_jogador", {
+      const historicoRes = await fetch("http://localhost:8000/historico_jogador/criar_historico_jogador", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(historicoPayload),

@@ -50,7 +50,7 @@ const TemporadaFrame = () => {
   const [loadingPartidas, setLoadingPartidas] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:8001/time_temporada/listar_times_temporada")
+    axios.get("http://localhost:8000/time_temporada/listar_times_temporada")
       .then((response) => {
         setTimesTemporada(response.data);
         setLoading(false);
@@ -172,12 +172,12 @@ const TemporadaFrame = () => {
 
   useEffect(() => {
     Promise.all([
-      axios.get("http://localhost:8001/partida/listar_partidas"),
-      axios.get("http://localhost:8001/evento_partida/listar_evento_partidas"),
-      axios.get("http://localhost:8001/times/listar_times"),
-      axios.get("http://localhost:8001/estadio/listar_estadios"),
-      axios.get("http://localhost:8001/estatistica/listar_estatisticas"),
-      axios.get("http://localhost:8001/jogador/listar_jogadores")
+      axios.get("http://localhost:8000/partida/listar_partidas"),
+      axios.get("http://localhost:8000/evento_partida/listar_evento_partidas"),
+      axios.get("http://localhost:8000/times/listar_times"),
+      axios.get("http://localhost:8000/estadio/listar_estadios"),
+      axios.get("http://localhost:8000/estatistica/listar_estatisticas"),
+      axios.get("http://localhost:8000/jogador/listar_jogadores")
     ])
       .then(([resPartidas, resEventos, resTimes, resEstadios, resEstatisticas, resJogadores]) => {
         setPartidas(resPartidas.data);

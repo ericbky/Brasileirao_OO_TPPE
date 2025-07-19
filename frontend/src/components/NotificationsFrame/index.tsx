@@ -52,10 +52,10 @@ export const NotificationsFrame: React.FC = () => {
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      axios.get("http://localhost:8001/partida/listar_partidas"),
-      axios.get("http://localhost:8001/evento_partida/listar_evento_partidas"),
-      axios.get("http://localhost:8001/jogador/listar_jogadores"),
-      axios.get("http://localhost:8001/times/listar_times")
+      axios.get("http://localhost:8000/partida/listar_partidas"),
+      axios.get("http://localhost:8000/evento_partida/listar_evento_partidas"),
+      axios.get("http://localhost:8000/jogador/listar_jogadores"),
+      axios.get("http://localhost:8000/times/listar_times")
     ])
       .then(([resPartidas, resEventos, resJogadores, resTimes]) => {
 
@@ -171,14 +171,14 @@ export const NotificationsFrame: React.FC = () => {
                   <p className="ntf-ts">{ts}</p>
                 </div>
               </div>
-              <a
+              {/* <a
                 className="ntf-link"
                 href={partidaId ? `/partida/${partidaId}` : "#"}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Ver partida
-              </a>
+              </a> */}
             </article>
           ))
         )}

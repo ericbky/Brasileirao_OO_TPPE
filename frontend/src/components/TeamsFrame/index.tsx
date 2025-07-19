@@ -21,7 +21,7 @@ export const TeamsFrame = () => {
 
     React.useEffect(() => {
         import("axios").then(axios => {
-            axios.default.get("http://localhost:8001/times/listar_times").then((res) => {
+            axios.default.get("http://localhost:8000/times/listar_times").then((res) => {
                 setTimes(res.data);
             });
         });
@@ -35,11 +35,11 @@ export const TeamsFrame = () => {
                         <div className="teams-title">Times</div>
                     </div>
 
-                    <div className="teams-create-wrapper">
+                    {/* <div className="teams-create-wrapper">
                         <div className="teams-create-button">
                             <div className="teams-create-text">Criar Time</div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className="teams-filters" style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "flex-end", marginBottom: 16 }}>

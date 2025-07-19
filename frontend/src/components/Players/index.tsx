@@ -30,13 +30,13 @@ export const PlayerFrame = () => {
 
     React.useEffect(() => {
         import("axios").then(axios => {
-            axios.default.get("http://localhost:8001/jogador/listar_jogadores").then((res) => {
+            axios.default.get("http://localhost:8000/jogador/listar_jogadores").then((res) => {
                 setJogadores(res.data || []);
             });
-            axios.default.get("http://localhost:8001/times/listar_times").then((res) => {
+            axios.default.get("http://localhost:8000/times/listar_times").then((res) => {
                 setTimes(res.data || []);
             });
-            axios.default.get("http://localhost:8001/evento_partida/listar_evento_partidas").then((res) => {
+            axios.default.get("http://localhost:8000/evento_partida/listar_evento_partidas").then((res) => {
                 setEventos(res.data || []);
             });
         });
@@ -244,7 +244,7 @@ export const PlayerFrame = () => {
                                         <div className="div-wrapper-18" style={{ cursor: "pointer" }}>
                                             <div className="text-wrapper-10" onClick={async () => {
                                                 const axios = (await import('axios')).default;
-                                                await axios.delete(`http://localhost:8001/jogador/deletar_jogador?id=${jogador.id}`);
+                                                await axios.delete(`http://localhost:8000/jogador/deletar_jogador?id=${jogador.id}`);
                                                 window.location.reload();
                                             }} style={{ color: '#d32f2f', fontWeight: 600 }}>
                                                 Deletar

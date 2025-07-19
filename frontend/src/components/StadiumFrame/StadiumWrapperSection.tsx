@@ -13,7 +13,7 @@ const StadiumWrapperSection: React.FC<StadiumWrapperSectionProps> = ({ onSelectS
 
   useEffect(() => {
     axios
-      .get("http://localhost:8001/estadio/listar_estadios")
+      .get("http://localhost:8000/estadio/listar_estadios")
       .then((response) => {
         const data = response.data.map((stadium: any) => ({
           label: stadium.nome,

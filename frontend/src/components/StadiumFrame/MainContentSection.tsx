@@ -15,7 +15,7 @@ const MainContentSection = ({ onSelectCity }: { onSelectCity?: (city: string) =>
 
   useEffect(() => {
     axios
-      .get("http://localhost:8001/estadio/listar_estadios")
+      .get("http://localhost:8000/estadio/listar_estadios")
       .then((response) => {
         const cities = response.data.map((stadium: any) => String(stadium.cidade)); // Garante que cada cidade seja uma string
         const uniqueCities: string[] = Array.from(new Set(cities)); // Remove duplicatas e garante o tipo correto

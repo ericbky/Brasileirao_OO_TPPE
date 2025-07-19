@@ -18,8 +18,8 @@ const QuickStatsSection = () => {
 
   useEffect(() => {
     Promise.all([
-      axios.get("http://localhost:8001/estadio/listar_estadios"),
-      axios.get("http://localhost:8001/partida/listar_partidas"),
+      axios.get("http://localhost:8000/estadio/listar_estadios"),
+      axios.get("http://localhost:8000/partida/listar_partidas"),
     ]).then(([estadioRes, partidaRes]) => {
       const estadios: Estadio[] = estadioRes.data;
       const partidas: any[] = partidaRes.data;

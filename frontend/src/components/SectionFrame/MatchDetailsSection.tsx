@@ -14,14 +14,14 @@ const MatchDetailsSection = () => {
   const { filters } = useMatchFilters();
 
   useEffect(() => {
-    axios.get("http://localhost:8001/partida/listar_partidas").then((res) => {
+    axios.get("http://localhost:8000/partida/listar_partidas").then((res) => {
       setPartidas(Array.isArray(res.data) ? res.data : []);
     });
-    axios.get("http://localhost:8001/times/listar_times").then((res) => {
+    axios.get("http://localhost:8000/times/listar_times").then((res) => {
       setTimes(Array.isArray(res.data) ? res.data : res.data.times || []);
     });
     axios
-      .get("http://localhost:8001/estadio/listar_estadios")
+      .get("http://localhost:8000/estadio/listar_estadios")
       .then((res) => {
         setEstadios(Array.isArray(res.data) ? res.data : res.data.estadios || []);
       })

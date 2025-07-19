@@ -16,7 +16,7 @@ const QuickStatsSection = () => {
   const [timeMaisVitorias, setTimeMaisVitorias] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    fetch("http://localhost:8001/partida/listar_partidas")
+    fetch("http://localhost:8000/partida/listar_partidas")
       .then(res => res.json())
       .then(data => {
         let partidas: any[] = Array.isArray(data) ? data : (Array.isArray(data.partidas) ? data.partidas : []);
@@ -50,7 +50,7 @@ const QuickStatsSection = () => {
         });
         if (idTimeMaisVitorias) {
           // Buscar nome do time
-          fetch("http://localhost:8001/times/listar_times")
+          fetch("http://localhost:8000/times/listar_times")
             .then(res => res.json())
             .then(timesData => {
               const times: any[] = Array.isArray(timesData) ? timesData : (Array.isArray(timesData.times) ? timesData.times : []);

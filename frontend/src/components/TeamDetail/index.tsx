@@ -40,26 +40,26 @@ export const TeamDetail = () => {
 
     React.useEffect(() => {
         import("axios").then(axios => {
-            axios.default.get("http://localhost:8001/times/listar_times").then((res) => {
+            axios.default.get("http://localhost:8000/times/listar_times").then((res) => {
                 const nomeParam = id?.replace(/-/g, " ").toLowerCase();
                 const found = res.data.find((t: Time) => t.nome.toLowerCase() === nomeParam);
                 setTime(found || null);
                 if (found) {
-                    axios.default.get(`http://localhost:8001/jogador/listar_jogadores?time_id=${found.id}`).then((resJog) => {
+                    axios.default.get(`http://localhost:8000/jogador/listar_jogadores?time_id=${found.id}`).then((resJog) => {
                         setJogadores(resJog.data || []);
                     });
-                    axios.default.get(`http://localhost:8001/time_temporada/listar_times_temporada?time_id=${found.id}`).then((resTemp) => {
+                    axios.default.get(`http://localhost:8000/time_temporada/listar_times_temporada?time_id=${found.id}`).then((resTemp) => {
                         if (Array.isArray(resTemp.data) && resTemp.data.length > 0) {
                             setTemporadaAtual(resTemp.data[resTemp.data.length - 1].temporada);
                         } else {
                             setTemporadaAtual(null);
                         }
                     });
-                    axios.default.get("http://localhost:8001/tecnico/tecnico/listar_tecnicos").then((resTec) => {
+                    axios.default.get("http://localhost:8000/tecnico/tecnico/listar_tecnicos").then((resTec) => {
                         // Seleciona o técnico cujo time_id corresponde ao id do time presente em TeamDetail
                         const historicoDoTime: any[] = [];
                         let tecnicoDoTime: any | null = null;
-                        axios.default.get("http://localhost:8001/historico_tecnico/listar_historico_tecnicos").then((resHist) => {
+                        axios.default.get("http://localhost:8000/historico_tecnico/listar_historico_tecnicos").then((resHist) => {
                             // Filtra histórico do time
                             const historicoFiltrado = resHist.data.filter((hist: any) => hist.time_id === found.id);
                             historicoDoTime.push(...historicoFiltrado);
@@ -237,7 +237,7 @@ export const TeamDetail = () => {
                                     onClick={async () => {
                                         if (time) {
                                             const axios = (await import('axios')).default;
-                                            await axios.delete(`http://localhost:8001/times/deletar_time?id=${time.id}`);
+                                            await axios.delete(`http://localhost:8000/times/deletar_time?id=${time.id}`);
                                             window.location.href = '/times';
                                         }
                                     }}

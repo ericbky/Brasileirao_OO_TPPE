@@ -10,7 +10,7 @@ const FilterSection = ({ selectedCity, selectedStadium, onSelectStadium }: { sel
 
   useEffect(() => {
     axios
-      .get("http://localhost:8001/estadio/listar_estadios")
+      .get("http://localhost:8000/estadio/listar_estadios")
       .then((response) => {
         if (!selectedCity && !selectedStadium) {
           setStadiumDetails(response.data);
@@ -30,7 +30,7 @@ const FilterSection = ({ selectedCity, selectedStadium, onSelectStadium }: { sel
 
   useEffect(() => {
     axios
-      .get("http://localhost:8001/partida/listar_partidas")
+      .get("http://localhost:8000/partida/listar_partidas")
       .then((response) => {
         // Agrupa partidas por estadio_id
         const grouped: { [key: string]: any[] } = {};
@@ -74,26 +74,37 @@ const FilterSection = ({ selectedCity, selectedStadium, onSelectStadium }: { sel
                   </Typography>
                 </Stack>
                 <Button
-                  variant="text"
-                  endIcon={<ArrowForwardIcon sx={{ width: 14, height: 11 }} />}
+                  variant="contained"
+                  color="error"
                   sx={{
-                    backgroundColor: "background.paper",
                     borderRadius: "12px",
-                    minWidth: "84px",
+                    minWidth: "120px",
                     maxWidth: "480px",
                     height: "32px",
                     pl: 2,
-                    pr: 1,
+                    pr: 2,
                     justifyContent: "center",
                     alignSelf: "flex-start",
-                    "& .MuiButton-endIcon": {
-                      ml: 0.5,
+                    backgroundColor: "#ffeaea",
+                    color: "#c62828",
+                    boxShadow: "none",
+                    '&:hover': {
+                      backgroundColor: "#ffd6d6",
+                      color: "#b71c1c",
                     },
+                  }}
+                  onClick={async () => {
+                    try {
+                      await axios.delete(`http://localhost:8000/estadio/deletar_estadio?id=${stadium.id}`);
+                      window.location.reload();
+                    } catch (err) {
+                      alert("Erro ao excluir estádio");
+                    }
                   }}
                 >
                   <Typography
                     variant="subtitle2"
-                    color="text.primary"
+                    color="inherit"
                     sx={{
                       overflow: "hidden",
                       textOverflow: "ellipsis",
@@ -102,7 +113,7 @@ const FilterSection = ({ selectedCity, selectedStadium, onSelectStadium }: { sel
                       WebkitBoxOrient: "vertical",
                     }}
                   >
-                    Visualizar Partidas
+                    Excluir Estádio
                   </Typography>
                 </Button>
               </Stack>
@@ -141,26 +152,37 @@ const FilterSection = ({ selectedCity, selectedStadium, onSelectStadium }: { sel
               </Typography>
             </Stack>
             <Button
-              variant="text"
-              endIcon={<ArrowForwardIcon sx={{ width: 14, height: 11 }} />}
+              variant="contained"
+              color="error"
               sx={{
-                backgroundColor: "background.paper",
                 borderRadius: "12px",
-                minWidth: "84px",
+                minWidth: "120px",
                 maxWidth: "480px",
                 height: "32px",
                 pl: 2,
-                pr: 1,
+                pr: 2,
                 justifyContent: "center",
                 alignSelf: "flex-start",
-                "& .MuiButton-endIcon": {
-                  ml: 0.5,
+                backgroundColor: "#ffeaea",
+                color: "#c62828",
+                boxShadow: "none",
+                '&:hover': {
+                  backgroundColor: "#ffd6d6",
+                  color: "#b71c1c",
                 },
+              }}
+              onClick={async () => {
+                try {
+                  await axios.delete(`http://localhost:8000/estadio/deletar_estadio?id=${stadiumDetails.id}`);
+                  window.location.reload();
+                } catch (err) {
+                  alert("Erro ao excluir estádio");
+                }
               }}
             >
               <Typography
                 variant="subtitle2"
-                color="text.primary"
+                color="inherit"
                 sx={{
                   overflow: "hidden",
                   textOverflow: "ellipsis",
@@ -169,7 +191,7 @@ const FilterSection = ({ selectedCity, selectedStadium, onSelectStadium }: { sel
                   WebkitBoxOrient: "vertical",
                 }}
               >
-                Visualizar Partidas
+                Excluir Estádio
               </Typography>
             </Button>
           </Stack>
