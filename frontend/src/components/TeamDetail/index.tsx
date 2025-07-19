@@ -84,9 +84,9 @@ export const TeamDetail = () => {
     return (
         <div className="team-detail">
             <div className="div">
-                <div className="team-detail-wrapper">
-                    <div className="div-wrapper">
-                        <div className="text-wrapper">{time ? time.nome.toUpperCase() : id?.replace("-", " ").toUpperCase()}</div>
+                <div className="team-detail-header" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '24px 0' }}>
+                    <div className="team-name" style={{ fontSize: 32, fontWeight: 700, letterSpacing: 1, minWidth: 320 }}>
+                        {time ? time.nome.toUpperCase() : id?.replace("-", " ").toUpperCase()}
                     </div>
                 </div>
 
@@ -198,7 +198,9 @@ export const TeamDetail = () => {
                         </div>
                     )}
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, width: "100%" }}>
-                        {jogadores.map((jogador, idx) => (
+                        {jogadores
+                            .filter(jogador => time && jogador.time_id === time.id)
+                            .map((jogador, idx) => (
                             <div className="div-11" key={jogador.nome + idx} style={{ minWidth: 0 }}>
                                 <div className="div-13">
                                     <div className="div-wrapper-2">
@@ -214,7 +216,13 @@ export const TeamDetail = () => {
                 <div className="team-detail-wrapper-7">
                     <div className="team-detail-wrapper-8">
                         <div className="div-wrapper-8">
-                            <div className="text-wrapper-9">Visualizar Jogadores</div>
+                            <Link
+                                to="/jogadores"
+                                className="text-wrapper-9"
+                                style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+                            >
+                                Visualizar Jogadores
+                            </Link>
                         </div>
                     </div>
                 </div>
