@@ -3,7 +3,6 @@ import { Box, Container, Typography } from "@mui/material";
 
 import { ThemeProvider } from "./ThemeProvider";
 import TopScorersSection from "./TopScorersSection";
-import AssistsSection from "./AssistsSection";
 import GoalkeepersSection from "./GoalkeepersSection";
 import DisciplinaryPlayersSection from "./DisciplinaryPlayersSection";
 import StandingsSection from "./StandingsSection";
