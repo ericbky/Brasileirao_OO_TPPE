@@ -54,7 +54,13 @@ export const PlayerFrame = () => {
 
                     <div className="player-frame-wrapper">
                         <div className="div-wrapper-2">
-                            <div className="text-wrapper-2">Registrar Jogador</div>
+                            <div
+                                className="text-wrapper-2"
+                                style={{ cursor: 'pointer'}}
+                                onClick={() => navigate('/criar-jogador')}
+                            >
+                                Registrar Jogador
+                            </div>
                         </div>
                     </div>
                 </div>

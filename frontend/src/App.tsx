@@ -7,6 +7,7 @@ import { PlayerFrame } from "./components/Players";
 import { NotificationsFrame } from "./components/NotificationsFrame";
 import StadiumFrame from "./components/StadiumFrame";
 import TemporadaFrame from "./components/TemporadaFrame";
+import CreatePlayerFrame from "./components/CreatePlayerFrame";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
 
         {/* Extras/auxiliares */}
         <Route path="/notificacoes" element={<NotificationsFrame />} />
+        <Route path="/criar-jogador" element={<CreatePlayerFrame />} />
       </Routes>
     </Router>
   );
