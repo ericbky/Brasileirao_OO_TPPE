@@ -39,14 +39,14 @@ type TableHeader = {
 };
 
 const TemporadaFrame = () => {
-  const [setTimesTemporada] = useState<any[]>([]);
-  const [setLoading] = useState(true);
+  const [timesTemporada, setTimesTemporada] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [jogadores, setJogadores] = useState<any[]>([]);
   const [partidas, setPartidas] = useState<any[]>([]);
   const [eventos, setEventos] = useState<any[]>([]);
   const [times, setTimes] = useState<any[]>([]);
   const [estadios, setEstadios] = useState<any[]>([]);
-  const [setEstatisticas] = useState<any[]>([]);
+  const [estatisticas, setEstatisticas] = useState<any[]>([]);
   const [loadingPartidas, setLoadingPartidas] = useState(true);
 
   useEffect(() => {
